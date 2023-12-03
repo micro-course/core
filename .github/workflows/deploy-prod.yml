@@ -1,0 +1,36 @@
+name: deploy prod
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20.x.x
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run lint:types
+      - run: npm run test
+  deploy:
+    needs: lint
+    runs-on: ubuntu-latest
+    concurrency:
+      group: prod
+      cancel-in-progress: true
+    steps:
+      - name: SSH Command
+        uses: D3rHase/ssh-command-action@v0.2.2
+        with:
+          # hostname / IP of the server
+          host: ${{ secrets.PROD_SSH_HOST }}
+          user: ${{ secrets.PROD_SSH_USERNAME }}
+          private_key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+          host_fingerprint: ${{ secrets.PROD_SSH_FINGERPRINT }}
+          command: source ~/.nvm/nvm.sh; ~/deploy.sh
