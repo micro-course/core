@@ -33,4 +33,4 @@ jobs:
           user: ${{ secrets.STAGING_SSH_USERNAME }}
           private_key: ${{ secrets.STAGING_SSH_PRIVATE_KEY }}
           host_fingerprint: ${{ secrets.STAGING_SSH_FINGERPRINT }}
-          command: source ~/.nvm/nvm.sh; echo 'Hello world'
+          command: source ~/.nvm/nvm.sh; ~/deploy.sh
