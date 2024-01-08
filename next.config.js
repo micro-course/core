@@ -1,5 +1,13 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  reactStrictMode: true,
+  rewrites: () => [
+    {
+      source: "/images/:path*",
+      destination: "http://localhost:9000/:path*",
+    },
+  ],
+};
 
 module.exports = nextConfig;
 
