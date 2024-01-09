@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/shared/ui/utils";
-import { AppHeader } from "@/widgets/app-header/app-header";
-import { ThemeProvider } from "@/features/theme/theme-provider";
+import { AppProvider } from "./_providers/app-provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -28,10 +27,7 @@ export default function RootLayout({
           fontSans.variable,
         )}
       >
-        <ThemeProvider>
-          <AppHeader />
-          {children}
-        </ThemeProvider>
+        <AppProvider>{children}</AppProvider>
       </body>
     </html>
   );

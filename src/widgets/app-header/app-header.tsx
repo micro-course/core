@@ -4,12 +4,17 @@ import { Logo } from "./_ui/logo";
 import { MainNav } from "./_ui/main-nav";
 import { Profile } from "./_ui/profile";
 
-export function AppHeader() {
+export function AppHeader({
+  variant,
+}: {
+  variant: "auth" | "private" | "public";
+}) {
+  const isProfile = variant !== "auth";
   return (
     <Layout
       logo={<Logo />}
       nav={<MainNav />}
-      profile={<Profile />}
+      profile={isProfile && <Profile />}
       actions={<ToggleTheme />}
     />
   );
