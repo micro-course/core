@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/shared/ui/utils";
+import { AppHeader } from "@/widgets/app-header/app-header";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,6 +27,7 @@ export default function RootLayout({
           fontSans.variable,
         )}
       >
+        <AppHeader />
         {children}
       </body>
     </html>
