@@ -12,7 +12,7 @@ import { LogOut, User } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
-import { useAppSession } from "@/entities/session/use-app-session";
+import { useAppSession } from "@/entities/user/use-app-session";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { useSignOut } from "@/features/auth/use-sign-out";
 import { SignInButton } from "@/features/auth/sign-in-button";
@@ -20,6 +20,8 @@ import { SignInButton } from "@/features/auth/sign-in-button";
 export function Profile() {
   const session = useAppSession();
   const { signOut, isPending: isLoadingSignOut } = useSignOut();
+
+  console.log(session.data);
 
   if (session.status === "loading") {
     return <Skeleton className="w-8 h-8 rounded-full" />;
@@ -37,7 +39,7 @@ export function Profile() {
           className="p-px rounded-full self-center h-8 w-8"
         >
           <Avatar className="w-8 h-8">
-            <AvatarImage src={session.data?.user.image} />
+            <AvatarImage src={session.data?.user?.image ?? undefined} />
             <AvatarFallback>AC</AvatarFallback>
           </Avatar>
         </Button>
@@ -46,7 +48,7 @@ export function Profile() {
         <DropdownMenuLabel>
           <p>Мой аккаунт</p>
           <p className="text-xs text-muted-foreground overflow-hidden text-ellipsis">
-            {session.data?.user.name}
+            {session?.data?.user?.name}
           </p>
         </DropdownMenuLabel>
         <DropdownMenuGroup></DropdownMenuGroup>
