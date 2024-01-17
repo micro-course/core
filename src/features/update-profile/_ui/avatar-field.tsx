@@ -12,7 +12,9 @@ export function AvatarField({
   value?: string;
   onChange: (value?: string) => void;
 }) {
-  const { handleFileSelect, isPending } = useUploadAvatar({});
+  const { handleFileSelect, isPending } = useUploadAvatar({
+    onSuccess: onChange,
+  });
 
   return (
     <Button
