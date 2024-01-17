@@ -16,6 +16,13 @@ export function UpdateProfileForm({
     ...getProfileQuery(userId),
   });
 
+  const router = useRouter();
+  const handleSuccess = () => {
+    if (callbackUrl) {
+      router.push(callbackUrl);
+    }
+  };
+
   if (profileQuery.isPending) {
     return <Spinner aria-label="Загрузка профиля" />;
   }
@@ -28,7 +35,7 @@ export function UpdateProfileForm({
     <ProfileForm
       userId={userId}
       profile={profileQuery.data.profile}
-      //onSuccess={handleSuccess}
+      onSuccess={handleSuccess}
       submitText={callbackUrl ? "Продолжить" : "Сохранить"}
     />
   );
