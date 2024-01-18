@@ -17,7 +17,7 @@ class FileStorage {
   private s3Client = new S3Client({
     forcePathStyle: true,
     endpoint: privateConfig.S3_ENDPOINT,
-    region: "eu-west-1",
+    region: privateConfig.S3_REGION,
     credentials: {
       accessKeyId: privateConfig.S3_ACCESS_KEY_ID,
       secretAccessKey: privateConfig.S3_SECRET_ACCESS_KEY,
