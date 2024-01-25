@@ -3,5 +3,5 @@
     "module": "commonjs",
     "moduleResolution": "node"
   },
-  "include": ["./prisma/**/*.ts", "./tests/**/*.ts"]
+  "include": ["./prisma/**/*.ts", "./tests/**/*.ts", "./scripts/**/*.ts"]
 }

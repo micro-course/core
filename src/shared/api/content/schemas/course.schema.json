@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["id", "title", "description", "lessons"],
+  "properties": {
+    "id": { "type": "string", "title": "Uuid" },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "lessons": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "title": "LessonPath"
+      }
+    }
+  },
+  "additionalProperties": false
+}
