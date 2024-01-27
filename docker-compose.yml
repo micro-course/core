@@ -12,6 +12,13 @@ services:
       - POSTGRES_DB=postgres
     volumes:
       - db-data:/var/lib/postgresql/data
+  dev-content-nginx:
+    image: nginx:latest
+    ports:
+      - "4000:80"
+    volumes:
+      - ./nginx/dev-content.conf:/etc/nginx/conf.d/default.conf
+      - ../staging-content:/usr/share/nginx/html
   minio:
     image: minio/minio:latest
     entrypoint: sh
