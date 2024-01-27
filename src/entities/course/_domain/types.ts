@@ -1,6 +1,6 @@
 export type CourseEntity = {
   id: string;
   slug: string;
-  name: string;
+  title: string;
   description: string;
 };

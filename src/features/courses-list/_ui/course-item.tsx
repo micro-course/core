@@ -6,7 +6,7 @@ export function CourseItem({ course }: { course: CourseEntity }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{course.name}</CardTitle>
+        <CardTitle>{course.title}</CardTitle>
         <CardDescription>{course.description}</CardDescription>
       </CardHeader>
     </Card>
