@@ -18,6 +18,9 @@ const privateConfigSchema = z.object({
   S3_IMAGES_BUCKET: z.string(),
   S3_ENDPOINT: z.string(),
   S3_REGION: z.string(),
+
+  CONTENT_URL: z.string(),
+  CONTENT_TOKEN: z.string().optional(),
 });
 
 export const privateConfig = privateConfigSchema.parse(process.env);
