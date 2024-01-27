@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "postinstall": "patch-package",
-    "dev": "next dev",
+    "dev": "next dev | pino-pretty",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -44,6 +44,7 @@
     "nodemailer": "^6.9.8",
     "patch-package": "^8.0.0",
     "pino": "^8.17.2",
+    "pino-pretty": "^10.3.1",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.48.2",
