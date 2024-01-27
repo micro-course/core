@@ -8,6 +8,7 @@ import lessonSchema from "./_schemas/lesson.schema.json";
 import { Course } from "./_schemas/course.schema";
 import { Lesson } from "./_schemas/lesson.schema";
 import { Manifest } from "./_schemas/manifest.schema";
+import { loggedMethod } from "@/shared/lib/logger";
 
 interface Deps {
   cacheStrategy: CacheStategy;
@@ -24,6 +25,7 @@ export class ContentApi {
     private d: Deps,
   ) {}
 
+  @loggedMethod
   async fetchManifest() {
     const fetchData = async () => {
       const text = await this.d.fileFetcher.fetchText(this.getManifestUrl());
