@@ -13,6 +13,7 @@ import ReactFlow, {
 import { MapProjection } from "../_domain/projections";
 import { customNodes } from "./nodes/custom-nodes";
 import { getFlowNode } from "../_vm/data-prepare/flow-nodes/get-flow-node";
+import { useMoveNode } from "../_vm/actions/use-move-node";
 
 export function Flow({ map }: { map: MapProjection }) {
   const initialNodes = useMemo(
@@ -29,6 +30,7 @@ export function Flow({ map }: { map: MapProjection }) {
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const { move } = useMoveNode();
 
   useEffect(() => {
     setNodes(initialNodes);
@@ -50,6 +52,10 @@ export function Flow({ map }: { map: MapProjection }) {
         maxZoom={10}
         minZoom={0.01}
         onConnect={onConnect}
+        onNodeDragStop={(_, node) => {
+          console.log("move");
+          move({ x: node.position.x, y: node.position.y, id: node.id });
+        }}
       >
         <Controls />
         <MiniMap />
