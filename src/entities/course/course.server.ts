@@ -1,1 +1,2 @@
-export { getCoursesListUseCase } from "./_use-cases/get-courses-list";
+export { courseRepository } from "./_repositories/course";
+export { courseIndexRepository } from "./_repositories/course-index";

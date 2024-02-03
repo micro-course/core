@@ -1,22 +1,44 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "required": ["id", "title", "description", "lessons"],
+  "required": ["id", "title", "description", "lessons", "thumbnail"],
   "additionalProperties": false,
   "properties": {
-    "id": { "type": "string", "title": "Uuid" },
+    "id": {
+      "$ref": "#/definitions/cuid"
+    },
     "title": {
-      "type": "string"
+      "type": "string",
+      "maxLength": 100
     },
     "description": {
       "type": "string"
     },
-    "lessons": {
+    "shortDescription": {
+      "type": "string",
+      "maxLength": 400
+    },
+    "thumbnail": {
+      "type": "string"
+    },
+    "dependencies": {
       "type": "array",
       "items": {
         "type": "string",
-        "title": "LessonPath"
+        "title": "Cuid"
       }
+    },
+    "lessons": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/cuid"
+      }
+    }
+  },
+  "definitions": {
+    "cuid": {
+      "type": "string",
+      "title": "cuid"
     }
   }
 }

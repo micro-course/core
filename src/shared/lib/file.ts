@@ -28,3 +28,27 @@ export function validateFileSize(file: File, sizeMb: number) {
     return true;
   }
 }
+
+export function getImageSizes(
+  src: string,
+  style?: Partial<CSSStyleDeclaration>,
+) {
+  return new Promise<{ width: number; height: number }>((resolve) => {
+    const img = document.createElement("img");
+
+    Object.assign(img.style, style);
+
+    img.onload = function handleLoad() {
+      resolve({
+        width: img.width,
+        height: img.height,
+      });
+
+      img.remove();
+    };
+
+    img.src = src;
+
+    document.body.appendChild(img);
+  });
+}

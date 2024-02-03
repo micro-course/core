@@ -1,16 +1,14 @@
+import { publicConfig } from "@/shared/config/public";
+import { CacheStrategy } from "@/shared/lib/cache";
 import { QueryClient } from "@tanstack/react-query";
 
-export interface CacheStategy {
-  fetch<T>(key: unknown[], getData: () => Promise<T>): Promise<T>;
-}
-
-export class DummyCacheStrategy implements CacheStategy {
+export class DummyCacheStrategy implements CacheStrategy {
   fetch<T>(_: unknown[], getData: () => Promise<T>): Promise<T> {
     return getData();
   }
 }
 
-export class ReactQueryCacheStrategy implements CacheStategy {
+export class ReactQueryCacheStrategy implements CacheStrategy {
   private timer: any;
 
   constructor(
@@ -18,6 +16,7 @@ export class ReactQueryCacheStrategy implements CacheStategy {
       defaultOptions: {
         queries: {
           staleTime: Infinity,
+          retry: 0,
         },
       },
     }),
@@ -41,3 +40,7 @@ export class ReactQueryCacheStrategy implements CacheStategy {
     clearInterval(this.timer);
   }
 }
+
+export const contentCacheStrategy = publicConfig.isDev
+  ? new DummyCacheStrategy()
+  : new ReactQueryCacheStrategy();

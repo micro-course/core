@@ -5,12 +5,15 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export type Uuid = string;
-export type LessonPath = string;
+export type Cuid = string;
+export type Cuid1 = string;
 
 export interface Course {
-  id: Uuid;
+  id: Cuid;
   title: string;
   description: string;
-  lessons: LessonPath[];
+  shortDescription?: string;
+  thumbnail: string;
+  dependencies?: Cuid1[];
+  lessons: Cuid[];
 }

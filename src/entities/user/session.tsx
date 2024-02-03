@@ -1,6 +1,6 @@
-"use client";
 import { useSession } from "next-auth/react";
 import { SessionProvider as NextAuthSessionProvider } from "next-auth/react";
+export type { SessionEntity } from "./_domain/types";
 
 export const useAppSession = useSession;
 

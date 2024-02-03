@@ -1,3 +1,9 @@
+import { CoursesMap } from "@/features/courses-map/courses-map";
+
 export default function Map() {
-  return <div className="container py-10">Map</div>;
+  return (
+    <div className="fixed inset-0 flex flex-col">
+      <CoursesMap />
+    </div>
+  );
 }
