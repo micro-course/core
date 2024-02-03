@@ -17,15 +17,17 @@ import {
 import { Spinner } from "@/shared/ui/spinner";
 import { ImageField } from "./image-field";
 import {
-  INITIAL_IMAGE_SIZE,
+  INITIAL_HEIGHT,
   INITIAL_ROTATION,
   INITIAL_SCALE,
+  INITIAL_WIDTH,
 } from "../../_constants";
 import { DimensionsFields, dimensionsFieldsSchema } from "./dimensions-fields";
 import {
   useAddImage,
   useAddImageLoading,
 } from "../../_vm/actions/use-add-image";
+import { stringifyDimensions } from "../../_domain/methods/transform-dimensions";
 
 const formSchema = z
   .object({
@@ -46,10 +48,12 @@ export function AddImageForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       src: "",
-      width: INITIAL_IMAGE_SIZE,
-      height: INITIAL_IMAGE_SIZE,
-      scale: INITIAL_SCALE,
-      rotation: INITIAL_ROTATION,
+      ...stringifyDimensions({
+        width: INITIAL_WIDTH,
+        height: INITIAL_HEIGHT,
+        scale: INITIAL_SCALE,
+        rotation: INITIAL_ROTATION,
+      }),
     },
   });
 

@@ -1,6 +1,8 @@
 import { CourseId, CourseSlug } from "@/entities/course/course";
 import {
-  MapNodeBase,
+  MapNodeDimensions,
+  MapNodeSettings,
+  MapNodePosition,
   MapNodeId,
   MapNodeImageData,
 } from "@/entities/map/map-node";
@@ -20,12 +22,16 @@ type CourseNodeData = {
 export type ImageNodeProjection = {
   id: MapNodeId;
   data: MapNodeImageData;
-} & MapNodeBase;
+} & MapNodePosition &
+  MapNodeDimensions &
+  MapNodeSettings;
 
 export type CourseNodeProjection = {
   id: MapNodeId;
   data: CourseNodeData;
-} & MapNodeBase;
+} & MapNodePosition &
+  MapNodeDimensions &
+  MapNodeSettings;
 
 export type MapNodeProjection = CourseNodeProjection | ImageNodeProjection;
 
@@ -42,3 +48,16 @@ export type MapProjection = {
 };
 
 //===
+//
+export type DimensionsStrings = {
+  width: string;
+  height: string;
+  scale: string;
+  rotation: string;
+};
+
+export type PositionStrings = {
+  x: string;
+  y: string;
+  zIndex: string;
+};

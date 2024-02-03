@@ -2,7 +2,9 @@ export type {
   MapNodeEntity,
   MapNodeType,
   MapNodeId,
-  MapNodeBase,
+  MapNodePosition,
+  MapNodeSettings,
+  MapNodeDimensions,
   MapNodeData,
   MapNodeCourseData,
   MapNodeImageData,
@@ -14,4 +16,8 @@ export {
 } from "./_domain/factory";
 export { MAP_NODE_TYPES } from "./_domain/entities";
 
-export { mapNodeBaseSchema } from "./_domain/schemas";
+export {
+  mapNodePositionSchema,
+  mapNodeSettingsSchema,
+  mapNodeDimensionsSchema,
+} from "./_domain/schemas";

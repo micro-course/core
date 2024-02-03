@@ -21,7 +21,7 @@ const useDialogsStore = create<DialogsState>((set) => ({
     [DialogType.ADD_IMAGE]: {
       isOpen: false,
     },
-    [DialogType.UPDATE_NODE_BASE]: {
+    [DialogType.UPDATE_NODE]: {
       isOpen: false,
     },
   },

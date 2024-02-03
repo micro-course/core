@@ -9,24 +9,26 @@ import {
 } from "@/shared/ui/dialog";
 import { DialogType, useDialog } from "../../_vm/lib/diaglos";
 import {
-  UpdateNodeBaseForm,
-  UpdateNodeBaseFormFields,
-  UpdateNodeBaseFormActions,
-} from "../forms/update-node-base-form";
+  UpdateNodeForm,
+  UpdateNodeFormFields,
+  UpdateNodeFormActions,
+} from "../forms/update-node-form";
 
-export function UpdateNodeBaseDialog() {
-  const updateNodeBaseDialog = useDialog(DialogType.UPDATE_NODE_BASE);
+export function UpdateNodeDialog() {
+  const updateNodeDialog = useDialog(DialogType.UPDATE_NODE);
+
+  console.log(updateNodeDialog.state);
 
   return (
     <Dialog
-      onOpenChange={updateNodeBaseDialog.close}
-      open={updateNodeBaseDialog.state.isOpen}
+      onOpenChange={updateNodeDialog.close}
+      open={updateNodeDialog.state.isOpen}
     >
       <DialogContent className="sm:max-w-[500px]">
-        {updateNodeBaseDialog.state.isOpen && (
-          <UpdateNodeBaseForm
-            onSuccess={updateNodeBaseDialog.close}
-            node={updateNodeBaseDialog.state.node}
+        {updateNodeDialog.state.isOpen && (
+          <UpdateNodeForm
+            onSuccess={updateNodeDialog.close}
+            node={updateNodeDialog.state.node}
           >
             <DialogHeader className="mb-3">
               <DialogTitle>Обновление ноды</DialogTitle>
@@ -34,11 +36,11 @@ export function UpdateNodeBaseDialog() {
                 Общие для всех типов нод параметры
               </DialogDescription>
             </DialogHeader>
-            <UpdateNodeBaseFormFields />
+            <UpdateNodeFormFields />
             <DialogFooter className="mt-3">
-              <UpdateNodeBaseFormActions />
+              <UpdateNodeFormActions />
             </DialogFooter>
-          </UpdateNodeBaseForm>
+          </UpdateNodeForm>
         )}
       </DialogContent>
     </Dialog>

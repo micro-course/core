@@ -3,6 +3,8 @@ import { useServerAction } from "@/shared/lib/server-action/client";
 import { addImageNodeAction } from "../../_actions/add-image-node";
 import { useInvalidateMap } from "../queries";
 import { useReactFlow } from "reactflow";
+import { DimensionsStrings } from "../../_domain/projections";
+import { parseDimensions } from "../../_domain/methods/transform-dimensions";
 
 const mutationKey = ["map", "add-image"];
 
@@ -14,16 +16,12 @@ export const useAddImage = () => {
   const addImage = async ({
     src,
     ...dimensions
-  }: {
-    width: string;
-    height: string;
-    scale: string;
-    rotation: string;
-    src: string;
-  }) => {
+  }: { src: string } & DimensionsStrings) => {
+    const parsedDimensions = parseDimensions(dimensions);
     const { y, x } = reactFlow.screenToFlowPosition({
-      x: document.documentElement.clientWidth / 2,
-      y: document.documentElement.clientHeight / 2,
+      x: document.documentElement.clientWidth / 2 - parsedDimensions.width / 2,
+      y:
+        document.documentElement.clientHeight / 2 - parsedDimensions.height / 2,
     });
 
     return addImageNode({
@@ -31,7 +29,7 @@ export const useAddImage = () => {
       y,
       src,
       hidden: true,
-      ...dimensions,
+      ...parseDimensions(dimensions),
     });
   };
 

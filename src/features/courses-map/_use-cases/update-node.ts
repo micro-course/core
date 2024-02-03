@@ -2,22 +2,27 @@ import { createMapAbility } from "../_domain/ability";
 import { MapNodeProjection } from "../_domain/projections";
 import { WithSession, checkAbility } from "@/entities/user/session.server";
 import { mapNodeRepository } from "@/entities/map/map-node.server";
-import { MapNodeBase, MapNodeId } from "@/entities/map/map-node";
+import {
+  MapNodeSettings,
+  MapNodeDimensions,
+  MapNodePosition,
+  MapNodeId,
+} from "@/entities/map/map-node";
 import { createMapNodeProjection } from "../_domain/mappers";
 import { NotFoundError } from "@/shared/lib/errors";
 
-export type UpdateBaseNodeCommand = {
+export type UpdateNodeCommand = {
   id: MapNodeId;
-} & Partial<MapNodeBase>;
+} & Partial<MapNodePosition & MapNodeDimensions & MapNodeSettings>;
 
-export class UpdateBaseNodeUseCase {
+export class UpdateNodeUseCase {
   @checkAbility({
     createAbility: createMapAbility,
     check: (ability) => ability.canMangeNodes(),
   })
   async exec(
     _: WithSession,
-    command: UpdateBaseNodeCommand,
+    command: UpdateNodeCommand,
   ): Promise<MapNodeProjection> {
     const nodeEntity = await mapNodeRepository.getNodeById(command.id);
 
@@ -31,4 +36,4 @@ export class UpdateBaseNodeUseCase {
   }
 }
 
-export const updateBaseNodeUseCase = new UpdateBaseNodeUseCase();
+export const updateNodeUseCase = new UpdateNodeUseCase();

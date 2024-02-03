@@ -2,27 +2,27 @@
 import { getAppSessionStrictServer } from "@/entities/user/session.server";
 import { serverAction } from "@/shared/lib/server-action/server";
 import { z } from "zod";
-import { addCourseNodeUseCase } from "../_use-cases/add-course-node";
 import {
   mapNodeDimensionsSchema,
   mapNodeSettingsSchema,
   mapNodePositionSchema,
 } from "@/entities/map/map-node";
+import { updateNodeUseCase } from "../_use-cases/update-node";
 
 const params = z
   .object({
-    courseId: z.string(),
+    id: z.string(),
   })
-  .merge(mapNodeDimensionsSchema)
-  .merge(mapNodePositionSchema)
-  .merge(mapNodeSettingsSchema);
+  .merge(mapNodeDimensionsSchema.partial())
+  .merge(mapNodePositionSchema.partial())
+  .merge(mapNodeSettingsSchema.partial());
 
-export const addCourseNodeAction = serverAction(
+export const updateNodeAction = serverAction(
   {
     paramsSchema: params,
   },
   async (data) => {
     const session = await getAppSessionStrictServer();
-    return addCourseNodeUseCase.exec({ session }, data);
+    return updateNodeUseCase.exec({ session }, data);
   },
 );

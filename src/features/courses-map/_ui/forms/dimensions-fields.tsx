@@ -8,8 +8,10 @@ import {
 } from "@/shared/ui/form";
 import { useFormContext } from "react-hook-form";
 import { Input } from "@/shared/ui/input";
+import { toZod } from "tozod";
+import { DimensionsStrings } from "../../_domain/projections";
 
-export const dimensionsFieldsSchema = z.object({
+export const dimensionsFieldsSchema: toZod<DimensionsStrings> = z.object({
   width: z.string(),
   height: z.string(),
   scale: z.string(),

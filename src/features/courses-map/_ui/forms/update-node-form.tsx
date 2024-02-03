@@ -14,9 +14,11 @@ import { Switch } from "@/shared/ui/switch";
 import { MapNodeProjection } from "../../_domain/projections";
 import { Label } from "@/shared/ui/label";
 import {
-  useUpdateNodeBase,
-  useUpdateNodeBaseLoading,
-} from "../../_vm/actions/use-update-node-base";
+  useUpdateNode,
+  useUpdateNodeLoading,
+} from "../../_vm/actions/use-update-node";
+import { stringifyPosition } from "../../_domain/methods/transform-position";
+import { stringifyDimensions } from "../../_domain/methods/transform-dimensions";
 
 const formSchema = z
   .object({
@@ -27,7 +29,7 @@ const formSchema = z
 
 type FormValues = z.infer<typeof formSchema>;
 
-export function UpdateNodeBaseForm({
+export function UpdateNodeForm({
   onSuccess,
   children,
   node,
@@ -40,20 +42,15 @@ export function UpdateNodeBaseForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       hidden: node.hidden,
-      x: String(node.x),
-      y: String(node.y),
-      width: node.width,
-      height: node.height,
-      scale: node.scale,
-      rotation: node.rotation,
-      zIndex: node.zIndex ? String(node.zIndex) : "",
+      ...stringifyDimensions(node),
+      ...stringifyPosition(node),
     },
   });
 
-  const { updateNodeBase } = useUpdateNodeBase();
+  const { updateNode } = useUpdateNode();
 
   const handleSubmit = form.handleSubmit(async (data) => {
-    await updateNodeBase({
+    await updateNode({
       id: node.id,
       ...data,
     });
@@ -67,7 +64,7 @@ export function UpdateNodeBaseForm({
   );
 }
 
-export function UpdateNodeBaseFormFields() {
+export function UpdateNodeFormFields() {
   const form = useFormContext<FormValues>();
 
   return (
@@ -88,8 +85,8 @@ export function UpdateNodeBaseFormFields() {
   );
 }
 
-export function UpdateNodeBaseFormActions() {
-  const isLoading = useUpdateNodeBaseLoading();
+export function UpdateNodeFormActions() {
+  const isLoading = useUpdateNodeLoading();
   const form = useFormContext<FormValues>();
 
   return (

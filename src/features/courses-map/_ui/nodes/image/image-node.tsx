@@ -11,18 +11,18 @@ import { Button } from "@/shared/ui/button";
 import { Pen, Settings2 } from "lucide-react";
 
 export default function ImageNode(props: NodeProps<ImageNodeProjection>) {
-  const setDialogState = useDialogSetState(DialogType.UPDATE_NODE_BASE);
+  const setDialogState = useDialogSetState(DialogType.UPDATE_NODE);
 
   return (
     <>
       <NodeToolbar>
-        <div className={cn(" flex gap-2")}>
+        <div className={cn(" flex gap-2 z-50")}>
           <Button
             size={"icon"}
             variant={"outline"}
-            onClick={() =>
-              setDialogState.setState({ isOpen: true, node: props.data })
-            }
+            onClick={() => {
+              setDialogState.setState({ isOpen: true, node: props.data });
+            }}
           >
             <Settings2 />
           </Button>
@@ -30,15 +30,23 @@ export default function ImageNode(props: NodeProps<ImageNodeProjection>) {
       </NodeToolbar>
 
       <div
-        className={cn(props.selected && "outline-primary outline", "relative ")}
+        className={cn(
+          props.selected &&
+            "outline-primary outline flex items-center justify-center",
+          "relative ",
+        )}
         style={{
-          transform: `scale(${props.data.scale}) rotate(${props.data.rotation})`,
+          width: `${props.data.width * props.data.scale}px`,
+          height: `${props.data.height * props.data.scale}px`,
+          pointerEvents: "none",
         }}
       >
         <img
           src={props.data.data.src}
           alt=""
           style={{
+            transform: `scale(${props.data.scale}) rotate(${props.data.rotation}deg)`,
+            transformOrigin: "center center",
             width: props.data.width,
             height: props.data.height,
           }}

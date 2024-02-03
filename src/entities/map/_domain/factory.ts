@@ -1,8 +1,16 @@
 import { createId } from "@/shared/lib/id";
-import { MAP_NODE_TYPES, MapNodeBase, MapNodeEntity } from "./entities";
+import {
+  MAP_NODE_TYPES,
+  MapNodeDimensions,
+  MapNodeEntity,
+  MapNodePosition,
+  MapNodeSettings,
+} from "./entities";
 import { COURSE_BASE_Z_INDEX, IMAGE_BASE_Z_INDEX } from "../_const";
 
-const cleanBase = (node: MapNodeBase) => {
+const cleanBase = (
+  node: MapNodeSettings & MapNodePosition & MapNodeDimensions,
+) => {
   return {
     x: node.x,
     y: node.y,
@@ -18,7 +26,9 @@ const cleanBase = (node: MapNodeBase) => {
 export const createImageMapNodeEntity = ({
   src,
   ...base
-}: MapNodeBase & { src: string }): MapNodeEntity => {
+}: MapNodeSettings &
+  MapNodePosition &
+  MapNodeDimensions & { src: string }): MapNodeEntity => {
   return {
     id: createId(),
     ...cleanBase(base),
@@ -34,7 +44,9 @@ export const createImageMapNodeEntity = ({
 export const createCourseMapNodeEntity = ({
   courseId,
   ...base
-}: MapNodeBase & { courseId: string }): MapNodeEntity => {
+}: MapNodeSettings &
+  MapNodePosition &
+  MapNodeDimensions & { courseId: string }): MapNodeEntity => {
   return {
     id: createId(),
     ...cleanBase(base),

@@ -11,24 +11,32 @@ export type MapNodeImageData = {
   src: string;
 };
 
-export type MapNodeBase = {
+export type MapNodePosition = {
   x: number;
   y: number;
-  width: string; // css width value
-  height: string; // css height value
-  rotation: string; // css rotate value
-  scale: string; // css scale value
-  hidden: boolean;
   zIndex?: number;
+};
+
+export type MapNodeDimensions = {
+  width: number; // px
+  height: number; // px
+  rotation: number; // deg
+  scale: number;
+};
+
+export type MapNodeSettings = {
+  hidden: boolean;
 };
 
 export type MapNodeData = MapNodeCourseData | MapNodeImageData;
 export type MapNodeType = MapNodeData["type"];
 
-export type MapNodeEntity = MapNodeBase & {
-  id: MapNodeId;
-  data: MapNodeData;
-};
+export type MapNodeEntity = MapNodePosition &
+  MapNodeDimensions &
+  MapNodeSettings & {
+    id: MapNodeId;
+    data: MapNodeData;
+  };
 
 export const MAP_NODE_TYPES = {
   COURSE: "course" satisfies MapNodeType,

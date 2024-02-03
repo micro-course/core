@@ -2,12 +2,19 @@ import { createMapAbility } from "../_domain/ability";
 import { MapNodeProjection } from "../_domain/projections";
 import { WithSession, checkAbility } from "@/entities/user/session.server";
 import { mapNodeRepository } from "@/entities/map/map-node.server";
-import { MapNodeBase, createImageMapNodeEntity } from "@/entities/map/map-node";
+import {
+  createImageMapNodeEntity,
+  MapNodePosition,
+  MapNodeDimensions,
+  MapNodeSettings,
+} from "@/entities/map/map-node";
 import { createMapNodeProjection } from "../_domain/mappers";
 
 export type AddImageNodeCommand = {
   src: string;
-} & MapNodeBase;
+} & MapNodeDimensions &
+  MapNodePosition &
+  MapNodeSettings;
 
 export class AddImageNodeUseCase {
   @checkAbility({

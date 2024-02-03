@@ -3,7 +3,9 @@ import { MapNodeProjection } from "../_domain/projections";
 import { WithSession, checkAbility } from "@/entities/user/session.server";
 import { mapNodeRepository } from "@/entities/map/map-node.server";
 import {
-  MapNodeBase,
+  MapNodePosition,
+  MapNodeDimensions,
+  MapNodeSettings,
   createCourseMapNodeEntity,
 } from "@/entities/map/map-node";
 import { createMapNodeProjection } from "../_domain/mappers";
@@ -11,7 +13,9 @@ import { CourseId } from "@/entities/course/course";
 
 export type AddCourseNodeCommand = {
   courseId: CourseId;
-} & MapNodeBase;
+} & MapNodeDimensions &
+  MapNodePosition &
+  MapNodeSettings;
 
 export class AddCourseNodeUseCase {
   @checkAbility({

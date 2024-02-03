@@ -57,6 +57,7 @@
     "reactflow": "^11.10.3",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
+    "tozod": "^3.0.0",
     "yaml": "^2.3.4",
     "zod": "^3.22.4",
     "zustand": "^4.5.0"
