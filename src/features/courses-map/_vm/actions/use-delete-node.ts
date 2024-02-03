@@ -2,23 +2,23 @@ import { useMutation } from "@tanstack/react-query";
 import { useServerAction } from "@/shared/lib/server-action/client";
 import { useMapCache } from "../queries";
 import { MapNodeId } from "@/entities/map/map-node";
-import { updateNodeAction } from "../../_actions/update-node";
+import { deleteNodeAction } from "../../_actions/delete-node";
 
-const mutationKey = ["map", "move-node"];
+const mutationKey = ["map", "delete-node"];
 
-export const useMoveNode = () => {
-  const updateNode = useServerAction(updateNodeAction);
+export const useDeleteNode = () => {
+  const deleteNode = useServerAction(deleteNodeAction);
   const mapCache = useMapCache();
 
-  const { mutate: move } = useMutation({
+  const { mutate } = useMutation({
     mutationKey: mutationKey,
-    mutationFn: async (data: { x: number; y: number; id: MapNodeId }) => {
-      return updateNode(data);
+    mutationFn: async (data: { id: MapNodeId }) => {
+      return deleteNode(data);
     },
-    onMutate: async (moveParams) => {
+    onMutate: async (deleteParams) => {
       await mapCache.cancelQuery();
       const previousMap = mapCache.get();
-      mapCache.updateNodePosition(moveParams);
+      mapCache.removeNode(deleteParams);
       return { previousMap };
     },
     onError: (_, __, context) => {
@@ -30,6 +30,6 @@ export const useMoveNode = () => {
   });
 
   return {
-    move,
+    deleteNode: mutate,
   };
 };

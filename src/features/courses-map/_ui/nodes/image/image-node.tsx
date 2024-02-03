@@ -8,10 +8,13 @@ import {
   useDialogSetState,
 } from "@/features/courses-map/_vm/lib/diaglos";
 import { Button } from "@/shared/ui/button";
-import { Pen, Settings2 } from "lucide-react";
+import { Settings2, Trash2 } from "lucide-react";
+import { useDeleteNode } from "@/features/courses-map/_vm/actions/use-delete-node";
 
 export default function ImageNode(props: NodeProps<ImageNodeProjection>) {
   const setDialogState = useDialogSetState(DialogType.UPDATE_NODE);
+
+  const { deleteNode } = useDeleteNode();
 
   return (
     <>
@@ -26,14 +29,23 @@ export default function ImageNode(props: NodeProps<ImageNodeProjection>) {
           >
             <Settings2 />
           </Button>
+          <Button
+            size={"icon"}
+            variant={"outline"}
+            color="danger"
+            onClick={() => {
+              deleteNode({ id: props.id });
+            }}
+          >
+            <Trash2 />
+          </Button>
         </div>
       </NodeToolbar>
 
       <div
         className={cn(
-          props.selected &&
-            "outline-primary outline flex items-center justify-center",
-          "relative ",
+          props.selected && "outline-primary outline ",
+          "relative flex items-center justify-center",
         )}
         style={{
           width: `${props.data.width * props.data.scale}px`,

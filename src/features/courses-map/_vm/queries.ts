@@ -37,6 +37,23 @@ export const useInvalidateMap = () => {
 export const useMapCache = () => {
   const queryClient = useQueryClient();
 
+  const removeNode = ({ id }: { id: MapNodeId }) =>
+    queryClient.setQueryData([baseKey, "map"], (data: MapProjection) => {
+      const node = data.nodes[id];
+      if (!node) {
+        return data;
+      }
+
+      const newNodes = { ...data.nodes };
+      delete newNodes[id];
+
+      return {
+        ...data,
+        nodeIds: data.nodeIds.filter((nodeId) => nodeId !== id),
+        nodes: newNodes,
+      } satisfies MapProjection;
+    });
+
   const updateNodePosition = ({
     x,
     y,
@@ -82,5 +99,6 @@ export const useMapCache = () => {
     invalidate,
     set,
     get,
+    removeNode,
   };
 };
