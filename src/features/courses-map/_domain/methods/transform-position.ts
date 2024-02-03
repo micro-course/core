@@ -1,11 +1,11 @@
-import { parseIntOrDefault } from "@/shared/lib/number";
+import { parseFloatOrDefault, parseIntOrDefault } from "@/shared/lib/number";
 import { PositionStrings } from "../projections";
 import { MapNodePosition } from "@/entities/map/map-node";
 
 export const parsePosition = (positon: PositionStrings): MapNodePosition => {
   return {
-    x: parseIntOrDefault(positon.x, 0),
-    y: parseIntOrDefault(positon.y, 0),
+    x: parseFloatOrDefault(positon.x, 0),
+    y: parseFloatOrDefault(positon.y, 0),
     zIndex: parseIntOrDefault(positon.zIndex, undefined),
   };
 };

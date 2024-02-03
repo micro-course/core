@@ -1,4 +1,4 @@
-import { parseIntOrDefault } from "@/shared/lib/number";
+import { parseFloatOrDefault, parseIntOrDefault } from "@/shared/lib/number";
 import { DimensionsStrings } from "../projections";
 import {
   INITIAL_HEIGHT,
@@ -14,7 +14,7 @@ export const parseDimensions = (
   return {
     width: parseIntOrDefault(dimensions.width, INITIAL_WIDTH),
     height: parseIntOrDefault(dimensions.height, INITIAL_HEIGHT),
-    scale: parseIntOrDefault(dimensions.scale, INITIAL_SCALE),
+    scale: parseFloatOrDefault(dimensions.scale, INITIAL_SCALE),
     rotation: parseIntOrDefault(dimensions.rotation, INITIAL_ROTATION),
   };
 };

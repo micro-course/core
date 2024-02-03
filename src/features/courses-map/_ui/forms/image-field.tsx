@@ -6,12 +6,15 @@ import { useUploadImage } from "../../_vm/actions/use-upload-image";
 export function ImageField({
   src,
   onChange,
+  onChangeSize,
 }: {
   src: string;
   onChange: (...event: any[]) => void;
+  onChangeSize?: (sizes: { width: number; height: number }) => void;
 }) {
   const { handleFileSelect, isPending } = useUploadImage({
     onSuccess: onChange,
+    onImageSize: onChangeSize,
   });
 
   return (

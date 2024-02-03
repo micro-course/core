@@ -19,9 +19,12 @@ export const useAddImage = () => {
   }: { src: string } & DimensionsStrings) => {
     const parsedDimensions = parseDimensions(dimensions);
     const { y, x } = reactFlow.screenToFlowPosition({
-      x: document.documentElement.clientWidth / 2 - parsedDimensions.width / 2,
+      x:
+        document.documentElement.clientWidth / 2 -
+        (parsedDimensions.width * parsedDimensions.scale) / 2,
       y:
-        document.documentElement.clientHeight / 2 - parsedDimensions.height / 2,
+        document.documentElement.clientHeight / 2 -
+        (parsedDimensions.width * parsedDimensions.scale) / 2,
     });
 
     return addImageNode({

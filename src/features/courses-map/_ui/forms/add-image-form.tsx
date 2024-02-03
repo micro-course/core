@@ -99,7 +99,14 @@ export function AddImageFormFields() {
           <FormItem>
             <FormLabel>Картинка</FormLabel>
             <FormControl>
-              <ImageField src={field.value} onChange={field.onChange} />
+              <ImageField
+                src={field.value}
+                onChange={field.onChange}
+                onChangeSize={({ width, height }) => {
+                  form.setValue("width", String(width));
+                  form.setValue("height", String(height));
+                }}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>

@@ -42,28 +42,20 @@ export default function ImageNode(props: NodeProps<ImageNodeProjection>) {
         </div>
       </NodeToolbar>
 
-      <div
+      <img
+        src={props.data.data.src}
         className={cn(
           props.selected && "outline-primary outline ",
-          "relative flex items-center justify-center",
+          props.data.hidden && "opacity-50",
         )}
+        alt=""
         style={{
           width: `${props.data.width * props.data.scale}px`,
           height: `${props.data.height * props.data.scale}px`,
-          pointerEvents: "none",
+          transform: `rotate(${props.data.rotation}deg)`,
+          transformOrigin: "center center",
         }}
-      >
-        <img
-          src={props.data.data.src}
-          alt=""
-          style={{
-            transform: `scale(${props.data.scale}) rotate(${props.data.rotation}deg)`,
-            transformOrigin: "center center",
-            width: props.data.width,
-            height: props.data.height,
-          }}
-        />
-      </div>
+      />
     </>
   );
 }

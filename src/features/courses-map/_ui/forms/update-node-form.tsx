@@ -6,13 +6,18 @@ import { useForm, useFormContext } from "react-hook-form";
 import * as z from "zod";
 
 import { Button } from "@/shared/ui/button";
-import { Form, FormField, FormItem } from "@/shared/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/shared/ui/form";
 import { Spinner } from "@/shared/ui/spinner";
 import { DimensionsFields, dimensionsFieldsSchema } from "./dimensions-fields";
 import { PositionFields, positionFieldsSchema } from "./position-fields";
 import { Switch } from "@/shared/ui/switch";
 import { MapNodeProjection } from "../../_domain/projections";
-import { Label } from "@/shared/ui/label";
 import {
   useUpdateNode,
   useUpdateNodeLoading,
@@ -74,8 +79,10 @@ export function UpdateNodeFormFields() {
         name="hidden"
         render={({ field }) => (
           <FormItem className="flex items-center space-x-2">
-            <Switch onChange={field.onChange} checked={field.value} />
-            <Label>Скрыто</Label>
+            <FormControl>
+              <Switch checked={field.value} onCheckedChange={field.onChange} />
+            </FormControl>
+            <FormLabel className="!mt-0">Скрыто</FormLabel>
           </FormItem>
         )}
       />

@@ -61,7 +61,7 @@ export function DimensionsFields({}) {
             <FormItem>
               <FormLabel>scale</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} type="number" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -74,7 +74,7 @@ export function DimensionsFields({}) {
             <FormItem>
               <FormLabel>rotation</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} type="number" />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -29,21 +29,21 @@ export function validateFileSize(file: File, sizeMb: number) {
   }
 }
 
-export function getImageSizes(
-  src: string,
-  style?: Partial<CSSStyleDeclaration>,
-) {
+export function getImageSizes(file: File) {
   return new Promise<{ width: number; height: number }>((resolve) => {
     const img = document.createElement("img");
 
-    Object.assign(img.style, style);
+    const src = URL.createObjectURL(file);
 
+    img.style.opacity = "0";
+    img.style.position = "absolute";
     img.onload = function handleLoad() {
       resolve({
         width: img.width,
         height: img.height,
       });
 
+      URL.revokeObjectURL(src);
       img.remove();
     };
 

@@ -74,7 +74,7 @@ model MapNode {
   width      Int                @default(100)
   height     Int                @default(100)
   rotation   Int                @default(0)
-  scale      Int                @default(1)
+  scale      Float              @default(1)
   hidden     Boolean
   zIndex     Int?
   courseData MapNodeCourseData?
