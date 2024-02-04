@@ -1,4 +1,4 @@
-import { MapNodeProjection } from "../../../_domain/projections";
+import { MapNode } from "../../../_domain/projections";
 
 export enum DialogType {
   ADD_COURSE = "ADD_COURSE",
@@ -8,7 +8,7 @@ export enum DialogType {
 
 export type DialogParams = {
   [DialogType.UPDATE_NODE]: {
-    node: MapNodeProjection;
+    node: MapNode;
   };
   [DialogType.ADD_COURSE]: {};
   [DialogType.ADD_IMAGE]: {};

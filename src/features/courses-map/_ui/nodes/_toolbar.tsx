@@ -1,5 +1,5 @@
 import { cn } from "@/shared/ui/utils";
-import { MapNodeProjection } from "../../_domain/projections";
+import { MapNode } from "../../_domain/projections";
 
 import { NodeProps, NodeToolbar } from "reactflow";
 import {
@@ -10,7 +10,7 @@ import { Button } from "@/shared/ui/button";
 import { Settings2, Trash2 } from "lucide-react";
 import { useDeleteNode } from "../../_vm/actions/use-delete-node";
 
-export default function Toolbar(props: NodeProps<MapNodeProjection>) {
+export default function Toolbar(props: NodeProps<MapNode>) {
   const setDialogState = useDialogSetState(DialogType.UPDATE_NODE);
 
   const { deleteNode } = useDeleteNode();

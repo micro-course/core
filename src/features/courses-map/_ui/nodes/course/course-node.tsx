@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import { cn } from "@/shared/ui/utils";
-import { CourseNodeProjection } from "../../../_domain/projections";
+import { CourseNode } from "../../../_domain/projections";
 
 import { NodeProps } from "reactflow";
 import Toolbar from "../_toolbar";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 
-export default function CourseNode(props: NodeProps<CourseNodeProjection>) {
+export default function CourseNode(props: NodeProps<CourseNode>) {
   return (
     <>
       <Toolbar {...props} />

@@ -1,8 +1,8 @@
-import { MapNodeProjection } from "../../../_domain/projections";
+import { MapNode } from "../../../_domain/projections";
 import { ReactFlowNode } from "./reactflow-node";
 
 export const getFlowNode = (
-  node: MapNodeProjection,
+  node: MapNode,
   lastNode?: ReactFlowNode,
 ): ReactFlowNode => {
   return {

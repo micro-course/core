@@ -12,7 +12,7 @@ import ReactFlow, {
   NodeDragHandler,
   SelectionDragHandler,
 } from "reactflow";
-import { MapProjection } from "../_domain/projections";
+import { Map } from "../_domain/projections";
 import { customNodes } from "./nodes/custom-nodes";
 import { getFlowNode } from "../_vm/data-prepare/flow-nodes/get-flow-node";
 import { useMoveNode } from "../_vm/actions/use-move-node";
@@ -34,7 +34,7 @@ const viewportStorage = new SafeLocalStorage(
   undefined,
 );
 
-export function Flow({ map }: { map: MapProjection }) {
+export function Flow({ map }: { map: Map }) {
   const flow = useReactFlow();
 
   const [nodes, setNodes, onNodesChange] = useNodesState([]);

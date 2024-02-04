@@ -1,10 +1,6 @@
 import { createMapAbility } from "../_domain/ability";
-import {
-  MapNodeProjection,
-  MapEdgeProjection,
-  MapProjection,
-} from "../_domain/projections";
-import { createMapNodeProjection } from "../_domain/mappers";
+import { MapNode, MapEdge, Map } from "../_domain/projections";
+import { createMapNode } from "../_domain/mappers";
 import { mapNodeRepository } from "@/entities/map/map-node.server";
 import { WithSession, checkAbility } from "@/entities/user/session.server";
 import {
@@ -13,14 +9,14 @@ import {
   MapNodeId,
 } from "@/entities/map/map-node";
 import { courseIndexRepository } from "@/entities/course/course.server";
-import { CoursesIndexProjection } from "@/entities/course/_domain/projections";
+import { CoursesIndex } from "@/entities/course/_domain/projections";
 
 export class GetMapUseCase {
   @checkAbility({
     createAbility: createMapAbility,
     check: (ability) => ability.canViewMap(),
   })
-  async exec({ session }: WithSession): Promise<MapProjection> {
+  async exec({ session }: WithSession): Promise<Map> {
     const ability = createMapAbility(session);
 
     let { mapNodes, courseIndex } = await this.uploadData();
@@ -36,11 +32,11 @@ export class GetMapUseCase {
 
   private async buildMap(
     mapNodes: MapNodeEntity[],
-    courseIndex: CoursesIndexProjection,
-  ): Promise<MapProjection> {
-    const nodes: Record<MapNodeId, MapNodeProjection> = {};
+    courseIndex: CoursesIndex,
+  ): Promise<Map> {
+    const nodes: Record<MapNodeId, MapNode> = {};
     const nodeIds: MapNodeId[] = [];
-    const edges: MapEdgeProjection[] = [];
+    const edges: MapEdge[] = [];
 
     for (const mapNode of mapNodes) {
       if (mapNode.data.type === MAP_NODE_TYPES.COURSE) {
@@ -48,10 +44,10 @@ export class GetMapUseCase {
         if (!course) {
           continue;
         }
-        nodes[mapNode.id] = createMapNodeProjection(mapNode, course);
+        nodes[mapNode.id] = createMapNode(mapNode, course);
         nodeIds.push(mapNode.id);
       } else {
-        nodes[mapNode.id] = createMapNodeProjection(mapNode);
+        nodes[mapNode.id] = createMapNode(mapNode, undefined);
         nodeIds.push(mapNode.id);
       }
     }

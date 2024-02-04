@@ -13,5 +13,5 @@ export { courseEntityToListItem } from "./_domain/mappers";
 
 export type {
   CourseListItem,
-  CoursesIndexProjection,
+  CoursesIndex,
 } from "./_domain/projections";

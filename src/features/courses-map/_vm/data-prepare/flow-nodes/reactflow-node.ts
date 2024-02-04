@@ -1,7 +1,4 @@
 import { Node } from "reactflow";
-import { MapNodeProjection } from "../../../_domain/projections";
+import { MapNode } from "../../../_domain/projections";
 
-export type ReactFlowNode = Node<
-  MapNodeProjection,
-  MapNodeProjection["data"]["type"]
->;
+export type ReactFlowNode = Node<MapNode, MapNode["data"]["type"]>;

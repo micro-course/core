@@ -3,7 +3,7 @@ import { getMapAction } from "../_actions/get-map";
 import { getCoursesToAddAction } from "../_actions/get-courses-to-add";
 import { useQueryClient } from "@tanstack/react-query";
 import { MapNodeId, MapNodePosition } from "@/entities/map/map-node";
-import { MapProjection } from "../_domain/projections";
+import { Map } from "../_domain/projections";
 
 export const baseKey = "courses-map";
 
@@ -38,7 +38,7 @@ export const useMapCache = () => {
   const queryClient = useQueryClient();
 
   const removeNode = ({ id }: { id: MapNodeId }) =>
-    queryClient.setQueryData([baseKey, "map"], (data: MapProjection) => {
+    queryClient.setQueryData([baseKey, "map"], (data: Map) => {
       const node = data.nodes[id];
       if (!node) {
         return data;
@@ -51,7 +51,7 @@ export const useMapCache = () => {
         ...data,
         nodeIds: data.nodeIds.filter((nodeId) => nodeId !== id),
         nodes: newNodes,
-      } satisfies MapProjection;
+      } satisfies Map;
     });
 
   const updateNodePosition = ({
@@ -59,7 +59,7 @@ export const useMapCache = () => {
     y,
     id,
   }: MapNodePosition & { id: MapNodeId }) =>
-    queryClient.setQueryData([baseKey, "map"], (data: MapProjection) => {
+    queryClient.setQueryData([baseKey, "map"], (data: Map) => {
       const node = data.nodes[id];
       if (!node) {
         return data;
@@ -75,7 +75,7 @@ export const useMapCache = () => {
             y,
           },
         },
-      } satisfies MapProjection;
+      } satisfies Map;
     });
 
   const cancelQuery = () =>
@@ -88,10 +88,9 @@ export const useMapCache = () => {
       queryKey: [baseKey, "map"],
     });
 
-  const set = (data?: MapProjection) =>
-    queryClient.setQueryData([baseKey, "map"], data);
+  const set = (data?: Map) => queryClient.setQueryData([baseKey, "map"], data);
 
-  const get = () => queryClient.getQueryData<MapProjection>([baseKey, "map"]);
+  const get = () => queryClient.getQueryData<Map>([baseKey, "map"]);
 
   return {
     updateNodePosition,

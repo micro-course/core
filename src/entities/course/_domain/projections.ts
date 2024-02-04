@@ -7,7 +7,7 @@ import {
   LessonId,
 } from "./entities";
 
-export type CoursesIndexProjection = {
+export type CoursesIndex = {
   list: CourseEntity[];
   bySlug: Record<CourseSlug, CourseEntity>;
   byId: Record<CourseId, CourseEntity>;

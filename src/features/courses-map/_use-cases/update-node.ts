@@ -1,5 +1,5 @@
 import { createMapAbility } from "../_domain/ability";
-import { MapNodeProjection } from "../_domain/projections";
+import { MapNode } from "../_domain/projections";
 import { WithSession, checkAbility } from "@/entities/user/session.server";
 import { mapNodeRepository } from "@/entities/map/map-node.server";
 import {
@@ -8,7 +8,7 @@ import {
   MapNodePosition,
   MapNodeId,
 } from "@/entities/map/map-node";
-import { createMapNodeProjection } from "../_domain/mappers";
+import { createMapNode } from "../_domain/mappers";
 import { NotFoundError } from "@/shared/lib/errors";
 import { courseRepository } from "@/entities/course/course.server";
 
@@ -21,10 +21,7 @@ export class UpdateNodeUseCase {
     createAbility: createMapAbility,
     check: (ability) => ability.canMangeNodes(),
   })
-  async exec(
-    _: WithSession,
-    command: UpdateNodeCommand,
-  ): Promise<MapNodeProjection> {
+  async exec(_: WithSession, command: UpdateNodeCommand): Promise<MapNode> {
     const nodeEntity = await mapNodeRepository.getNodeById(command.id);
 
     if (!nodeEntity) {
@@ -33,7 +30,7 @@ export class UpdateNodeUseCase {
 
     Object.assign(nodeEntity, command);
 
-    return createMapNodeProjection(
+    return createMapNode(
       ...(await Promise.all([
         mapNodeRepository.save(nodeEntity),
         nodeEntity.data.type === "course"

@@ -7,7 +7,7 @@ import {
   MapNodeImageData,
 } from "@/entities/map/map-node";
 
-export type CourseToAddProjection = {
+export type CourseToAdd = {
   id: CourseId;
   slug: CourseSlug;
   title: string;
@@ -17,34 +17,34 @@ export type CourseToAddProjection = {
 
 type CourseNodeData = {
   type: "course";
-} & CourseToAddProjection;
+} & CourseToAdd;
 
-export type ImageNodeProjection = {
+export type ImageNode = {
   id: MapNodeId;
   data: MapNodeImageData;
 } & MapNodePosition &
   MapNodeDimensions &
   MapNodeSettings;
 
-export type CourseNodeProjection = {
+export type CourseNode = {
   id: MapNodeId;
   data: CourseNodeData;
 } & MapNodePosition &
   MapNodeDimensions &
   MapNodeSettings;
 
-export type MapNodeProjection = CourseNodeProjection | ImageNodeProjection;
+export type MapNode = CourseNode | ImageNode;
 
-export type MapEdgeProjection = {
+export type MapEdge = {
   id: string;
   source: MapNodeId;
   target: MapNodeId;
 };
 
-export type MapProjection = {
+export type Map = {
   nodeIds: MapNodeId[];
-  nodes: Record<MapNodeId, MapNodeProjection>;
-  edges: MapEdgeProjection[];
+  nodes: Record<MapNodeId, MapNode>;
+  edges: MapEdge[];
 };
 
 //===

@@ -6,16 +6,16 @@ import {
   courseLessonSlug,
 } from "../_domain/entities";
 
-import { CoursesIndexProjection } from "../_domain/projections";
+import { CoursesIndex } from "../_domain/projections";
 
 import { contentApi } from "@/shared/api/content";
 import { cachedAsyncMethod } from "@/shared/lib/cache";
 import { contentCacheStrategy } from "./cache-strategy";
 import { logger } from "@/shared/lib/logger";
 
-class CourseProjectionsRespository {
+class CourseIndexRepository {
   @cachedAsyncMethod(contentCacheStrategy, () => ["getCoursesIndex"])
-  async getCoursesIndex(): Promise<CoursesIndexProjection> {
+  async getCoursesIndex(): Promise<CoursesIndex> {
     const manifest = await contentApi.fetchManifestQuery();
 
     const coursesResult = await Promise.allSettled(
@@ -28,7 +28,7 @@ class CourseProjectionsRespository {
       manifest.courses.map((courseSlug) => ({ courseSlug })),
     );
 
-    const coursesIndex: CoursesIndexProjection = {
+    const coursesIndex: CoursesIndex = {
       list: [],
       bySlug: {},
       byId: {},
@@ -122,4 +122,4 @@ class CourseProjectionsRespository {
   };
 }
 
-export const courseIndexRepository = new CourseProjectionsRespository();
+export const courseIndexRepository = new CourseIndexRepository();

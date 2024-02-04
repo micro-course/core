@@ -1,11 +1,11 @@
 import { CourseEntity, CourseListItem } from "@/entities/course/course";
 import { MAP_NODE_TYPES, MapNodeEntity } from "@/entities/map/map-node";
-import { CourseToAddProjection, MapNodeProjection } from "./projections";
+import { CourseToAdd, MapNode } from "./projections";
 
-export const createMapNodeProjection = (
+export const createMapNode = (
   mapNodeEntity: MapNodeEntity,
   course: CourseListItem | undefined,
-): MapNodeProjection => {
+): MapNode => {
   if (course && mapNodeEntity.data.type === MAP_NODE_TYPES.COURSE) {
     return {
       ...mapNodeEntity,
@@ -29,7 +29,7 @@ export const createMapNodeProjection = (
   throw new Error(`Unknown map node type: ${mapNodeEntity.data.type}`);
 };
 
-export const createMapEdgeProjection = (
+export const createMapEdge = (
   mapNodeEntity: MapNodeEntity,
   mapNodeEntity2: MapNodeEntity,
 ) => {
@@ -40,9 +40,7 @@ export const createMapEdgeProjection = (
   };
 };
 
-export const createCourseToAddProjection = (
-  course: CourseEntity,
-): CourseToAddProjection => {
+export const createCourseToAdd = (course: CourseEntity): CourseToAdd => {
   return {
     id: course.id,
     slug: course.slug,

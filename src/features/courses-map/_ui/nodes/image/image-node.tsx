@@ -1,11 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import { cn } from "@/shared/ui/utils";
-import { ImageNodeProjection } from "../../../_domain/projections";
+import { ImageNode } from "../../../_domain/projections";
 
 import { NodeProps } from "reactflow";
 import Toolbar from "../_toolbar";
 
-export default function ImageNode(props: NodeProps<ImageNodeProjection>) {
+export default function ImageNode(props: NodeProps<ImageNode>) {
   return (
     <>
       <Toolbar {...props} />

@@ -1,5 +1,5 @@
 import { createMapAbility } from "../_domain/ability";
-import { MapNodeProjection } from "../_domain/projections";
+import { MapNode } from "../_domain/projections";
 import { WithSession, checkAbility } from "@/entities/user/session.server";
 import { mapNodeRepository } from "@/entities/map/map-node.server";
 import {
@@ -8,7 +8,7 @@ import {
   MapNodeSettings,
   createCourseMapNodeEntity,
 } from "@/entities/map/map-node";
-import { createMapNodeProjection } from "../_domain/mappers";
+import { createMapNode } from "../_domain/mappers";
 import { CourseId } from "@/entities/course/course";
 import { courseRepository } from "@/entities/course/course.server";
 
@@ -23,17 +23,14 @@ export class AddCourseNodeUseCase {
     createAbility: createMapAbility,
     check: (ability) => ability.canMangeNodes(),
   })
-  async exec(
-    _: WithSession,
-    command: AddCourseNodeCommand,
-  ): Promise<MapNodeProjection> {
+  async exec(_: WithSession, command: AddCourseNodeCommand): Promise<MapNode> {
     let entity = createCourseMapNodeEntity(command);
 
     entity = await mapNodeRepository.save(entity);
 
     const course = await courseRepository.courseById(command.courseId);
 
-    return createMapNodeProjection(entity, course);
+    return createMapNode(entity, course);
   }
 }
 
