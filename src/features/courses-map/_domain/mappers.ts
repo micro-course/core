@@ -4,7 +4,7 @@ import { CourseToAddProjection, MapNodeProjection } from "./projections";
 
 export const createMapNodeProjection = (
   mapNodeEntity: MapNodeEntity,
-  course?: CourseListItem,
+  course: CourseListItem | undefined,
 ): MapNodeProjection => {
   if (course && mapNodeEntity.data.type === MAP_NODE_TYPES.COURSE) {
     return {

@@ -1,22 +1,22 @@
 import { useIsMutating, useMutation } from "@tanstack/react-query";
 import { useServerAction } from "@/shared/lib/server-action/client";
-import { addImageNodeAction } from "../../_actions/add-image-node";
+import { addCourseNodeAction } from "../../_actions/add-course-node";
 import { useInvalidateMap } from "../queries";
 import { DimensionsStrings } from "../../_domain/projections";
 import { parseDimensions } from "../../_domain/methods/transform-dimensions";
 import { useGetScreenCenter } from "../lib/flow/use-get-screen-center";
 
-const mutationKey = ["map", "add-image"];
+const mutationKey = ["map", "add-course"];
 
-export const useAddImage = () => {
-  const addImageNode = useServerAction(addImageNodeAction);
+export const useAddCourse = () => {
+  const addCourseNode = useServerAction(addCourseNodeAction);
   const invalidateMap = useInvalidateMap();
 
   const getScreenCenter = useGetScreenCenter();
-  const addImage = async ({
-    src,
+  const addCourse = async ({
+    courseId,
     ...dimensions
-  }: { src: string } & DimensionsStrings) => {
+  }: { courseId: string } & DimensionsStrings) => {
     const parsedDimensions = parseDimensions(dimensions);
 
     const { x, y } = getScreenCenter({
@@ -24,17 +24,17 @@ export const useAddImage = () => {
       height: parsedDimensions.width * parsedDimensions.scale,
     });
 
-    return addImageNode({
+    return addCourseNode({
       x,
       y,
-      src,
+      courseId,
       hidden: true,
       ...parseDimensions(dimensions),
     });
   };
 
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: addImage,
+    mutationFn: addCourse,
     mutationKey: mutationKey,
 
     onSettled: async () => {
@@ -43,12 +43,12 @@ export const useAddImage = () => {
   });
 
   return {
-    addImage: mutateAsync,
+    addCourse: mutateAsync,
     isPending,
   };
 };
 
-export function useAddImageLoading() {
+export function useAddCourseLoading() {
   return useIsMutating({
     mutationKey: mutationKey,
   });

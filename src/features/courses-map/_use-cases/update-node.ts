@@ -10,6 +10,7 @@ import {
 } from "@/entities/map/map-node";
 import { createMapNodeProjection } from "../_domain/mappers";
 import { NotFoundError } from "@/shared/lib/errors";
+import { courseRepository } from "@/entities/course/course.server";
 
 export type UpdateNodeCommand = {
   id: MapNodeId;
@@ -32,7 +33,14 @@ export class UpdateNodeUseCase {
 
     Object.assign(nodeEntity, command);
 
-    return createMapNodeProjection(await mapNodeRepository.save(nodeEntity));
+    return createMapNodeProjection(
+      ...(await Promise.all([
+        mapNodeRepository.save(nodeEntity),
+        nodeEntity.data.type === "course"
+          ? courseRepository.courseById(nodeEntity.data.courseId)
+          : undefined,
+      ])),
+    );
   }
 }
 

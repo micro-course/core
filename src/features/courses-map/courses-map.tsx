@@ -8,6 +8,7 @@ import { useGetMapQuery } from "./_vm/queries";
 import { useQuery } from "@tanstack/react-query";
 import { FullPageSpinner } from "@/shared/ui/full-page-spinner";
 import { UpdateNodeDialog } from "./_ui/dialogs/update-node-dialog";
+import { AddCourseDialog } from "./_ui/dialogs/add-course-dialog";
 
 export function CoursesMap() {
   const mapQuery = useQuery({
@@ -30,6 +31,7 @@ export function CoursesMap() {
       </div>
       <AddImageDialog />
       <UpdateNodeDialog />
+      <AddCourseDialog />
     </ReactFlowProvider>
   );
 }

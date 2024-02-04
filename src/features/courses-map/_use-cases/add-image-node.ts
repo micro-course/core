@@ -29,7 +29,7 @@ export class AddImageNodeUseCase {
 
     entity = await mapNodeRepository.save(entity);
 
-    return createMapNodeProjection(entity);
+    return createMapNodeProjection(entity, undefined);
   }
 }
 

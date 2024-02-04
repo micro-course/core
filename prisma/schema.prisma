@@ -84,13 +84,13 @@ model MapNode {
 model MapNodeCourseData {
   id        String   @id @default(uuid())
   courseId  String   @unique
-  mapNode   MapNode? @relation(fields: [mapNodeId], references: [id])
+  mapNode   MapNode? @relation(fields: [mapNodeId], references: [id], onDelete: Cascade)
   mapNodeId String?  @unique
 }
 
 model MapNodeImageData {
   id        String   @id @default(uuid())
   src       String
-  mapNode   MapNode? @relation(fields: [mapNodeId], references: [id])
+  mapNode   MapNode? @relation(fields: [mapNodeId], references: [id], onDelete: Cascade)
   mapNodeId String?  @unique
 }

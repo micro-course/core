@@ -10,6 +10,7 @@ import {
 } from "@/entities/map/map-node";
 import { createMapNodeProjection } from "../_domain/mappers";
 import { CourseId } from "@/entities/course/course";
+import { courseRepository } from "@/entities/course/course.server";
 
 export type AddCourseNodeCommand = {
   courseId: CourseId;
@@ -30,7 +31,9 @@ export class AddCourseNodeUseCase {
 
     entity = await mapNodeRepository.save(entity);
 
-    return createMapNodeProjection(entity);
+    const course = await courseRepository.courseById(command.courseId);
+
+    return createMapNodeProjection(entity, course);
   }
 }
 
