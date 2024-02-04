@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect } from "react";
+import { useCallback, useDeferredValue, useEffect } from "react";
 import ReactFlow, {
   useNodesState,
   useEdgesState,
@@ -12,6 +12,8 @@ import ReactFlow, {
   NodeDragHandler,
   SelectionDragHandler,
   Edge,
+  useStore,
+  ReactFlowState,
 } from "reactflow";
 import { CoursesMap } from "../_domain/projections";
 import { customNodes } from "./nodes/custom-nodes";
@@ -34,6 +36,34 @@ const viewportStorage = new SafeLocalStorage(
   ]),
   undefined,
 );
+
+enum ZoomLevel {
+  DETAILS = "details", // 5 - 1,
+  NORMAL = "normal", // 1 - 0.5,
+  FAR = "far", // 0.5 - 0.2,
+  GLOBAL = "global", // 0.2 - 0.1,
+}
+
+export const MAX_ZOOM_LEVEL = 5;
+export const MIN_ZOOM_LEVEL = 0.1;
+
+const selectCurrentZoomLevel = (state: ReactFlowState) => {
+  const zoom = state.transform[2];
+
+  if (zoom < 0.2) {
+    return ZoomLevel.GLOBAL;
+  }
+
+  if (zoom < 0.3) {
+    return ZoomLevel.FAR;
+  }
+
+  if (zoom < 1) {
+    return ZoomLevel.NORMAL;
+  }
+
+  return ZoomLevel.DETAILS;
+};
 
 export function Flow({ map }: { map: CoursesMap }) {
   const flow = useReactFlow();
@@ -77,6 +107,8 @@ export function Flow({ map }: { map: CoursesMap }) {
     [deleteNode],
   );
 
+  const zoomLevel = useDeferredValue(useStore(selectCurrentZoomLevel));
+
   useEffect(() => {
     setNodes((lastNodes) => {
       const lastNodesMap = new Map(lastNodes.map((node) => [node.id, node]));
@@ -90,6 +122,10 @@ export function Flow({ map }: { map: CoursesMap }) {
     });
 
     setEdges((lastEdges) => {
+      if (zoomLevel === ZoomLevel.GLOBAL || zoomLevel === ZoomLevel.FAR) {
+        return [];
+      }
+
       const lastEdgesMap = new Map(lastEdges.map((edge) => [edge.id, edge]));
       return map.edgeIds.map(
         (id) => {
@@ -106,7 +142,7 @@ export function Flow({ map }: { map: CoursesMap }) {
         [map],
       );
     });
-  }, [setNodes, map, setEdges]);
+  }, [setNodes, map, setEdges, zoomLevel]);
 
   return (
     <div className="absolute inset-0">
@@ -120,8 +156,8 @@ export function Flow({ map }: { map: CoursesMap }) {
         nodeTypes={customNodes}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
-        maxZoom={10}
-        minZoom={0.01}
+        maxZoom={MAX_ZOOM_LEVEL}
+        minZoom={MIN_ZOOM_LEVEL}
         onNodesDelete={handleNodesDelete}
         onNodeDragStop={handleNodeDragStop}
         onSelectionDragStop={handleSelectionDragStop}
