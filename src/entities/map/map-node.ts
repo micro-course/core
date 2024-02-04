@@ -5,9 +5,8 @@ export type {
   MapNodePosition,
   MapNodeSettings,
   MapNodeDimensions,
-  MapNodeData,
-  MapNodeCourseData,
-  MapNodeImageData,
+  CourseMapNodeData,
+  ImageMapNodeData,
 } from "./_domain/entities";
 
 export {

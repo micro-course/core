@@ -2,7 +2,7 @@
 import { cn } from "@/shared/ui/utils";
 import { CourseNode } from "../../../_domain/projections";
 
-import { NodeProps } from "reactflow";
+import { Handle, NodeProps, Position } from "reactflow";
 import Toolbar from "../_toolbar";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 
@@ -10,6 +10,8 @@ export default function CourseNode(props: NodeProps<CourseNode>) {
   return (
     <>
       <Toolbar {...props} />
+      <Handle type="target" position={Position.Bottom} />
+      <Handle type="source" position={Position.Top} />
       <div
         className="flex justify-center items-center"
         style={{

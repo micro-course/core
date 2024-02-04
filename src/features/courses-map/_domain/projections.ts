@@ -4,8 +4,10 @@ import {
   MapNodeSettings,
   MapNodePosition,
   MapNodeId,
-  MapNodeImageData,
+  ImageMapNodeData,
 } from "@/entities/map/map-node";
+
+export type MapEdgeId = string;
 
 export type CourseToAdd = {
   id: CourseId;
@@ -13,6 +15,7 @@ export type CourseToAdd = {
   title: string;
   thumbnail: string;
   shortDescription?: string;
+  dependencies: CourseId[];
 };
 
 type CourseNodeData = {
@@ -21,7 +24,7 @@ type CourseNodeData = {
 
 export type ImageNode = {
   id: MapNodeId;
-  data: MapNodeImageData;
+  data: ImageMapNodeData;
 } & MapNodePosition &
   MapNodeDimensions &
   MapNodeSettings;
@@ -33,18 +36,20 @@ export type CourseNode = {
   MapNodeDimensions &
   MapNodeSettings;
 
-export type MapNode = CourseNode | ImageNode;
+export type CoursesMapNode = CourseNode | ImageNode;
 
-export type MapEdge = {
+export type CoursesMapEdge = {
   id: string;
   source: MapNodeId;
   target: MapNodeId;
 };
 
-export type Map = {
+export type CoursesMap = {
+  nodes: Record<MapNodeId, CoursesMapNode>;
   nodeIds: MapNodeId[];
-  nodes: Record<MapNodeId, MapNode>;
-  edges: MapEdge[];
+  edges: Record<MapEdgeId, CoursesMapEdge>;
+  edgeIds: MapEdgeId[];
+  courseIdNodeMap: Record<CourseId, MapNodeId>;
 };
 
 //===

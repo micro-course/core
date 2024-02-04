@@ -1,12 +1,7 @@
 import { cachedAsyncMethod, invalidateCache } from "@/shared/lib/cache";
 import { dbClient } from "@/shared/lib/db";
 import { mapNodesCacheStrategy } from "./cache-strategy";
-import {
-  MAP_NODE_TYPES,
-  MapNodeData,
-  MapNodeEntity,
-  MapNodeId,
-} from "../_domain/entities";
+import { MAP_NODE_TYPES, MapNodeEntity, MapNodeId } from "../_domain/entities";
 
 export class MapNodeRepository {
   constructor() {}
@@ -44,7 +39,7 @@ export class MapNodeRepository {
   }: Awaited<
     ReturnType<typeof this.queryMapNodesList>
   >[number]): MapNodeEntity {
-    let data: MapNodeData | undefined = undefined;
+    let data: MapNodeEntity["data"] | undefined = undefined;
 
     if (imageData) {
       data = {

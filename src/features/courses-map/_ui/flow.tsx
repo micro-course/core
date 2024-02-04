@@ -11,8 +11,9 @@ import ReactFlow, {
   OnNodesDelete,
   NodeDragHandler,
   SelectionDragHandler,
+  Edge,
 } from "reactflow";
-import { Map } from "../_domain/projections";
+import { CoursesMap } from "../_domain/projections";
 import { customNodes } from "./nodes/custom-nodes";
 import { getFlowNode } from "../_vm/data-prepare/flow-nodes/get-flow-node";
 import { useMoveNode } from "../_vm/actions/use-move-node";
@@ -34,11 +35,11 @@ const viewportStorage = new SafeLocalStorage(
   undefined,
 );
 
-export function Flow({ map }: { map: Map }) {
+export function Flow({ map }: { map: CoursesMap }) {
   const flow = useReactFlow();
 
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, , onEdgesChange] = useEdgesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   const { move } = useMoveNode();
   const { deleteNode } = useDeleteNode();
@@ -87,7 +88,25 @@ export function Flow({ map }: { map: Map }) {
         [map],
       );
     });
-  }, [setNodes, map]);
+
+    setEdges((lastEdges) => {
+      const lastEdgesMap = new Map(lastEdges.map((edge) => [edge.id, edge]));
+      return map.edgeIds.map(
+        (id) => {
+          const lastEdge = lastEdgesMap.get(id);
+          const edge = map.edges[id];
+          return {
+            ...lastEdge,
+            id: edge.id,
+            source: edge.source,
+            target: edge.target,
+            animated: true,
+          } satisfies Edge;
+        },
+        [map],
+      );
+    });
+  }, [setNodes, map, setEdges]);
 
   return (
     <div className="absolute inset-0">

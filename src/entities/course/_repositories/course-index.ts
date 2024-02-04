@@ -12,6 +12,7 @@ import { contentApi } from "@/shared/api/content";
 import { cachedAsyncMethod } from "@/shared/lib/cache";
 import { contentCacheStrategy } from "./cache-strategy";
 import { logger } from "@/shared/lib/logger";
+import { compact } from "lodash-es";
 
 class CourseIndexRepository {
   @cachedAsyncMethod(contentCacheStrategy, () => ["getCoursesIndex"])
@@ -46,6 +47,15 @@ class CourseIndexRepository {
         coursesIndex.lessonBySlug[courseLessonSlug(course.slug, lesson.slug)] =
           lesson;
       }
+    }
+
+    // Important replace slug with id in dependencies
+    for (const course of coursesIndex.list) {
+      course.dependencies = compact(
+        course.dependencies.map((dependency) => {
+          return coursesIndex.bySlug[dependency]?.id;
+        }),
+      );
     }
 
     return coursesIndex;

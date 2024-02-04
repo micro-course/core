@@ -1,5 +1,5 @@
 import { createMapAbility } from "../_domain/ability";
-import { MapNode } from "../_domain/projections";
+import { CoursesMapNode } from "../_domain/projections";
 import { WithSession, checkAbility } from "@/entities/user/session.server";
 import { mapNodeRepository } from "@/entities/map/map-node.server";
 import {
@@ -23,7 +23,7 @@ export class AddCourseNodeUseCase {
     createAbility: createMapAbility,
     check: (ability) => ability.canMangeNodes(),
   })
-  async exec(_: WithSession, command: AddCourseNodeCommand): Promise<MapNode> {
+  async exec(_: WithSession, command: AddCourseNodeCommand): Promise<CoursesMapNode> {
     let entity = createCourseMapNodeEntity(command);
 
     entity = await mapNodeRepository.save(entity);

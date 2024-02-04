@@ -17,7 +17,7 @@ import { Spinner } from "@/shared/ui/spinner";
 import { DimensionsFields, dimensionsFieldsSchema } from "./dimensions-fields";
 import { PositionFields, positionFieldsSchema } from "./position-fields";
 import { Switch } from "@/shared/ui/switch";
-import { MapNode } from "../../_domain/projections";
+import { CoursesMapNode } from "../../_domain/projections";
 import {
   useUpdateNode,
   useUpdateNodeLoading,
@@ -41,7 +41,7 @@ export function UpdateNodeForm({
 }: {
   onSuccess?: () => void;
   children?: React.ReactNode;
-  node: MapNode;
+  node: CoursesMapNode;
 }) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),

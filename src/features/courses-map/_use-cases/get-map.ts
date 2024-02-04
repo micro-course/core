@@ -1,5 +1,10 @@
 import { createMapAbility } from "../_domain/ability";
-import { MapNode, MapEdge, Map } from "../_domain/projections";
+import {
+  CoursesMapNode,
+  CoursesMapEdge,
+  CoursesMap,
+  MapEdgeId,
+} from "../_domain/projections";
 import { createMapNode } from "../_domain/mappers";
 import { mapNodeRepository } from "@/entities/map/map-node.server";
 import { WithSession, checkAbility } from "@/entities/user/session.server";
@@ -10,13 +15,14 @@ import {
 } from "@/entities/map/map-node";
 import { courseIndexRepository } from "@/entities/course/course.server";
 import { CoursesIndex } from "@/entities/course/_domain/projections";
+import { CourseId } from "@/entities/course/course";
 
 export class GetMapUseCase {
   @checkAbility({
     createAbility: createMapAbility,
     check: (ability) => ability.canViewMap(),
   })
-  async exec({ session }: WithSession): Promise<Map> {
+  async exec({ session }: WithSession): Promise<CoursesMap> {
     const ability = createMapAbility(session);
 
     let { mapNodes, courseIndex } = await this.uploadData();
@@ -33,10 +39,12 @@ export class GetMapUseCase {
   private async buildMap(
     mapNodes: MapNodeEntity[],
     courseIndex: CoursesIndex,
-  ): Promise<Map> {
-    const nodes: Record<MapNodeId, MapNode> = {};
+  ): Promise<CoursesMap> {
+    const nodes: Record<MapNodeId, CoursesMapNode> = {};
     const nodeIds: MapNodeId[] = [];
-    const edges: MapEdge[] = [];
+    const edges: Record<MapEdgeId, CoursesMapEdge> = {};
+    const edgeIds: MapEdgeId[] = [];
+    const courseIdNodeMap: Record<CourseId, MapNodeId> = {};
 
     for (const mapNode of mapNodes) {
       if (mapNode.data.type === MAP_NODE_TYPES.COURSE) {
@@ -45,6 +53,7 @@ export class GetMapUseCase {
           continue;
         }
         nodes[mapNode.id] = createMapNode(mapNode, course);
+        courseIdNodeMap[mapNode.data.courseId] = mapNode.id;
         nodeIds.push(mapNode.id);
       } else {
         nodes[mapNode.id] = createMapNode(mapNode, undefined);
@@ -52,10 +61,33 @@ export class GetMapUseCase {
       }
     }
 
+    for (const nodeId of nodeIds) {
+      const node = nodes[nodeId];
+
+      if (node.data.type === MAP_NODE_TYPES.COURSE) {
+        node.data.dependencies.forEach((dependencyId) => {
+          if (!courseIdNodeMap[dependencyId]) {
+            return;
+          }
+
+          const id = `${nodeId}-${dependencyId}`;
+          edgeIds.push(id);
+
+          edges[id] = {
+            id: `${nodeId}-${dependencyId}`,
+            source: nodeId,
+            target: courseIdNodeMap[dependencyId],
+          };
+        });
+      }
+    }
+
     return {
       edges,
+      edgeIds,
       nodes,
       nodeIds,
+      courseIdNodeMap,
     };
   }
 

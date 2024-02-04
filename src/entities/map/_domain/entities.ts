@@ -1,16 +1,6 @@
 export type MapNodeId = string;
 type CourseId = string;
 
-export type MapNodeCourseData = {
-  type: "course";
-  courseId: CourseId;
-};
-
-export type MapNodeImageData = {
-  type: "image";
-  src: string;
-};
-
 export type MapNodePosition = {
   x: number;
   y: number;
@@ -28,15 +18,33 @@ export type MapNodeSettings = {
   hidden: boolean;
 };
 
-export type MapNodeData = MapNodeCourseData | MapNodeImageData;
-export type MapNodeType = MapNodeData["type"];
-
-export type MapNodeEntity = MapNodePosition &
+export type BaseMapNodeEntity = MapNodePosition &
   MapNodeDimensions &
   MapNodeSettings & {
     id: MapNodeId;
-    data: MapNodeData;
   };
+
+export type CourseMapNodeData = {
+  type: "course";
+  courseId: CourseId;
+};
+
+export type ImageMapNodeData = {
+  type: "image";
+  src: string;
+};
+
+export type CourseMapNodeEntity = BaseMapNodeEntity & {
+  data: CourseMapNodeData;
+};
+
+export type ImageMapNodeEntity = BaseMapNodeEntity & {
+  data: ImageMapNodeData;
+};
+
+export type MapNodeEntity = CourseMapNodeEntity | ImageMapNodeEntity;
+
+export type MapNodeType = MapNodeEntity["data"]["type"];
 
 export const MAP_NODE_TYPES = {
   COURSE: "course" satisfies MapNodeType,
