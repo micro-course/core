@@ -1,18 +1,4 @@
-import { useSession } from "next-auth/react";
-import { SessionProvider as NextAuthSessionProvider } from "next-auth/react";
+export { AppSessionProvider } from "./_ui/app-session-provider";
+export { useAppSession } from "./_vm/use-app-session";
+export { useAbilityStrict } from "./_vm/use-ability";
 export type { SessionEntity } from "./_domain/types";
-
-export const useAppSession = useSession;
-
-export const useRole = () => {
-  const session = useAppSession();
-  return session?.data?.user?.role;
-};
-
-export function AppSessionProvider({
-  children,
-}: {
-  children?: React.ReactNode;
-}) {
-  return <NextAuthSessionProvider>{children}</NextAuthSessionProvider>;
-}

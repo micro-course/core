@@ -14,6 +14,7 @@ import ReactFlow, {
   Edge,
   useStore,
   ReactFlowState,
+  ReactFlowProps,
 } from "reactflow";
 import { CoursesMap } from "../_domain/projections";
 import { customNodes } from "./nodes/custom-nodes";
@@ -25,6 +26,8 @@ import css from "./flow.module.css";
 import { cn } from "@/shared/ui/utils";
 import { getFlowNode } from "../_vm/flow/get-flow-node";
 import { ReactFlowNode } from "../_vm/flow/reactflow-node";
+import { useMapAbility } from "../_vm/use-map-ability";
+import { MAP_NODE_TYPES } from "@/entities/map/map-node";
 
 const viewportStorage = new SafeLocalStorage(
   "viewport",
@@ -69,6 +72,8 @@ const selectCurrentZoomLevel = (state: ReactFlowState) => {
 
 export function Flow({ map }: { map: CoursesMap }) {
   const flow = useReactFlow();
+  const ability = useMapAbility();
+  const canManageNodes = ability.canMangeNodes();
 
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges] = useEdgesState([]);
@@ -117,7 +122,10 @@ export function Flow({ map }: { map: CoursesMap }) {
       return map.nodeIds.map(
         (id) => {
           const node = map.nodes[id];
-          return getFlowNode(node, lastNodesMap.get(node.id) as ReactFlowNode);
+          return {
+            ...getFlowNode(node, lastNodesMap.get(node.id) as ReactFlowNode),
+            selectable: canManageNodes,
+          } satisfies ReactFlowNode;
         },
         [map],
       );
@@ -146,27 +154,44 @@ export function Flow({ map }: { map: CoursesMap }) {
         [map],
       );
     });
-  }, [setNodes, map, setEdges, zoomLevel]);
+  }, [setNodes, map, setEdges, zoomLevel, canManageNodes]);
+
+  const flowProps: ReactFlowProps = ability.canMangeNodes()
+    ? {
+        onNodesChange: onNodesChange,
+        onNodesDelete: handleNodesDelete,
+        onNodeDragStop: handleNodeDragStop,
+        onSelectionDragStop: handleSelectionDragStop,
+      }
+    : {
+        nodesDraggable: false,
+      };
 
   return (
     <div className={cn("absolute inset-0 bg-slate-300/50 dark:bg-background")}>
       <ReactFlow
         fitView={!viewportStorage.get()}
         defaultViewport={viewportStorage.get()}
+        maxZoom={MAX_ZOOM_LEVEL}
+        minZoom={MIN_ZOOM_LEVEL}
         onlyRenderVisibleElements={true}
         onMoveEnd={onSave}
         nodes={nodes}
         edges={edges}
         nodeTypes={customNodes}
-        onNodesChange={onNodesChange}
-        maxZoom={MAX_ZOOM_LEVEL}
-        minZoom={MIN_ZOOM_LEVEL}
-        onNodesDelete={handleNodesDelete}
-        onNodeDragStop={handleNodeDragStop}
-        onSelectionDragStop={handleSelectionDragStop}
+        {...flowProps}
       >
         <Controls />
-        <MiniMap />
+        <MiniMap
+          nodeBorderRadius={4}
+          className="bg-background/60 rounded shadow"
+          maskColor="hsl(var(--primary) / 0.3)"
+          nodeColor={(node) =>
+            node.type === MAP_NODE_TYPES.IMAGE
+              ? "transparent"
+              : "hsl(var(--primary) / 0.8)"
+          }
+        />
         <Background variant={BackgroundVariant.Dots} gap={40} size={1} />
       </ReactFlow>
     </div>

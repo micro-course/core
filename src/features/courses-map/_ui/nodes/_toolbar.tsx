@@ -9,11 +9,17 @@ import {
 import { Button } from "@/shared/ui/button";
 import { Settings2, Trash2 } from "lucide-react";
 import { useDeleteNode } from "../../_vm/actions/use-delete-node";
+import { useMapAbility } from "../../_vm/use-map-ability";
 
 export default function Toolbar(props: NodeProps<CoursesMapNode>) {
   const setDialogState = useDialogSetState(DialogType.UPDATE_NODE);
 
+  const ability = useMapAbility();
   const { deleteNode } = useDeleteNode();
+
+  if (!ability.canMangeNodes()) {
+    return null;
+  }
 
   return (
     <>
