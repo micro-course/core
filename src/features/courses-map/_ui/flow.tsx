@@ -17,12 +17,14 @@ import ReactFlow, {
 } from "reactflow";
 import { CoursesMap } from "../_domain/projections";
 import { customNodes } from "./nodes/custom-nodes";
-import { getFlowNode } from "../_vm/data-prepare/flow-nodes/get-flow-node";
 import { useMoveNode } from "../_vm/actions/use-move-node";
 import { SafeLocalStorage } from "@/shared/lib/safe-local-storage";
 import { z } from "zod";
 import { useDeleteNode } from "../_vm/actions/use-delete-node";
-import { ReactFlowNode } from "../_vm/data-prepare/flow-nodes/reactflow-node";
+import css from "./flow.module.css";
+import { cn } from "@/shared/ui/utils";
+import { getFlowNode } from "../_vm/flow/get-flow-node";
+import { ReactFlowNode } from "../_vm/flow/reactflow-node";
 
 const viewportStorage = new SafeLocalStorage(
   "viewport",
@@ -54,7 +56,7 @@ const selectCurrentZoomLevel = (state: ReactFlowState) => {
     return ZoomLevel.GLOBAL;
   }
 
-  if (zoom < 0.3) {
+  if (zoom < 0.5) {
     return ZoomLevel.FAR;
   }
 
@@ -69,7 +71,7 @@ export function Flow({ map }: { map: CoursesMap }) {
   const flow = useReactFlow();
 
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [edges, setEdges] = useEdgesState([]);
 
   const { move } = useMoveNode();
   const { deleteNode } = useDeleteNode();
@@ -122,7 +124,7 @@ export function Flow({ map }: { map: CoursesMap }) {
     });
 
     setEdges((lastEdges) => {
-      if (zoomLevel === ZoomLevel.GLOBAL || zoomLevel === ZoomLevel.FAR) {
+      if (zoomLevel === ZoomLevel.GLOBAL) {
         return [];
       }
 
@@ -137,6 +139,8 @@ export function Flow({ map }: { map: CoursesMap }) {
             source: edge.source,
             target: edge.target,
             animated: true,
+            className:
+              ZoomLevel.FAR === zoomLevel ? css.largeEdge : css.mediumEdge,
           } satisfies Edge;
         },
         [map],
@@ -145,7 +149,7 @@ export function Flow({ map }: { map: CoursesMap }) {
   }, [setNodes, map, setEdges, zoomLevel]);
 
   return (
-    <div className="absolute inset-0">
+    <div className={cn("absolute inset-0 bg-slate-300/50 dark:bg-background")}>
       <ReactFlow
         fitView={!viewportStorage.get()}
         defaultViewport={viewportStorage.get()}
@@ -155,7 +159,6 @@ export function Flow({ map }: { map: CoursesMap }) {
         edges={edges}
         nodeTypes={customNodes}
         onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
         maxZoom={MAX_ZOOM_LEVEL}
         minZoom={MIN_ZOOM_LEVEL}
         onNodesDelete={handleNodesDelete}

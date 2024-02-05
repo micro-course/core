@@ -1,4 +1,4 @@
-import { CoursesMapNode } from "../../../_domain/projections";
+import { CoursesMapNode } from "../../_domain/projections";
 import { ReactFlowNode } from "./reactflow-node";
 
 export const getFlowNode = (
