@@ -15,6 +15,9 @@
   animation-name: mediumDashDraw;
   animation-duration: 1s;
 }
+.root :global(.react-flow__controls-button) {
+  background-color: hsl(var(--background));
+}
 
 @keyframes largeDashDraw {
   to {

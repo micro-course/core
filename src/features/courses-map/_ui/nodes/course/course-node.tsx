@@ -5,8 +5,12 @@ import { CourseNode } from "../../../_domain/projections";
 import { Handle, NodeProps, Position } from "reactflow";
 import Toolbar from "../_toolbar";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
+import { useMapAbility } from "../../../_vm/use-map-ability";
 
 export default function CourseNode(props: NodeProps<CourseNode>) {
+  const ability = useMapAbility();
+  const canManageNodes = ability.canMangeNodes();
+
   return (
     <>
       <Toolbar {...props} />
@@ -24,8 +28,9 @@ export default function CourseNode(props: NodeProps<CourseNode>) {
             console.log("click");
           }}
           className={cn(
-            "overflow-hidden shrink-0",
-            props.selected && "outline-primary outline ",
+            "overflow-hidden shrink-0 shadow hover:shadow-lg cursor-pointer ",
+            "transition-color hover:outline hover:outline-primary",
+            props.selected && canManageNodes && "outline-primary outline ",
             props.data.hidden && "opacity-50",
           )}
           style={{
@@ -52,5 +57,3 @@ export default function CourseNode(props: NodeProps<CourseNode>) {
     </>
   );
 }
-
-import * as React from "react";

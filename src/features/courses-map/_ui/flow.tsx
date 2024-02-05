@@ -28,6 +28,7 @@ import { getFlowNode } from "../_vm/flow/get-flow-node";
 import { ReactFlowNode } from "../_vm/flow/reactflow-node";
 import { useMapAbility } from "../_vm/use-map-ability";
 import { MAP_NODE_TYPES } from "@/entities/map/map-node";
+import { BG_CLASS_NAME } from "../_constants";
 
 const viewportStorage = new SafeLocalStorage(
   "viewport",
@@ -124,7 +125,6 @@ export function Flow({ map }: { map: CoursesMap }) {
           const node = map.nodes[id];
           return {
             ...getFlowNode(node, lastNodesMap.get(node.id) as ReactFlowNode),
-            selectable: canManageNodes,
           } satisfies ReactFlowNode;
         },
         [map],
@@ -168,7 +168,12 @@ export function Flow({ map }: { map: CoursesMap }) {
       };
 
   return (
-    <div className={cn("absolute inset-0 bg-slate-300/50 dark:bg-background")}>
+    <div
+      className={cn(
+        "absolute inset-0 bg-slate-300/20 dark:bg-background",
+        css.root,
+      )}
+    >
       <ReactFlow
         fitView={!viewportStorage.get()}
         defaultViewport={viewportStorage.get()}
@@ -181,11 +186,20 @@ export function Flow({ map }: { map: CoursesMap }) {
         nodeTypes={customNodes}
         {...flowProps}
       >
-        <Controls />
+        <Controls
+          className={cn(
+            BG_CLASS_NAME,
+            "text-primary fill-primary shadow border",
+            "[&>button]:border [&>button]:border-border",
+          )}
+        />
         <MiniMap
           nodeBorderRadius={4}
-          className="bg-background/60 rounded shadow"
-          maskColor="hsl(var(--primary) / 0.3)"
+          className={cn(
+            BG_CLASS_NAME,
+            "text-primary fill-primary border border-border",
+          )}
+          maskColor="hsl(var(--primary) / 0.1)"
           nodeColor={(node) =>
             node.type === MAP_NODE_TYPES.IMAGE
               ? "transparent"
