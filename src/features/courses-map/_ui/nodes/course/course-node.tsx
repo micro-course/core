@@ -6,6 +6,7 @@ import { Handle, NodeProps, Position } from "reactflow";
 import Toolbar from "../_toolbar";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { useMapAbility } from "../../../_vm/use-map-ability";
+import Link from "next/link";
 
 export default function CourseNode(props: NodeProps<CourseNode>) {
   const ability = useMapAbility();
@@ -16,7 +17,8 @@ export default function CourseNode(props: NodeProps<CourseNode>) {
       <Toolbar {...props} />
       <Handle type="target" position={Position.Bottom} />
       <Handle type="source" position={Position.Top} />
-      <div
+      <Link
+        href={`/course/${props.data.data.slug}`}
         className="flex justify-center items-center"
         style={{
           width: `${props.data.width * props.data.scale}px`,
@@ -53,7 +55,7 @@ export default function CourseNode(props: NodeProps<CourseNode>) {
             </CardDescription>
           </CardHeader>
         </Card>
-      </div>
+      </Link>
     </>
   );
 }
