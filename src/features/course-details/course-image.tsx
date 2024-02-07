@@ -22,8 +22,6 @@ export function CourseImage({
     }),
   });
 
-  console.log(courseDetailsQuery);
-
   return (
     <div className={cn("relative", className)}>
       <Skeleton className="w-full absolute inset-0" />

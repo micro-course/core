@@ -10,7 +10,7 @@ export default function CourseSheetContentPage({
   params: { slug: CourseSlug };
 }) {
   return (
-    <SheetContent className="w-full sm:w-[700px] !max-w-full">
+    <SheetContent className="w-full sm:w-[700px] !max-w-full max-h-screen overflow-y-auto overflow-x-hidden">
       <CourseImage
         courseSlug={slug}
         className="h-[15vh] -mx-6 -mt-6 w-[calc(100%+52px)]"

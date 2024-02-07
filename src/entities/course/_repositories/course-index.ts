@@ -103,6 +103,7 @@ class CourseIndexRepository {
       slug: lessonSlug,
       courseId: meta.courseId,
       title: lesson.title,
+      shortDescription: lesson.shortDescription,
       blocks: lesson.blocks,
     };
   };

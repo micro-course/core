@@ -5,6 +5,9 @@ import { createCourseDetailsAbility } from "../_domain/ablility";
 import { CourseDetails } from "../_domain/projections";
 import { courseEntityToCourseDetails } from "../_domain/mappers";
 import { NotFoundError } from "@/shared/lib/errors";
+import { lessonRepository } from "@/entities/course/lesson.server";
+import { LessonEntity, LessonId } from "@/entities/course/lesson";
+import { logger } from "@/shared/lib/logger";
 
 type Query = {
   courseSlug: CourseSlug;
@@ -16,15 +19,44 @@ export class GetCourseDetailsUseCase {
     check: (ability) => ability.canView(),
   })
   async exec({}: WithSession, query: Query): Promise<CourseDetails> {
-    const courseEntity = await courseRepository.compiledCourseBySlug(
-      query.courseSlug,
-    );
+    const courseEntity = await this.loadCompiledCourse(query.courseSlug);
+    const lessons = await this.loadLessons(courseEntity.lessons);
 
+    return courseEntityToCourseDetails(courseEntity, lessons);
+  }
+
+  async loadCompiledCourse(courseSlug: CourseSlug) {
+    const courseEntity =
+      await courseRepository.compiledCourseBySlug(courseSlug);
     if (!courseEntity) {
-      throw new NotFoundError(`Course by slug ${query.courseSlug} not found`);
+      throw new NotFoundError(`Course by slug ${courseSlug} not found`);
     }
 
-    return courseEntityToCourseDetails(courseEntity);
+    return courseEntity;
+  }
+
+  loadLessons(lessonsIds: LessonId[]) {
+    return Promise.allSettled(
+      lessonsIds.map((lessonId) =>
+        lessonRepository.lessonWithCompiledShortDesctiption(lessonId),
+      ),
+    ).then((lessons) => {
+      let entities: LessonEntity[] = [];
+
+      lessons.forEach((lesson, i) => {
+        if (lesson.status === "fulfilled") {
+          entities.push(lesson.value);
+        } else {
+          logger.error({
+            msg: "Lesson not found",
+            reason: lesson.reason,
+            lessonId: lessonsIds[i],
+          });
+        }
+      });
+
+      return entities;
+    });
   }
 }
 

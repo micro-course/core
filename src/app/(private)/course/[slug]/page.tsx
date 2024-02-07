@@ -9,7 +9,7 @@ export default function CoursePage({
   params: { slug: CourseSlug };
 }) {
   return (
-    <main className="-mt-14">
+    <main className="-mt-14 pb-14">
       <CourseImage courseSlug={slug} className="w-full h-[30vh]" />
       <CourseDetails
         courseSlug={slug}

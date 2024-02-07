@@ -30,6 +30,7 @@ export interface LessonEntity {
   slug: LessonSlug;
   courseId: CourseId;
   title: string;
+  shortDescription?: string;
   blocks: ContentBlockEntity[];
 }
 

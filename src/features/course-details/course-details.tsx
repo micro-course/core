@@ -26,27 +26,25 @@ export function CourseDetails({
   }
 
   return (
-    <div className={cn(className, "flex gap-5 flex-col")}>
-      <h2 className="mt-10 scroll-m-20 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
-        {courseDetailsQuery.data.title}
-      </h2>
+    <div className={cn(className, "flex gap-8 flex-col")}>
+      <div className="flex flex-col gap-5">
+        <h2 className="text-3xl font-semibold tracking-tight transition-colors ">
+          {courseDetailsQuery.data.title}
+        </h2>
 
-      <MdxCode code={courseDetailsQuery.data.description} />
+        <MdxCode code={courseDetailsQuery.data.description} />
 
-      <BuyButton className="mt-8" />
+        <BuyButton />
+      </div>
 
-      <hr className="mt-6" />
+      <hr />
 
-      <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-        Уроки
-      </h3>
-
-      <LessonsList />
+      <LessonsList lessons={courseDetailsQuery.data.lessons} />
     </div>
   );
 }
 
-function BuyButton({ className }: { className: string }) {
+function BuyButton({ className }: { className?: string }) {
   return (
     <Button variant={"default"} size={"lg"} className={className}>
       Купить за 999 руб
