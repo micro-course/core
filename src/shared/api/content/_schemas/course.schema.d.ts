@@ -14,6 +14,7 @@ export interface Course {
   description: string;
   shortDescription?: string;
   thumbnail: string;
+  image: string;
   dependencies?: Cuid1[];
   lessons: Cuid[];
 }

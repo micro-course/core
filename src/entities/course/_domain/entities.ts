@@ -17,6 +17,7 @@ export type CourseEntity = {
   slug: CourseSlug;
   title: string;
   thumbnail: string;
+  image: string;
   description: string;
   shortDescription?: string;
   dependencies: CourseId[];

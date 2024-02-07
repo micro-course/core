@@ -39,32 +39,32 @@ export class MapNodeRepository {
   }: Awaited<
     ReturnType<typeof this.queryMapNodesList>
   >[number]): MapNodeEntity {
-    let data: MapNodeEntity["data"] | undefined = undefined;
+    const zIndex = nodeBase.zIndex ?? undefined;
 
     if (imageData) {
-      data = {
-        type: MAP_NODE_TYPES.IMAGE,
-        ...imageData,
+      return {
+        id,
+        ...nodeBase,
+        zIndex,
+        data: {
+          type: MAP_NODE_TYPES.IMAGE,
+          src: imageData.src,
+        },
       };
     }
 
     if (courseData) {
-      data = {
-        type: MAP_NODE_TYPES.COURSE,
-        ...courseData,
+      return {
+        id,
+        ...nodeBase,
+        zIndex,
+        data: {
+          type: MAP_NODE_TYPES.COURSE,
+          courseId: courseData.courseId,
+        },
       };
     }
-
-    if (!data) {
-      throw new Error("Invalid map node data");
-    }
-
-    return {
-      id,
-      ...nodeBase,
-      zIndex: nodeBase.zIndex ?? undefined,
-      data,
-    };
+    throw new Error("Unknown map node type");
   }
 
   private queryMapNodeById(id: MapNodeId) {

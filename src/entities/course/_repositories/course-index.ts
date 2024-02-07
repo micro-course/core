@@ -85,6 +85,7 @@ class CourseIndexRepository {
       dependencies: course.dependencies ?? [],
       lessons: lessonsEntities.map((lesson) => lesson.id),
       shortDescription: course.shortDescription,
+      image: course.image,
     };
 
     return [courseEntity, lessonsEntities] as const;

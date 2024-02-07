@@ -15,17 +15,16 @@ const variants = cva("prose dark:prose-invert prose-slate", {
   },
 });
 
+type MdxComponentProps = {
+  className?: string;
+  size?: "lg" | "md" | "sm";
+};
+
 export function useMdxComponent(code: string) {
   return useMemo(() => {
     const Component = getMDXComponent(code, {});
 
-    return function MdxComponent({
-      className,
-      size,
-    }: {
-      className?: string;
-      size?: "lg" | "md" | "sm";
-    }) {
+    return function MdxComponent({ className, size }: MdxComponentProps) {
       return (
         <div
           className={variants({
@@ -38,4 +37,12 @@ export function useMdxComponent(code: string) {
       );
     };
   }, [code]);
+}
+
+export function MdxCode({
+  code,
+  ...props
+}: MdxComponentProps & { code: string }) {
+  const Component = useMdxComponent(code);
+  return <Component {...props} />;
 }

@@ -8,7 +8,7 @@ export class DummyCacheStrategy implements CacheStrategy {
   }
 }
 
-export class ReactQueryCacheStrategy implements CacheStrategy {
+export class CourseIndexCacheStrategy implements CacheStrategy {
   private timer: any;
 
   constructor(
@@ -41,6 +41,30 @@ export class ReactQueryCacheStrategy implements CacheStrategy {
   }
 }
 
+export class CompiledContentCacheStrategy implements CacheStrategy {
+  constructor(
+    private queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          staleTime: 5 * 60 * 1000,
+          retry: 0,
+        },
+      },
+    }),
+  ) {}
+
+  fetch<T>(key: unknown[], getData: () => Promise<T>): Promise<T> {
+    return this.queryClient.fetchQuery({
+      queryKey: key,
+      queryFn: getData,
+    });
+  }
+}
+
 export const contentCacheStrategy = publicConfig.isDev
   ? new DummyCacheStrategy()
-  : new ReactQueryCacheStrategy();
+  : new CourseIndexCacheStrategy();
+
+export const compiledContentCacheStrategy = publicConfig.isDev
+  ? new DummyCacheStrategy()
+  : new CompiledContentCacheStrategy();
