@@ -1,8 +1,6 @@
 import Pino from "pino";
 
-export const logger = Pino({
-  level: "error",
-});
+export const logger = Pino({});
 
 export const loggedMethod = <A extends any[] = any[], R = any>({
   msg,

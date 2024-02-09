@@ -2,6 +2,8 @@ import { useServerAction } from "@/shared/lib/server-action/client";
 import { getCoursesListAction } from "../_actions/get-courses-list";
 import { CourseSlug } from "@/entities/course/course";
 import { getCourseLessonsAction } from "../_actions/get-course-lessons";
+import { LessonSlug } from "@/entities/course/lesson";
+import { getLearnLessonAction } from "../_actions/get-learn-lesson";
 
 export const baseKey = "learn";
 
@@ -21,5 +23,17 @@ export const useGetCourseLessonsQuery = (slug?: CourseSlug) => {
     queryKey: [baseKey, "course", slug, "lessons"],
     queryFn: () =>
       slug ? getCourseLessons({ courseSlug: slug }) : Promise.resolve(null),
+  };
+};
+
+export const useGetLearnLessonQuery = (
+  courseSlug: CourseSlug,
+  lessonSlug: LessonSlug,
+) => {
+  const getLearnLesson = useServerAction(getLearnLessonAction);
+
+  return {
+    queryKey: [baseKey, "course", courseSlug, "lessons", lessonSlug, "content"],
+    queryFn: () => getLearnLesson({ courseSlug, lessonSlug }),
   };
 };

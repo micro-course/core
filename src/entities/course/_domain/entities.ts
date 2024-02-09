@@ -34,36 +34,12 @@ export interface LessonEntity {
   blocks: ContentBlockEntity[];
 }
 
-export type ContentBlockEntity =
-  | TextBlockEntity
-  | VideoBlockEntity
-  | QuestionBlockEntity;
+export type ContentBlockEntity = TextBlockEntity;
 
 export interface TextBlockEntity {
   id: ContentBlockId;
   type: "text";
   text: string;
-}
-
-export interface VideoBlockEntity {
-  id: ContentBlockId;
-  type: "video";
-  url: string;
-}
-
-export interface QuestionBlockEntity {
-  id: ContentBlockId;
-  type: "question";
-  answerOptions: AnswerOption[];
-  explanation?: string;
-  successMessage?: string;
-  text?: string;
-}
-
-export interface AnswerOption {
-  id: ContentBlockId;
-  text: string;
-  isRight: boolean;
 }
 
 // =====

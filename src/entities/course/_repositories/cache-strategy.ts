@@ -46,7 +46,7 @@ export class CompiledContentCacheStrategy implements CacheStrategy {
     private queryClient = new QueryClient({
       defaultOptions: {
         queries: {
-          staleTime: 5 * 60 * 1000,
+          staleTime: publicConfig.isDev ? 0 : 5 * 60 * 1000,
           retry: 0,
         },
       },

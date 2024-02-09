@@ -18,7 +18,7 @@ export type CurrentLessonParams = {
   lessonSlug: string;
 };
 
-export type Lesson = {
+export type LearnLesson = {
   id: LessonId;
   slug: LessonSlug;
   courseId: CourseId;
@@ -27,30 +27,10 @@ export type Lesson = {
   blocks: ContentBlock[];
 };
 
-export type ContentBlock = TextBlock | VideoBlock | QuestionBlock;
+export type ContentBlock = TextBlock;
 
 export interface TextBlock {
   id: ContentBlockId;
   type: "text";
-  text: string;
-}
-
-export interface VideoBlock {
-  id: ContentBlockId;
-  type: "video";
-  url: string;
-}
-
-export interface QuestionBlock {
-  id: ContentBlockId;
-  type: "question";
-  answerOptions: AnswerOption[];
-  explanation?: string;
-  successMessage?: string;
-  text?: string;
-}
-
-export interface AnswerOption {
-  id: ContentBlockId;
   text: string;
 }

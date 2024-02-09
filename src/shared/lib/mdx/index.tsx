@@ -20,9 +20,11 @@ type MdxComponentProps = {
   size?: "lg" | "md" | "sm";
 };
 
-export function useMdxComponent(code: string) {
+type CustomComponents = Record<string, any>;
+
+export function useMdxComponent(code: string, components?: CustomComponents) {
   return useMemo(() => {
-    const Component = getMDXComponent(code, {});
+    const Component = getMDXComponent(code);
 
     return function MdxComponent({ className, size }: MdxComponentProps) {
       return (
@@ -32,17 +34,18 @@ export function useMdxComponent(code: string) {
             size,
           })}
         >
-          <Component />
+          <Component components={{ ...components }} />
         </div>
       );
     };
-  }, [code]);
+  }, [code, components]);
 }
 
 export function MdxCode({
   code,
+  components,
   ...props
-}: MdxComponentProps & { code: string }) {
-  const Component = useMdxComponent(code);
+}: MdxComponentProps & { code: string; components?: CustomComponents }) {
+  const Component = useMdxComponent(code, components);
   return <Component {...props} />;
 }

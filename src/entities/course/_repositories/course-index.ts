@@ -1,4 +1,5 @@
 import {
+  ContentBlockEntity,
   CourseId,
   CourseSlug,
   LessonEntity,
@@ -13,6 +14,8 @@ import { cachedAsyncMethod } from "@/shared/lib/cache";
 import { contentCacheStrategy } from "./cache-strategy";
 import { logger } from "@/shared/lib/logger";
 import { compact } from "lodash-es";
+
+const supportedBlockTypes: ContentBlockEntity["type"][] = ["text"];
 
 class CourseIndexRepository {
   @cachedAsyncMethod(contentCacheStrategy, () => ["getCoursesIndex"])
@@ -104,7 +107,10 @@ class CourseIndexRepository {
       courseId: meta.courseId,
       title: lesson.title,
       shortDescription: lesson.shortDescription,
-      blocks: lesson.blocks,
+      blocks: lesson.blocks.filter(
+        (block): block is ContentBlockEntity =>
+          !!supportedBlockTypes.find((type) => type === block.type),
+      ),
     };
   };
 

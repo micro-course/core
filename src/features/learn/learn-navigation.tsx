@@ -39,19 +39,19 @@ export function LearnNavigation({
     <div className={cn("flex gap-4", className)}>
       <Button
         variant={"outline"}
-        onClick={openCourseLessons}
+        onClick={openMyCourses}
         color="secondary"
-        tabIndex={1}
+        tabIndex={4}
       >
-        Все уроки
+        Мои курсы
       </Button>
       <Button
         variant={"outline"}
-        onClick={openMyCourses}
+        onClick={openCourseLessons}
         color="secondary"
-        tabIndex={2}
+        tabIndex={3}
       >
-        Мои курсы
+        Уроки курса
       </Button>
 
       <Button
@@ -59,10 +59,11 @@ export function LearnNavigation({
         variant={"outline"}
         onClick={onBack}
         className="ml-auto"
+        tabIndex={2}
       >
         Назад
       </Button>
-      <Button disabled={!canGoForward} onClick={onForward}>
+      <Button disabled={!canGoForward} onClick={onForward} tabIndex={1}>
         Дальше
       </Button>
     </div>

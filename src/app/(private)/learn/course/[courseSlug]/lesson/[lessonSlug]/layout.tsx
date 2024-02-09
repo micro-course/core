@@ -16,9 +16,7 @@ export default function Layout({
 }) {
   return (
     <>
-      {params.courseSlug}
-      {params.lessonSlug}
-      {children}
+      <div className="pb-[72px] flex flex-col grow">{children}</div>
       <SelectLessonSheet params={params} />
       <div className="fixed bottom-0 z-50 w-full border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <LearnNavigation

@@ -1,5 +1,6 @@
 import { CourseSlug } from "@/entities/course/course";
 import { LessonSlug } from "@/entities/course/lesson";
+import { Lesson } from "@/features/learn/lesson";
 
 export default function Page({
   params: { courseSlug, lessonSlug },
@@ -9,5 +10,9 @@ export default function Page({
     lessonSlug: LessonSlug;
   };
 }) {
-  return <div>My courses</div>;
+  return (
+    <main className="w-content mx-auto py-14 px-3">
+      <Lesson courseSlug={courseSlug} lessonSlug={lessonSlug} />
+    </main>
+  );
 }
