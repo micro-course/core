@@ -1,5 +1,5 @@
 import { cachedAsyncMethod } from "@/shared/lib/cache";
-import { CourseId, CourseSlug } from "../course";
+import { CourseEntity, CourseId, CourseSlug } from "../course";
 import { courseIndexRepository } from "./course-index";
 import { compiledContentCacheStrategy } from "./cache-strategy";
 import { compileMDX } from "@/shared/lib/mdx/server";
@@ -12,7 +12,12 @@ export class CourseRepository {
 
   async courseById(id: CourseId) {
     const index = await courseIndexRepository.getCoursesIndex();
-    return index.byId[id];
+    return index.byId[id] as CourseEntity | undefined;
+  }
+
+  async courseBySlug(slug: CourseSlug) {
+    const index = await courseIndexRepository.getCoursesIndex();
+    return index.bySlug[slug] as CourseEntity | undefined;
   }
 
   @cachedAsyncMethod(compiledContentCacheStrategy, (slug) => [
@@ -20,8 +25,7 @@ export class CourseRepository {
     slug,
   ])
   async compiledCourseBySlug(slug: CourseSlug) {
-    const index = await courseIndexRepository.getCoursesIndex();
-    const courseEntity = index.bySlug[slug];
+    const courseEntity = await this.courseBySlug(slug);
 
     if (!courseEntity) {
       return;

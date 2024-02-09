@@ -1,14 +1,13 @@
 import { cachedAsyncMethod } from "@/shared/lib/cache";
 import { compiledContentCacheStrategy } from "./cache-strategy";
 import { courseIndexRepository } from "./course-index";
-import { LessonId, CourseLessonSlug } from "../_domain/entities";
+import { LessonId, CourseLessonSlug, LessonEntity } from "../_domain/entities";
 import { compileMDX } from "@/shared/lib/mdx/server";
-import { NotFoundError } from "@/shared/lib/errors";
 
 export class LessonRepository {
   async lessonById(id: LessonId) {
     const index = await courseIndexRepository.getCoursesIndex();
-    return index.lessonById[id];
+    return index.lessonById[id] as LessonEntity | undefined;
   }
 
   @cachedAsyncMethod(compiledContentCacheStrategy, (id) => [
@@ -19,7 +18,7 @@ export class LessonRepository {
     const lesson = await this.lessonById(id);
 
     if (!lesson) {
-      throw new NotFoundError();
+      return undefined;
     }
 
     return {

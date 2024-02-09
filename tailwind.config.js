@@ -13,6 +13,12 @@ module.exports = {
       },
     },
     extend: {
+      width: {
+        content: "var(--content-container)",
+      },
+      maxWidth: {
+        content: "var(--content-container)",
+      },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },

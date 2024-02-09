@@ -36,7 +36,7 @@ export class GetCourseDetailsUseCase {
   }
 
   loadLessons(lessonsIds: LessonId[]) {
-    return Promise.allSettled(
+    return Promise.all(
       lessonsIds.map((lessonId) =>
         lessonRepository.lessonWithCompiledShortDesctiption(lessonId),
       ),
@@ -44,12 +44,11 @@ export class GetCourseDetailsUseCase {
       let entities: LessonEntity[] = [];
 
       lessons.forEach((lesson, i) => {
-        if (lesson.status === "fulfilled") {
-          entities.push(lesson.value);
+        if (lesson) {
+          entities.push(lesson);
         } else {
           logger.error({
-            msg: "Lesson not found",
-            reason: lesson.reason,
+            msg: "Course details Lesson not found",
             lessonId: lessonsIds[i],
           });
         }
