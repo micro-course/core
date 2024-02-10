@@ -4,7 +4,7 @@ import {
   DateTimeISOString,
   LessonId,
 } from "@/kernel";
-import { JSONEventType } from "@eventstore/db-client";
+import { EventData, JSONEventType } from "@eventstore/db-client";
 import { StudentId } from "./projections";
 
 type EventMeta = {
@@ -64,3 +64,5 @@ export type StudentProgressEvent =
   | LessonCompletedEvent
   | ContentBlockViewedEvent
   | ContentBlockCompletedEvent;
+
+export type StudentProgressEventData = EventData<StudentProgressEvent>;

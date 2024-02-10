@@ -28,17 +28,11 @@ export class CourseEnterUseCase {
       session.user.id,
     );
 
-    const courseEnteredEvent = studentProgressRepository.createEvent({
-      type: "CourseEntered",
-      data: {
-        courseId: courseEntity.id,
-      },
-      metadata: {
-        version: 1,
-        studentId: session.user.id,
-        datetime: DateTime.now().toISO(),
-      },
-    });
+    const courseEnteredEvent = studentProgressRepository.createEvent(
+      session.user.id,
+      "CourseEntered",
+      { courseId: courseEntity.id },
+    );
 
     studentProgress = studentProgressProducer.produce(
       studentProgress,

@@ -6,30 +6,41 @@ import {
   START,
   FORWARDS,
   jsonEvent,
-  NO_STREAM,
-  EventData,
   JSONEventOptions,
   StreamNotFoundError,
 } from "@eventstore/db-client";
-import { StudentProgressEvent } from "../_domain/events";
+import {
+  StudentProgressEvent,
+  StudentProgressEventData,
+} from "../_domain/events";
 import {
   StudentProgress,
   createStudentProgress,
   studentProgressSchema,
 } from "../_domain/projections";
 import { studentProgressProducer } from "../_domain/producer";
+import { DateTime } from "luxon";
 
 export class StudentProgressRepository {
   constructor() {}
 
-  createEvent(options: JSONEventOptions<StudentProgressEvent>) {
-    return jsonEvent<StudentProgressEvent>(options);
+  createEvent<T extends StudentProgressEvent["type"]>(
+    studentId: UserId,
+    type: T,
+    data: JSONEventOptions<Extract<StudentProgressEvent, { type: T }>>["data"],
+  ) {
+    return jsonEvent<StudentProgressEvent>({
+      type,
+      data,
+      metadata: {
+        version: 1,
+        studentId,
+        datetime: DateTime.now().toISO(),
+      },
+    } as JSONEventOptions<StudentProgressEvent>);
   }
 
-  async applyEvents(
-    studentId: UserId,
-    events: EventData<StudentProgressEvent>[],
-  ) {
+  async applyEvents(studentId: UserId, events: StudentProgressEventData[]) {
     await eventStoreDb.appendToStream(this.getKey(studentId), events);
   }
 

@@ -37,6 +37,15 @@ const lessonProgressSchema = z.object({
 });
 export type LessonProgress = z.infer<typeof lessonProgressSchema>;
 
+const contentBlockProgressSchema = z.object({
+  studentId: z.string(),
+  courseId: z.string(),
+  lessonId: z.string(),
+  contentBlockId: z.string(),
+  completedAt: luxonDateTimeOptionalSchema,
+});
+export type ContentBlockProgress = z.infer<typeof contentBlockProgressSchema>;
+
 export const studentProgressSchema = z.object({
   studentId: z.string(),
   meta: z.object({
@@ -46,6 +55,7 @@ export const studentProgressSchema = z.object({
   lastViewedBlock: lastViewedBlock,
   courses: z.record(courseProgressSchema.optional()),
   lessons: z.record(lessonProgressSchema.optional()),
+  contentBlocks: z.record(contentBlockProgressSchema.optional()),
 });
 
 export type StudentProgress = z.infer<typeof studentProgressSchema>;
@@ -61,5 +71,6 @@ export const createStudentProgress = (
     },
     courses: {},
     lessons: {},
+    contentBlocks: {},
   };
 };

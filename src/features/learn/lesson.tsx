@@ -36,7 +36,14 @@ export function Lesson({
       </h1>
 
       {lessonQuery.data.lesson.blocks.map((block, i) => {
-        return <ContentBlock contentBlock={block} key={i} />;
+        return (
+          <ContentBlock
+            contentBlock={block}
+            key={i}
+            lessonSlug={lessonSlug}
+            courseSlug={courseSlug}
+          />
+        );
       })}
     </div>
   );

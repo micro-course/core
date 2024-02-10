@@ -4,6 +4,7 @@ import { CourseSlug } from "@/entities/course/course";
 import { getCourseLessonsAction } from "../_actions/get-course-lessons";
 import { LessonSlug } from "@/entities/course/lesson";
 import { getLearnLessonAction } from "../_actions/get-learn-lesson";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const baseKey = "learn";
 
@@ -36,4 +37,12 @@ export const useGetLearnLessonQuery = (
     queryKey: [baseKey, "course", courseSlug, "lessons", lessonSlug, "content"],
     queryFn: () => getLearnLesson({ courseSlug, lessonSlug }),
   };
+};
+
+export const useInvalidateLearn = () => {
+  const queryClient = useQueryClient();
+  return () =>
+    queryClient.invalidateQueries({
+      queryKey: [baseKey],
+    });
 };

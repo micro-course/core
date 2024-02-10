@@ -1,5 +1,6 @@
-import { CourseId, LessonId } from "@/kernel";
+import { ContentBlockId, CourseId, LessonId } from "@/kernel";
 import {
+  ContentBlockProgress,
   CourseProgress,
   LessonProgress,
   StudentId,
@@ -84,6 +85,12 @@ export class StudentProgressProducer {
         ...event.data,
         ...event.metadata,
       });
+    const contentBlock =
+      state.contentBlocks[event.data.contentBlockId] ??
+      this.createContentBlock({
+        ...event.data,
+        ...event.metadata,
+      });
 
     state.lastViewedBlock = {
       ...event.data,
@@ -93,6 +100,7 @@ export class StudentProgressProducer {
     course.lastInteractionAt = now;
 
     state.lessons[event.data.lessonId] = lesson;
+    state.contentBlocks[event.data.contentBlockId] = contentBlock;
   }
 
   handleContentBlockCompleted(
@@ -101,11 +109,14 @@ export class StudentProgressProducer {
   ) {
     this.checkCourseEntered(state, event);
     this.checkLessonStarted(state, event);
+    this.checkContentBlockStarted(state, event);
 
     const course = state.courses[event.data.courseId]!;
     const lesson = state.lessons[event.data.lessonId]!;
+    const contentBlock = state.contentBlocks[event.data.contentBlockId]!;
     const now = this.eventDateTime(event);
 
+    contentBlock.completedAt = now;
     course.lastInteractionAt = now;
     lesson.completedBlocksCount += 1;
   }
@@ -172,6 +183,25 @@ export class StudentProgressProducer {
     };
   }
 
+  private createContentBlock({
+    studentId,
+    contentBlockId,
+    courseId,
+    lessonId,
+  }: {
+    studentId: StudentId;
+    courseId: CourseId;
+    lessonId: LessonId;
+    contentBlockId: ContentBlockId;
+  }): ContentBlockProgress {
+    return {
+      studentId,
+      courseId,
+      lessonId,
+      contentBlockId,
+    };
+  }
+
   private checkCourseEntered(
     state: StudentProgress,
     event: Extract<StudentProgressEvent, { data: { courseId: CourseId } }>,
@@ -192,6 +222,22 @@ export class StudentProgressProducer {
     if (!state.lessons[event.data.lessonId]) {
       throw new StudentProgressProducerError(
         "Course not started",
+        state,
+        event,
+      );
+    }
+  }
+
+  private checkContentBlockStarted(
+    state: StudentProgress,
+    event: Extract<
+      StudentProgressEvent,
+      { data: { contentBlockId: LessonId } }
+    >,
+  ) {
+    if (!state.contentBlocks[event.data.contentBlockId]) {
+      throw new StudentProgressProducerError(
+        "ContentBlock not started",
         state,
         event,
       );
