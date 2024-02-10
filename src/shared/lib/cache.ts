@@ -6,6 +6,10 @@ export interface InvalidateonStrategy {
   invalidate(key: unknown[]): Promise<void>;
 }
 
+export interface UpdateCacheStrategy {
+  update(key: unknown[], data: unknown): void;
+}
+
 export const cachedAsyncMethod = <A extends any[] = any[]>(
   cacheStrategy: CacheStrategy,
   key: (...args: A) => unknown[],
@@ -49,6 +53,38 @@ export const invalidateCache = <A extends any[] = any[]>(
         Promise.resolve(result)
           // Invalidate on success
           .then(() => strategy.invalidate(key(...args)))
+          // Invalidate on error
+          .catch(() => strategy.invalidate(key(...args)))
+          // Return value
+          .then(() => result)
+          // Avoid invalidate error
+          .catch(() => result) as Return
+      );
+    }
+
+    return replacementMethod;
+  };
+};
+
+export const updateCache = <A extends any[] = any[]>(
+  strategy: UpdateCacheStrategy & InvalidateonStrategy,
+  key: (...args: A) => unknown[],
+) => {
+  return function cachedAsycnMethodDecorator<
+    This,
+    Args extends A,
+    Return extends Promise<unknown>,
+  >(
+    target: (this: This, ...args: Args) => Return,
+    _: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>,
+  ) {
+    function replacementMethod(this: This, ...args: Args): Return {
+      const result = target.call(this, ...args);
+
+      return (
+        Promise.resolve(result)
+          // Update on success
+          .then((data) => strategy.update(key(...args), data))
           // Invalidate on error
           .catch(() => strategy.invalidate(key(...args)))
           // Return value

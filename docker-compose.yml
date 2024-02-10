@@ -12,6 +12,33 @@ services:
       - POSTGRES_DB=postgres
     volumes:
       - db-data:/var/lib/postgresql/data
+  eventstoredb:
+    image: eventstore/eventstore:latest
+    environment:
+      - EVENTSTORE_INSECURE=true # let eventstore run without ceritficate
+      - EVENTSTORE_EXT_TCP_PORT=1113 # set internal tcp port
+      - EVENTSTORE_HTTP_PORT=2113 # set internal admin ui port
+      - EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true
+    ports:
+      - "1113:1113" # map internal tcp port
+      - "2113:2113" # map internal admin ui port
+    volumes:
+      - type: volume
+        source: eventstore-data
+        target: /var/lib/eventstore
+      - type: volume
+        source: eventstore-logs
+        target: /var/log/eventstore
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/usr/share/redis/data
+    environment:
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16
   dev-content-nginx:
     image: nginx:latest
     ports:
@@ -51,3 +78,6 @@ services:
 volumes:
   db-data:
   minio-data:
+  eventstore-data:
+  eventstore-logs:
+  redis-data:

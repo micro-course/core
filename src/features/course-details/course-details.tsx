@@ -2,9 +2,9 @@ import { CourseSlug } from "@/entities/course/course";
 import { useQuery } from "@tanstack/react-query";
 import { useCourseDetailsQuery } from "./_vm/queries";
 import { MdxCode } from "@/shared/lib/mdx";
-import { Button } from "@/shared/ui/button";
 import { cn } from "@/shared/ui/utils";
 import { LessonsList } from "./_ui/lessons";
+import { CourseAction } from "./_ui/course-action";
 
 export function CourseDetails({
   courseSlug,
@@ -34,20 +34,15 @@ export function CourseDetails({
 
         <MdxCode code={courseDetailsQuery.data.description} />
 
-        <BuyButton />
+        <CourseAction
+          action={courseDetailsQuery.data.action}
+          courseSlug={courseSlug}
+        />
       </div>
 
       <hr />
 
       <LessonsList lessons={courseDetailsQuery.data.lessons} />
     </div>
-  );
-}
-
-function BuyButton({ className }: { className?: string }) {
-  return (
-    <Button variant={"default"} size={"lg"} className={className}>
-      Купить за 999 руб
-    </Button>
   );
 }

@@ -47,6 +47,7 @@ export const useServerAction = <P, R>(
         })
         .catch((error) => {
           onError.forEach((onError) => onError(error, params));
+          console.error(error);
           throw error;
         });
     },

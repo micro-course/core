@@ -77,3 +77,56 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .rainbow-shadow {
+    --raninbow-shadow-size: 8px;
+  }
+
+  .rainbow-shadow:after,
+  .rainbow-shadow:after {
+    content: "";
+    border-radius: inherit;
+    position: absolute;
+    top: calc(-1 * var(--raninbow-shadow-size) / 4);
+    left: calc(-1 * var(--raninbow-shadow-size) / 4);
+    width: calc(100% + var(--raninbow-shadow-size) / 2);
+    height: calc(100% + var(--raninbow-shadow-size) / 2);
+    background: linear-gradient(
+      45deg,
+      #fb0094,
+      #0000ff,
+      #00ff00,
+      #ffff00,
+      #ff0000,
+      #fb0094,
+      #0000ff,
+      #00ff00,
+      #ffff00,
+      #ff0000
+    );
+    background-size: 400%;
+    z-index: -1;
+    animation: rainbowShadow 60s linear infinite;
+  }
+
+  .rainbow-shadow:after {
+    top: calc(-1 * var(--raninbow-shadow-size) / 2);
+    left: calc(-1 * var(--raninbow-shadow-size) / 2);
+    width: calc(100% + var(--raninbow-shadow-size));
+    height: calc(100% + var(--raninbow-shadow-size));
+    filter: blur(var(--raninbow-shadow-size));
+    opacity: 0.9;
+  }
+}
+@keyframes rainbowShadow {
+  0% {
+    background-position: 0 0;
+  }
+  50.01% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}

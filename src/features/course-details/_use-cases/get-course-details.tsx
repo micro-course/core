@@ -8,6 +8,8 @@ import { NotFoundError } from "@/shared/lib/errors";
 import { lessonRepository } from "@/entities/course/lesson.server";
 import { LessonEntity, LessonId } from "@/entities/course/lesson";
 import { logger } from "@/shared/lib/logger";
+import { studentProgressRepository } from "@/entities/student-progress/student-progress.server";
+import { getCourseAction } from "../_domain/methods/get-course-action";
 
 type Query = {
   courseSlug: CourseSlug;
@@ -18,11 +20,16 @@ export class GetCourseDetailsUseCase {
     createAbility: createCourseDetailsAbility,
     check: (ability) => ability.canView(),
   })
-  async exec({}: WithSession, query: Query): Promise<CourseDetails> {
+  async exec({ session }: WithSession, query: Query): Promise<CourseDetails> {
     const courseEntity = await this.loadCompiledCourse(query.courseSlug);
     const lessons = await this.loadLessons(courseEntity.lessons);
+    const progress = await studentProgressRepository.getByStudentId(
+      session.user.id,
+    );
 
-    return courseEntityToCourseDetails(courseEntity, lessons);
+    const action = await getCourseAction(progress, courseEntity, lessons);
+
+    return courseEntityToCourseDetails(courseEntity, lessons, action);
   }
 
   async loadCompiledCourse(courseSlug: CourseSlug) {
