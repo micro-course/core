@@ -1,11 +1,12 @@
 import { Input } from "@/shared/ui/input";
-import { useDeferredValue, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { CourseListItem } from "../_domain/projections";
 import { CourseSlug } from "@/entities/course/course";
 import { ChevronRight } from "lucide-react";
 import { useCoursesList } from "../_vm/use-courses-list";
 import { Skeleton } from "@/shared/ui/skeleton";
+import { CourseProgressCircle } from "@/entities/student-progress/student-progress";
 
 export function CoursesList({
   currentCourseSlug,
@@ -60,7 +61,7 @@ export function CoursesList({
           <div className="p-3 sm:p-5 ">Список курсов пуст</div>
         )}
       </div>
-      {filterredMyCourses.length > 0 && (
+      {filterredNotMyCourses.length > 0 && (
         <div>
           <h4 className="text-lg px-3 sm:px-5 mb-4">Остальные курсы</h4>
           <div>
@@ -91,7 +92,16 @@ export function CoursesList({
 
 const CourseLink = ({ course }: { course: CourseListItem }) => {
   return (
-    <div className="flex flex-1 items-center justify-between py-3 px-3 sm:px-5 font-medium border-b border-t -mb-px text-left">
+    <div className="flex flex-1 items-center justify-between py-3 px-3 sm:px-5 font-medium border-b border-t -mb-px text-left gap-2">
+      {course.progress && (
+        <CourseProgressCircle
+          className="shrink-0"
+          courseProgress={course.progress}
+          size={16}
+          strokeWidth={3}
+          hideText
+        />
+      )}
       {course.title}
       <ChevronRight className="w-5 h-5 ml-auto shrink-0" />
     </div>

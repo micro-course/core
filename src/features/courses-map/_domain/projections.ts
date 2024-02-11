@@ -6,6 +6,7 @@ import {
   MapNodeId,
   ImageMapNodeData,
 } from "@/entities/map/map-node";
+import { CourseProgressPercent } from "@/entities/student-progress/student-progress";
 
 export type MapEdgeId = string;
 
@@ -18,20 +19,9 @@ export type CourseToAdd = {
   dependencies: CourseId[];
 };
 
-export type CourseNodeProgress =
-  | {
-      type: "not-started";
-    }
-  | {
-      type: "completed";
-      percent: number;
-    }
-  | { type: "in-progress"; percent: number }
-  | { type: "in-progress-last"; percent: number };
-
 type CourseNodeData = {
   type: "course";
-  progress: CourseNodeProgress;
+  progress: CourseProgressPercent;
 } & CourseToAdd;
 
 export type ImageNode = {

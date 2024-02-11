@@ -1,11 +1,12 @@
 import { CourseEntity, CourseListItem } from "@/entities/course/course";
 import { MAP_NODE_TYPES, MapNodeEntity } from "@/entities/map/map-node";
-import { CourseNodeProgress, CourseToAdd, CoursesMapNode } from "./projections";
+import { CourseToAdd, CoursesMapNode } from "./projections";
+import { CourseProgressPercent } from "@/entities/student-progress/student-progress";
 
 export const createMapNode = (
   mapNodeEntity: MapNodeEntity,
   course: CourseListItem | undefined,
-  courseNodeProgress: CourseNodeProgress | undefined,
+  courseNodeProgress: CourseProgressPercent | undefined,
 ): CoursesMapNode => {
   if (course && mapNodeEntity.data.type === MAP_NODE_TYPES.COURSE) {
     return {

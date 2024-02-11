@@ -1,11 +1,26 @@
-import { CourseEntity } from "@/entities/course/course";
-import { CourseNodeProgress } from "../projections";
-import { StudentProgress } from "@/entities/student-progress/student-progress";
+import { CourseId, LessonId } from "@/kernel";
+import { StudentProgress } from "../projections";
 
-export function getCourseNodeProgress(
+export type CourseProgressPercent =
+  | {
+      type: "not-started";
+    }
+  | {
+      type: "completed";
+      percent: number;
+    }
+  | { type: "in-progress"; percent: number }
+  | { type: "in-progress-last"; percent: number };
+
+type CourseEntity = {
+  id: CourseId;
+  lessons: LessonId[];
+};
+
+export function getCourseProgressPercent(
   courseEntity: CourseEntity,
   studentProgress: StudentProgress,
-): CourseNodeProgress {
+): CourseProgressPercent {
   const courseProgress = studentProgress.courses[courseEntity.id];
 
   if (!courseProgress) {

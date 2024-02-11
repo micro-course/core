@@ -7,7 +7,7 @@ import Toolbar from "../_toolbar";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { useMapAbility } from "../../../_vm/use-map-ability";
 import Link from "next/link";
-import { CourseProgress } from "./_course-progress";
+import { CourseProgressCircle } from "@/entities/student-progress/student-progress";
 
 export default function CourseNode(props: NodeProps<CourseNode>) {
   const ability = useMapAbility();
@@ -40,7 +40,7 @@ export default function CourseNode(props: NodeProps<CourseNode>) {
             transformOrigin: "center center",
           }}
         >
-          <CourseProgress
+          <CourseProgressCircle
             courseProgress={props.data.data.progress}
             className="absolute -left-4 -top-4"
           />

@@ -16,8 +16,10 @@ import {
 import { courseIndexRepository } from "@/entities/course/course.server";
 import { CoursesIndex } from "@/entities/course/_domain/projections";
 import { CourseId } from "@/entities/course/course";
-import { getCourseNodeProgress } from "../_domain/methods/get-course-node-progress";
-import { StudentProgress } from "@/entities/student-progress/student-progress";
+import {
+  StudentProgress,
+  getCourseProgressPercent,
+} from "@/entities/student-progress/student-progress";
 import { studentProgressRepository } from "@/entities/student-progress/student-progress.server";
 import { UserId } from "@/kernel";
 
@@ -62,7 +64,7 @@ export class GetMapUseCase {
         nodes[mapNode.id] = createMapNode(
           mapNode,
           course,
-          getCourseNodeProgress(course, studentProgress),
+          getCourseProgressPercent(course, studentProgress),
         );
         courseIdNodeMap[mapNode.data.courseId] = mapNode.id;
         nodeIds.push(mapNode.id);

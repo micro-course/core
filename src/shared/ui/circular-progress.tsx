@@ -9,6 +9,7 @@ const CircularProgress = ({
   circleBaseClassName,
   circleProgressClassName,
   textClassName,
+  hideText,
 }: {
   size?: number;
   strokeWidth?: number;
@@ -17,6 +18,7 @@ const CircularProgress = ({
   circleBaseClassName?: string;
   circleProgressClassName?: string;
   textClassName?: string;
+  hideText?: boolean;
 }) => {
   const percentageText = Math.min(
     100,
@@ -57,11 +59,13 @@ const CircularProgress = ({
           cy={size / 2}
         />
       </svg>
-      <div
-        className={cn("absolute text-xl text-white font-bold", textClassName)}
-      >
-        {percentageText}
-      </div>
+      {!hideText && (
+        <div
+          className={cn("absolute text-xl text-white font-bold", textClassName)}
+        >
+          {percentageText}
+        </div>
+      )}
     </div>
   );
 };

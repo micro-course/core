@@ -1,10 +1,12 @@
 import { ContentBlockId, CourseId, CourseSlug } from "@/entities/course/course";
 import { LessonId, LessonSlug } from "@/entities/course/lesson";
+import { CourseProgressPercent } from "@/entities/student-progress/student-progress";
 
 export type CourseListItem = {
   id: CourseId;
   slug: CourseSlug;
   title: string;
+  progress?: CourseProgressPercent;
 };
 
 export type LessonListItem = {

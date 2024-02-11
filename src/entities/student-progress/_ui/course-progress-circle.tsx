@@ -1,11 +1,17 @@
-import { CourseNodeProgress } from "@/features/courses-map/_domain/projections";
+import { CourseProgressPercent } from "@/entities/student-progress/student-progress";
 import CircularProgress from "@/shared/ui/circular-progress";
 
-export function CourseProgress({
+export function CourseProgressCircle({
   courseProgress,
   className,
+  strokeWidth,
+  size,
+  hideText,
 }: {
-  courseProgress: CourseNodeProgress;
+  courseProgress: CourseProgressPercent;
+  strokeWidth?: number;
+  size?: number;
+  hideText?: boolean;
   className?: string;
 }) {
   if (courseProgress.type === "not-started") {
@@ -15,8 +21,11 @@ export function CourseProgress({
   if (courseProgress.type === "completed") {
     return (
       <CircularProgress
+        size={size}
+        strokeWidth={strokeWidth}
         percentage={courseProgress.percent}
         className={className}
+        hideText={hideText}
         circleProgressClassName="stroke-green-500"
       />
     );
@@ -25,8 +34,11 @@ export function CourseProgress({
   if (courseProgress.type === "in-progress-last") {
     return (
       <CircularProgress
+        size={size}
+        strokeWidth={strokeWidth}
         percentage={courseProgress.percent}
         className={className}
+        hideText={hideText}
         circleProgressClassName="stroke-orange-500"
       />
     );
@@ -35,8 +47,11 @@ export function CourseProgress({
   if (courseProgress.type === "in-progress") {
     return (
       <CircularProgress
+        size={size}
+        strokeWidth={strokeWidth}
         percentage={courseProgress.percent}
         className={className}
+        hideText={hideText}
         circleProgressClassName="storke-blue-500"
       />
     );

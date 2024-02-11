@@ -1,6 +1,10 @@
 import { LessonEntity } from "@/entities/course/lesson";
 import { CourseListItem, LearnLesson, LessonListItem } from "./projections";
 import { CourseEntity } from "@/entities/course/course";
+import {
+  CourseProgressPercent,
+  StudentProgress,
+} from "@/entities/student-progress/student-progress";
 
 export const lessontEntityToLesson = (lesson: LessonEntity): LearnLesson => ({
   id: lesson.id,
@@ -19,11 +23,15 @@ export const lessonToListItem = (lesson: LessonEntity): LessonListItem => {
   };
 };
 
-export const courseToListItem = (course: CourseEntity): CourseListItem => {
+export const courseToListItem = (
+  course: CourseEntity,
+  progress?: CourseProgressPercent,
+): CourseListItem => {
   return {
     id: course.id,
     slug: course.slug,
     title: course.title,
+    progress,
   };
 };
 
