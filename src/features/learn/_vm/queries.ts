@@ -5,6 +5,7 @@ import { getCourseLessonsAction } from "../_actions/get-course-lessons";
 import { LessonSlug } from "@/entities/course/lesson";
 import { getLearnLessonAction } from "../_actions/get-learn-lesson";
 import { useQueryClient } from "@tanstack/react-query";
+import { getLastLessonAction } from "../_actions/get-last-lesson";
 
 export const baseKey = "learn";
 
@@ -36,6 +37,15 @@ export const useGetLearnLessonQuery = (
   return {
     queryKey: [baseKey, "course", courseSlug, "lessons", lessonSlug, "content"],
     queryFn: () => getLearnLesson({ courseSlug, lessonSlug }),
+  };
+};
+
+export const useLastLessonQuery = () => {
+  const lastLesson = useServerAction(getLastLessonAction);
+  return {
+    queryKey: [baseKey, "last-lesson"],
+    queryFn: () => lastLesson(),
+    gcTime: 0,
   };
 };
 

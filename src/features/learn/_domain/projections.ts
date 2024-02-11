@@ -34,3 +34,9 @@ export interface TextBlock {
   type: "text";
   text: string;
 }
+
+export type LessonPath = {
+  courseSlug: CourseSlug;
+  lessonSlug: LessonSlug;
+  contentBlockId?: ContentBlockId;
+};

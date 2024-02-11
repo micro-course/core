@@ -1,4 +1,4 @@
-export type { StudentProgress } from "./_domain/projections";
+export type { StudentProgress, CourseProgress } from "./_domain/projections";
 export type {
   StudentProgressEvent,
   StudentProgressEventData,

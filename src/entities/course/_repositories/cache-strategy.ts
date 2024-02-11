@@ -61,6 +61,11 @@ export class CompiledContentCacheStrategy implements CacheStrategy {
   }
 }
 
+export const contentCacheStrategy = new CourseIndexCacheStrategy();
+
+export const compiledContentCacheStrategy = new CompiledContentCacheStrategy();
+
+/*
 export const contentCacheStrategy = publicConfig.isDev
   ? new DummyCacheStrategy()
   : new CourseIndexCacheStrategy();
@@ -68,3 +73,4 @@ export const contentCacheStrategy = publicConfig.isDev
 export const compiledContentCacheStrategy = publicConfig.isDev
   ? new DummyCacheStrategy()
   : new CompiledContentCacheStrategy();
+*/
