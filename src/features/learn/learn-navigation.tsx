@@ -4,21 +4,33 @@ import { CurrentLessonParams } from "./_domain/projections";
 import { cn } from "@/shared/ui/utils";
 import { useSelectLessonSheetStore } from "./_vm/select-lesson-sheet";
 import { useQuery } from "@tanstack/react-query";
-import { useGetCourseLessonsQuery } from "./_vm/queries";
+import {
+  useGetCourseLessonsQuery,
+  useGetLearnLessonQuery,
+} from "./_vm/queries";
 import { CourseProgressCircle } from "@/entities/student-progress/student-progress";
 import { Skeleton } from "@/shared/ui/skeleton";
+import { getLessonPath } from "@/shared/router";
+import Link from "next/link";
 
 export function useLearnNavigation(params: CurrentLessonParams) {
   const openCourseLessons = useSelectLessonSheetStore(
     (store) => store.openCourseLesons,
   );
+  const lessonQuery = useQuery({
+    ...useGetLearnLessonQuery(params.courseSlug, params.lessonSlug),
+  });
   const openMyCourses = useSelectLessonSheetStore((store) => store.openCourses);
 
   return {
-    canGoBack: true,
-    canGoForward: true,
-    onBack: () => {},
-    onForward: () => {},
+    canGoBack: !!lessonQuery.data?.prev,
+    canGoForward: !!lessonQuery.data?.next,
+    backUrl: lessonQuery.data?.prev
+      ? getLessonPath(lessonQuery.data?.prev)
+      : undefined,
+    forwardUrl: lessonQuery.data?.next
+      ? getLessonPath(lessonQuery.data?.next)
+      : undefined,
     openMyCourses,
     openCourseLessons: () => openCourseLessons(params.courseSlug),
   };
@@ -70,8 +82,8 @@ export function LearnNavigation({
     openMyCourses,
     canGoForward,
     canGoBack,
-    onBack,
-    onForward,
+    backUrl,
+    forwardUrl,
   } = useLearnNavigation(params);
   return (
     <div className={cn("flex gap-4", className)}>
@@ -86,16 +98,24 @@ export function LearnNavigation({
       {renderCourseLessons()}
 
       <Button
+        asChild
         disabled={!canGoBack}
         variant={"outline"}
-        onClick={onBack}
         className="ml-auto"
         tabIndex={2}
       >
-        Назад
+        {canGoBack ? (
+          <Link href={backUrl ?? "#"}>Назад</Link>
+        ) : (
+          <button>Назад</button>
+        )}
       </Button>
-      <Button disabled={!canGoForward} onClick={onForward} tabIndex={1}>
-        Дальше
+      <Button disabled={!canGoForward} tabIndex={1} asChild>
+        {canGoForward ? (
+          <Link href={forwardUrl ?? "#"}>Продолжить</Link>
+        ) : (
+          <button>Продолжить</button>
+        )}
       </Button>
     </div>
   );

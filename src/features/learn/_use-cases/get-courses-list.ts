@@ -6,6 +6,7 @@ import { CourseListItem } from "../_domain/projections";
 import { studentProgressRepository } from "@/entities/student-progress/student-progress.server";
 import { UserId } from "@/kernel";
 import { getCourseProgressPercent } from "@/entities/student-progress/student-progress";
+import { getSortedMyCourses } from "../_domain/methods";
 
 export class GetCoursesListUseCase {
   @checkAbility({
@@ -20,22 +21,13 @@ export class GetCoursesListUseCase {
       session.user.id,
     );
 
-    const myCourses = courseIndex.list
-      .filter((course) => !!studentProgress.courses[course.id]?.enteredAt)
-      .sort((a, b) => {
-        const aProgress =
-          studentProgress.courses[a.id]?.lastInteractionAt?.toMillis?.() ?? 0;
-        const bProgress =
-          studentProgress.courses[b.id]?.lastInteractionAt?.toMillis?.() ?? 0;
-
-        return aProgress - bProgress;
-      })
-      .map((course) =>
+    const myCourses = getSortedMyCourses(courseIndex, studentProgress).map(
+      (course) =>
         courseToListItem(
           course,
           getCourseProgressPercent(course, studentProgress),
         ),
-      );
+    );
 
     const otherCourses = courseIndex.list
       .filter((course) => !studentProgress.courses[course.id]?.enteredAt)

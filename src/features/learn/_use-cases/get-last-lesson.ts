@@ -6,7 +6,7 @@ import { UserId } from "@/kernel";
 import { createLearnAbility } from "../_domain/ability";
 import { CoursesIndex } from "@/entities/course/course";
 import { CourseProgress } from "@/entities/student-progress/_domain/projections";
-import { LessonPath } from "../_domain/projections";
+import { LessonPath } from "@/shared/router";
 
 export class GetLastLessonUseCase {
   @checkAbility({
@@ -22,8 +22,6 @@ export class GetLastLessonUseCase {
       studentProgress,
       courseIndex,
     });
-
-    console.log({ lastViewedBlockPath });
 
     if (lastViewedBlockPath) {
       return lastViewedBlockPath;
