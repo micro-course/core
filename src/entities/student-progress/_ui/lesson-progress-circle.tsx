@@ -1,20 +1,18 @@
-import { CourseProgressPercent } from "@/entities/student-progress/student-progress";
 import CircularProgress from "@/shared/ui/circular-progress";
+import { LessonProgressPercent } from "../student-progress";
 
-export function CourseProgressCircle({
+export function LessonProgressCircle({
   courseProgress,
   className,
   strokeWidth,
   size,
   hideText,
-  textClassName,
 }: {
-  courseProgress: CourseProgressPercent;
+  courseProgress: LessonProgressPercent;
   strokeWidth?: number;
   size?: number;
   hideText?: boolean;
   className?: string;
-  textClassName?: string;
 }) {
   if (courseProgress.type === "not-started") {
     return null;
@@ -28,22 +26,7 @@ export function CourseProgressCircle({
         percentage={courseProgress.percent}
         className={className}
         hideText={hideText}
-        textClassName={textClassName}
         circleProgressClassName="stroke-green-500"
-      />
-    );
-  }
-
-  if (courseProgress.type === "in-progress-last") {
-    return (
-      <CircularProgress
-        size={size}
-        strokeWidth={strokeWidth}
-        percentage={courseProgress.percent}
-        className={className}
-        hideText={hideText}
-        textClassName={textClassName}
-        circleProgressClassName="stroke-orange-500"
       />
     );
   }
@@ -56,7 +39,6 @@ export function CourseProgressCircle({
         percentage={courseProgress.percent}
         className={className}
         hideText={hideText}
-        textClassName={textClassName}
         circleProgressClassName="storke-blue-500"
       />
     );

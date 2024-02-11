@@ -3,6 +3,10 @@ import { Button } from "@/shared/ui/button";
 import { CurrentLessonParams } from "./_domain/projections";
 import { cn } from "@/shared/ui/utils";
 import { useSelectLessonSheetStore } from "./_vm/select-lesson-sheet";
+import { useQuery } from "@tanstack/react-query";
+import { useGetCourseLessonsQuery } from "./_vm/queries";
+import { CourseProgressCircle } from "@/entities/student-progress/student-progress";
+import { Skeleton } from "@/shared/ui/skeleton";
 
 export function useLearnNavigation(params: CurrentLessonParams) {
   const openCourseLessons = useSelectLessonSheetStore(
@@ -27,6 +31,40 @@ export function LearnNavigation({
   params: CurrentLessonParams;
   className?: string;
 }) {
+  const courseQuery = useQuery({
+    ...useGetCourseLessonsQuery(params.courseSlug),
+  });
+
+  const renderCourseLessons = () => {
+    if (courseQuery.isPending) {
+      return <Skeleton className="h-[1em] w-20 " />;
+    }
+
+    if (courseQuery.data) {
+      return (
+        <Button
+          variant={"link"}
+          onClick={openCourseLessons}
+          color="secondary"
+          tabIndex={3}
+          className="flex items-center gap-2"
+        >
+          {courseQuery.data.course.progress && (
+            <CourseProgressCircle
+              size={40}
+              strokeWidth={4}
+              courseProgress={courseQuery.data.course.progress}
+              textClassName="text-md"
+            />
+          )}
+          {courseQuery.data.course.title}
+        </Button>
+      );
+    }
+
+    return null;
+  };
+
   const {
     openCourseLessons,
     openMyCourses,
@@ -45,14 +83,7 @@ export function LearnNavigation({
       >
         Мои курсы
       </Button>
-      <Button
-        variant={"outline"}
-        onClick={openCourseLessons}
-        color="secondary"
-        tabIndex={3}
-      >
-        Уроки курса
-      </Button>
+      {renderCourseLessons()}
 
       <Button
         disabled={!canGoBack}

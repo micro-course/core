@@ -15,6 +15,10 @@ export function useLessonsList({
 
   const deferredQuery = useDeferredValue(query);
 
+  const firstNotCompletedIndex = courseLessonsQuery.data?.lessons.findIndex(
+    (lesson) => lesson.progress?.type !== "completed",
+  );
+
   const filterredLessons =
     courseLessonsQuery.data?.lessons
       .map((lesson, i) => ({ ...lesson, title: `${i + 1}. ${lesson.title}` }))
@@ -23,6 +27,7 @@ export function useLessonsList({
       }) ?? [];
 
   return {
+    firstNotCompletedIndex,
     filterredLessons,
     isPending: courseLessonsQuery.isPending,
   };

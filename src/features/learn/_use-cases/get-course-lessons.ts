@@ -8,6 +8,12 @@ import { NotFoundError } from "@/shared/lib/errors";
 import { lessonRepository } from "@/entities/course/lesson.server";
 import { LessonEntity, LessonId } from "@/entities/course/lesson";
 import { logger } from "@/shared/lib/logger";
+import { studentProgressRepository } from "@/entities/student-progress/student-progress.server";
+import { UserId } from "@/kernel";
+import {
+  getCourseProgressPercent,
+  getLessonProgressPercent,
+} from "@/entities/student-progress/student-progress";
 
 type Query = {
   courseSlug: CourseSlug;
@@ -19,24 +25,34 @@ export class GetCourseLessonsUseCase {
     check: (ability) => ability.canViewCourses(),
   })
   async exec(
-    _: WithSession,
+    { session }: WithSession,
     query: Query,
   ): Promise<{
     course: CourseListItem;
     lessons: LessonListItem[];
   }> {
-    const { courseEntity, lessonsEntities } = await this.uploadData(
-      query.courseSlug,
-    );
+    const { courseEntity, lessonsEntities, studentProgress } =
+      await this.uploadData(session.user.id, query.courseSlug);
 
     return {
-      course: courseToListItem(courseEntity),
-      lessons: lessonsEntities.map(lessonToListItem),
+      course: courseToListItem(
+        courseEntity,
+        getCourseProgressPercent(courseEntity, studentProgress),
+      ),
+      lessons: lessonsEntities.map((lesson) =>
+        lessonToListItem(
+          lesson,
+          getLessonProgressPercent(lesson, studentProgress),
+        ),
+      ),
     };
   }
 
-  private async uploadData(courseSlug: CourseSlug) {
-    const courseEntity = await courseRepository.courseBySlug(courseSlug);
+  private async uploadData(userId: UserId, courseSlug: CourseSlug) {
+    const [courseEntity, studentProgress] = await Promise.all([
+      courseRepository.courseBySlug(courseSlug),
+      studentProgressRepository.getByStudentId(userId),
+    ]);
 
     if (!courseEntity) {
       throw new NotFoundError();
@@ -46,6 +62,7 @@ export class GetCourseLessonsUseCase {
 
     return {
       lessonsEntities: lessons,
+      studentProgress,
       courseEntity,
     };
   }
