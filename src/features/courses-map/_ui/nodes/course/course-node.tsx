@@ -7,6 +7,7 @@ import Toolbar from "../_toolbar";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { useMapAbility } from "../../../_vm/use-map-ability";
 import Link from "next/link";
+import { CourseProgress } from "./_course-progress";
 
 export default function CourseNode(props: NodeProps<CourseNode>) {
   const ability = useMapAbility();
@@ -26,11 +27,8 @@ export default function CourseNode(props: NodeProps<CourseNode>) {
         }}
       >
         <Card
-          onClick={() => {
-            console.log("click");
-          }}
           className={cn(
-            "overflow-hidden shrink-0 shadow hover:shadow-lg cursor-pointer ",
+            "shrink-0 shadow hover:shadow-lg cursor-pointer ",
             "transition-color hover:outline hover:outline-primary",
             props.selected && canManageNodes && "outline-primary outline ",
             props.data.hidden && "opacity-50",
@@ -42,6 +40,10 @@ export default function CourseNode(props: NodeProps<CourseNode>) {
             transformOrigin: "center center",
           }}
         >
+          <CourseProgress
+            courseProgress={props.data.data.progress}
+            className="absolute -left-4 -top-4"
+          />
           <img
             className="w-full h-[150px] object-cover"
             src={props.data.data.thumbnail}

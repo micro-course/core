@@ -16,6 +16,10 @@ import {
 import { courseIndexRepository } from "@/entities/course/course.server";
 import { CoursesIndex } from "@/entities/course/_domain/projections";
 import { CourseId } from "@/entities/course/course";
+import { getCourseNodeProgress } from "../_domain/methods/get-course-node-progress";
+import { StudentProgress } from "@/entities/student-progress/student-progress";
+import { studentProgressRepository } from "@/entities/student-progress/student-progress.server";
+import { UserId } from "@/kernel";
 
 export class GetMapUseCase {
   @checkAbility({
@@ -25,13 +29,15 @@ export class GetMapUseCase {
   async exec({ session }: WithSession): Promise<CoursesMap> {
     const ability = createMapAbility(session);
 
-    let { mapNodes, courseIndex } = await this.uploadData();
+    let { mapNodes, courseIndex, studentProgress } = await this.uploadData(
+      session.user.id,
+    );
 
     if (ability.canViewHidenNodes() === false) {
       mapNodes = await this.filterHiddenNodes(mapNodes);
     }
 
-    const map = await this.buildMap(mapNodes, courseIndex);
+    const map = await this.buildMap(mapNodes, courseIndex, studentProgress);
 
     return map;
   }
@@ -39,6 +45,7 @@ export class GetMapUseCase {
   private async buildMap(
     mapNodes: MapNodeEntity[],
     courseIndex: CoursesIndex,
+    studentProgress: StudentProgress,
   ): Promise<CoursesMap> {
     const nodes: Record<MapNodeId, CoursesMapNode> = {};
     const nodeIds: MapNodeId[] = [];
@@ -52,11 +59,15 @@ export class GetMapUseCase {
         if (!course) {
           continue;
         }
-        nodes[mapNode.id] = createMapNode(mapNode, course);
+        nodes[mapNode.id] = createMapNode(
+          mapNode,
+          course,
+          getCourseNodeProgress(course, studentProgress),
+        );
         courseIdNodeMap[mapNode.data.courseId] = mapNode.id;
         nodeIds.push(mapNode.id);
       } else {
-        nodes[mapNode.id] = createMapNode(mapNode, undefined);
+        nodes[mapNode.id] = createMapNode(mapNode, undefined, undefined);
         nodeIds.push(mapNode.id);
       }
     }
@@ -97,15 +108,17 @@ export class GetMapUseCase {
     });
   }
 
-  private async uploadData() {
-    const [mapNodes, courseIndex] = await Promise.all([
+  private async uploadData(userId: UserId) {
+    const [mapNodes, courseIndex, studentProgress] = await Promise.all([
       mapNodeRepository.getList(),
       courseIndexRepository.getCoursesIndex(),
+      studentProgressRepository.getByStudentId(userId),
     ]);
 
     return {
       mapNodes,
       courseIndex,
+      studentProgress,
     };
   }
 }

@@ -18,8 +18,20 @@ export type CourseToAdd = {
   dependencies: CourseId[];
 };
 
+export type CourseNodeProgress =
+  | {
+      type: "not-started";
+    }
+  | {
+      type: "completed";
+      percent: number;
+    }
+  | { type: "in-progress"; percent: number }
+  | { type: "in-progress-last"; percent: number };
+
 type CourseNodeData = {
   type: "course";
+  progress: CourseNodeProgress;
 } & CourseToAdd;
 
 export type ImageNode = {
