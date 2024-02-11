@@ -24,6 +24,8 @@ export function useViewContentBlock({
     rootMargin: "-40px 0px 0px 0px",
   });
 
+  const isIntersecting = intersection?.isIntersecting;
+
   const { mutate: viewContentBlockMutate } = useMutation({
     mutationFn: viewContentBlock,
     onSettled() {
@@ -32,7 +34,7 @@ export function useViewContentBlock({
   });
 
   useEffect(() => {
-    if (intersection) {
+    if (isIntersecting) {
       viewContentBlockMutate({
         contentBlockId,
         lessonSlug,
@@ -41,7 +43,7 @@ export function useViewContentBlock({
       return;
     }
   }, [
-    intersection,
+    isIntersecting,
     viewContentBlockMutate,
     contentBlockId,
     lessonSlug,

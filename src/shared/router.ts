@@ -14,7 +14,7 @@ export const getLessonPath = ({
   let url = `/learn/course/${courseSlug}/lesson/${lessonSlug}`;
 
   if (contentBlockId) {
-    url += `?contentBlockId=${contentBlockId}`;
+    url += `#${contentBlockId}`;
   }
 
   return url;

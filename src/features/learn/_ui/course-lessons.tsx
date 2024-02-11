@@ -10,6 +10,7 @@ import { useLessonsList } from "../_vm/use-lessons-list";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { LessonProgressCircle } from "@/entities/student-progress/student-progress";
 import { cn } from "@/shared/ui/utils";
+import { getLessonPath } from "@/shared/router";
 
 export function CourseLessons({
   onLinkClick,
@@ -55,7 +56,10 @@ export function CourseLessons({
             return (
               <Link
                 key={i}
-                href={`/learn/course/${courseSlug}/lesson/${lesson.slug}`}
+                href={getLessonPath({
+                  courseSlug,
+                  lessonSlug: lesson.slug,
+                })}
                 onClick={onLinkClick}
               >
                 <LessonLink
@@ -104,7 +108,7 @@ const LessonLink = ({
     <div
       ref={ref}
       className={cn(
-        current && "ring-2 ring-primary",
+        current && "ring-2 ring-inset ring-primary",
         "flex flex-1 items-center justify-between py-3 px-3 sm:px-5 font-medium border-b border-t -mb-px gap-2",
       )}
     >

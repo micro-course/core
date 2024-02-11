@@ -9,7 +9,6 @@ import { Skeleton } from "@/shared/ui/skeleton";
 import { CourseProgressCircle } from "@/entities/student-progress/student-progress";
 
 export function CoursesList({
-  currentCourseSlug,
   onCourseClick,
   onLinkClick,
 }: {
@@ -19,15 +18,10 @@ export function CoursesList({
 }) {
   const [query, setQuery] = useState("");
 
-  const {
-    filterredNotMyCourses,
-    filterredMyCourses,
-    currentCourse,
-    isPending,
-  } = useCoursesList({
-    currentCourseSlug,
-    query,
-  });
+  const { filterredNotMyCourses, filterredMyCourses, isPending } =
+    useCoursesList({
+      query,
+    });
 
   return (
     <div className="flex flex-col gap-8">
@@ -44,11 +38,6 @@ export function CoursesList({
             <Skeleton className="h-12 mb-px" />
             <Skeleton className="h-12 mb-px" />
           </>
-        )}
-        {currentCourse && (
-          <button onClick={() => onCourseClick(currentCourse.slug)}>
-            <CourseLink course={currentCourse} />
-          </button>
         )}
         {filterredMyCourses.map((course) => {
           return (

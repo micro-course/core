@@ -3,6 +3,7 @@ import { ContentBlock } from "../_domain/projections";
 import { useViewContentBlock } from "../_vm/use-view-content-block";
 import { TextBlock } from "./content-blocks/text-block";
 import { CourseSlug } from "@/entities/course/course";
+import { useEffect } from "react";
 
 export function ContentBlock({
   contentBlock,
@@ -19,6 +20,16 @@ export function ContentBlock({
     contentBlockId: contentBlock.id,
   });
 
+  useEffect(() => {
+    const currentHash = window.location.hash.replace("#", "");
+
+    if (currentHash === contentBlock.id) {
+      window.location.href.split("#")[0];
+      window.location.hash = "#";
+      contentBlockRef.current?.scrollIntoView();
+    }
+  }, [contentBlock.id, contentBlockRef]);
+
   const renderContent = () => {
     if (contentBlock.type === "text") {
       return <TextBlock text={contentBlock.text} />;
@@ -27,5 +38,9 @@ export function ContentBlock({
     return null;
   };
 
-  return <div ref={contentBlockRef}>{renderContent()}</div>;
+  return (
+    <div id={contentBlock.id} ref={contentBlockRef}>
+      {renderContent()}
+    </div>
+  );
 }

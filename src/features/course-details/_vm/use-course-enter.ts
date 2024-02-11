@@ -3,6 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { courseEnterAction } from "../_actions/course-enter";
 import { useInvalidateCourseDetails } from "./queries";
 import { useRouter } from "next/navigation";
+import { getLessonPath } from "@/shared/router";
 
 export function useCourseEnter() {
   const router = useRouter();
@@ -13,9 +14,7 @@ export function useCourseEnter() {
     mutationFn: courseEnter,
     async onSuccess({ targetLesson }, { courseSlug }) {
       invalidateQueries(courseSlug);
-      router.push(
-        `/learn/course/${courseSlug}/lesson/${targetLesson.lessonSlug}`,
-      );
+      router.push(getLessonPath(targetLesson));
     },
   });
 

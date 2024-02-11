@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { getMDXComponent } from "mdx-bundler/client";
 import { cva } from "class-variance-authority";
 
-const variants = cva("prose dark:prose-invert prose-slate", {
+const variants = cva("prose dark:prose-invert prose-slate max-w-none", {
   variants: {
     size: {
       lg: "prose-lg",

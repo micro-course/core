@@ -1,6 +1,6 @@
 import { CourseId, CourseSlug } from "@/entities/course/course";
 import { LessonId, LessonSlug } from "@/entities/course/lesson";
-import { ContentBlockId } from "@/kernel";
+import { LessonPath } from "@/shared/router";
 
 export type LessonPartial = {
   id: LessonId;
@@ -9,19 +9,13 @@ export type LessonPartial = {
   shortDescription?: string;
 };
 
-type TargetLesson = {
-  courseSlug: CourseId;
-  lessonSlug: LessonId;
-  contentBlockId?: ContentBlockId;
-};
-
 export type CourseAction =
   | { type: "comming-soon" }
   | { type: "buy" }
   | {
       type: "enter";
     }
-  | { type: "continue"; targetLesson: TargetLesson };
+  | { type: "continue"; targetLesson: LessonPath };
 
 export type CourseDetails = {
   id: CourseId;

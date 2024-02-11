@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCourseEnter } from "../_vm/use-course-enter";
 import { CourseSlug } from "@/entities/course/course";
 import { Spinner } from "@/shared/ui/spinner";
+import { getLessonPath } from "@/shared/router";
 
 export function CourseAction({
   action,
@@ -31,18 +32,8 @@ export function CourseAction({
   }
 
   if (action.type === "continue") {
-    const query = new URLSearchParams();
-
-    if (action.targetLesson.contentBlockId) {
-      query.set("contentBlockId", action.targetLesson.contentBlockId);
-    }
-
     return (
-      <Link
-        href={`/learn/course/${action.targetLesson.courseSlug}/lesson/${
-          action.targetLesson.lessonSlug
-        }?${query.toString()}`}
-      >
+      <Link href={getLessonPath(action.targetLesson)}>
         <Button variant={"default"} size={"lg"} className={"w-full"}>
           Продолжить
         </Button>
