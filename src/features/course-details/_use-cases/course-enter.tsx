@@ -5,7 +5,6 @@ import { createCourseDetailsAbility } from "../_domain/ablility";
 import { NotFoundError, UnknownServerError } from "@/shared/lib/errors";
 import { studentProgressRepository } from "@/entities/student-progress/student-progress.server";
 import { studentProgressProducer } from "@/entities/student-progress/student-progress";
-import { DateTime } from "luxon";
 import { lessonRepository } from "@/entities/course/lesson.server";
 import { LessonId } from "@/kernel";
 import { getCourseAction } from "../_domain/methods/get-course-action";

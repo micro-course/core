@@ -2,10 +2,7 @@ import { UserId } from "@/kernel";
 import { STUDENT_PROGRESS_VERSION } from "../_const";
 import { START } from "@eventstore/db-client";
 import { z } from "zod";
-import {
-  luxonDateTimeOptionalSchema,
-  luxonDateTimeSchema,
-} from "@/shared/lib/zod";
+import { isoDateString } from "@/shared/lib/zod";
 
 export type StudentId = UserId;
 
@@ -20,10 +17,10 @@ export const lastViewedBlock = z
 const courseProgressSchema = z.object({
   courseId: z.string(),
   studentId: z.string(),
-  enteredAt: luxonDateTimeSchema,
+  enteredAt: isoDateString,
   lastViewedBlock: lastViewedBlock,
-  lastInteractionAt: luxonDateTimeSchema,
-  completedAt: luxonDateTimeOptionalSchema,
+  lastInteractionAt: isoDateString,
+  completedAt: isoDateString.optional(),
   completedLessonsCount: z.number(),
 });
 export type CourseProgress = z.infer<typeof courseProgressSchema>;
@@ -32,7 +29,7 @@ const lessonProgressSchema = z.object({
   studentId: z.string(),
   courseId: z.string(),
   lessonId: z.string(),
-  completedAt: luxonDateTimeOptionalSchema,
+  completedAt: isoDateString.optional(),
   completedBlocksCount: z.number(),
 });
 export type LessonProgress = z.infer<typeof lessonProgressSchema>;
@@ -42,7 +39,7 @@ const contentBlockProgressSchema = z.object({
   courseId: z.string(),
   lessonId: z.string(),
   contentBlockId: z.string(),
-  completedAt: luxonDateTimeOptionalSchema,
+  completedAt: isoDateString.optional(),
 });
 export type ContentBlockProgress = z.infer<typeof contentBlockProgressSchema>;
 
@@ -65,6 +62,7 @@ export const createStudentProgress = (
 ): StudentProgress => {
   return {
     studentId,
+    lastViewedBlock: undefined,
     meta: {
       version: STUDENT_PROGRESS_VERSION,
       revision: START,

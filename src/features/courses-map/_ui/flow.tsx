@@ -89,7 +89,6 @@ export function Flow({ map }: { map: CoursesMap }) {
 
   const handleSelectionDragStop: SelectionDragHandler = useCallback(
     (_, nodes) => {
-      console.log("selection drag stop", nodes);
       nodes.forEach((node) => {
         move({ x: node.position.x, y: node.position.y, id: node.id });
       });

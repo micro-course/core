@@ -7,10 +7,12 @@ import { ChevronRight } from "lucide-react";
 import { useCoursesList } from "../_vm/use-courses-list";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { CourseProgressCircle } from "@/entities/student-progress/student-progress";
+import { cn } from "@/shared/ui/utils";
 
 export function CoursesList({
   onCourseClick,
   onLinkClick,
+  currentCourseSlug,
 }: {
   currentCourseSlug: CourseSlug;
   onCourseClick: (courseSlug: CourseSlug) => void;
@@ -42,7 +44,10 @@ export function CoursesList({
         {filterredMyCourses.map((course) => {
           return (
             <button key={course.id} onClick={() => onCourseClick(course.slug)}>
-              <CourseLink course={course} />
+              <CourseLink
+                course={course}
+                isSelected={course.slug === currentCourseSlug}
+              />
             </button>
           );
         })}
@@ -79,9 +84,20 @@ export function CoursesList({
   );
 }
 
-const CourseLink = ({ course }: { course: CourseListItem }) => {
+const CourseLink = ({
+  course,
+  isSelected,
+}: {
+  course: CourseListItem;
+  isSelected?: boolean;
+}) => {
   return (
-    <div className="flex flex-1 items-center justify-between py-3 px-3 sm:px-5 font-medium border-b border-t -mb-px text-left gap-2">
+    <div
+      className={cn(
+        "flex flex-1 items-center justify-between py-3 px-3 sm:px-5 font-medium border-b border-t -mb-px text-left gap-2",
+        isSelected && "ring-2 ring-inset ring-primary",
+      )}
+    >
       {course.progress && (
         <CourseProgressCircle
           className="shrink-0"

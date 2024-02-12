@@ -14,11 +14,9 @@ export class ContentParser {
       if (this.ajv.validate(schema, resultObject)) {
         return resultObject as T;
       } else {
-        console.log(this.ajv.errors);
         throw new ValidationError([...(this.ajv.errors ?? [])]);
       }
     } catch (error) {
-      console.log(error);
       throw new ParsingError(text, "ContentParsing error", error);
     }
   }

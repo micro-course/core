@@ -93,7 +93,7 @@ export class StudentProgressRepository {
         fromRevision:
           studentProgress.meta.revision === START
             ? START
-            : BigInt(studentProgress.meta.revision),
+            : BigInt(studentProgress.meta.revision) + BigInt(1),
       },
     );
 
@@ -110,6 +110,10 @@ export class StudentProgressRepository {
     }
   }
 
+  clearCache(studentId: UserId) {
+    return redis.del(this.getKey(studentId));
+  }
+
   private async saveToCache(studentProgress: StudentProgress) {
     await redis.set(
       this.getKey(studentProgress.studentId),
@@ -117,7 +121,7 @@ export class StudentProgressRepository {
     );
   }
 
-  private getKey(studentId: UserId) {
+  public getKey(studentId: UserId) {
     return `student-progress-entity-${studentId}`;
   }
 }

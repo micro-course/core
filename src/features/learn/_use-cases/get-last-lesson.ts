@@ -7,6 +7,7 @@ import { createLearnAbility } from "../_domain/ability";
 import { CoursesIndex } from "@/entities/course/course";
 import { CourseProgress } from "@/entities/student-progress/_domain/projections";
 import { LessonPath } from "@/shared/router";
+import { DateTime } from "luxon";
 
 export class GetLastLessonUseCase {
   @checkAbility({
@@ -31,8 +32,6 @@ export class GetLastLessonUseCase {
       studentProgress,
       courseIndex,
     });
-
-    console.log({ lastInteractionPath });
 
     return lastInteractionPath;
   }
@@ -78,7 +77,8 @@ export class GetLastLessonUseCase {
       .filter((course): course is CourseProgress => !!course)
       .sort(
         (a, b) =>
-          a.lastInteractionAt.toMillis() - b.lastInteractionAt.toMillis(),
+          DateTime.fromISO(a.lastInteractionAt).toMillis() -
+          DateTime.fromISO(b.lastInteractionAt).toMillis(),
       )[0];
 
     if (!course) {

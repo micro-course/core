@@ -17,8 +17,6 @@ import {
 export function UpdateNodeDialog() {
   const updateNodeDialog = useDialog(DialogType.UPDATE_NODE);
 
-  console.log(updateNodeDialog.state);
-
   return (
     <Dialog
       onOpenChange={updateNodeDialog.close}

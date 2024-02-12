@@ -34,8 +34,6 @@ services:
     restart: always
     ports:
       - "6379:6379"
-    volumes:
-      - redis-data:/usr/share/redis/data
     environment:
       - REDIS_PORT=6379
       - REDIS_DATABASES=16
@@ -80,4 +78,3 @@ volumes:
   minio-data:
   eventstore-data:
   eventstore-logs:
-  redis-data:

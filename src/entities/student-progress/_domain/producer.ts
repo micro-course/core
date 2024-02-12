@@ -1,4 +1,9 @@
-import { ContentBlockId, CourseId, LessonId } from "@/kernel";
+import {
+  ContentBlockId,
+  CourseId,
+  DateTimeISOString,
+  LessonId,
+} from "@/kernel";
 import {
   ContentBlockProgress,
   CourseProgress,
@@ -14,7 +19,6 @@ import {
   ContentBlockViewedEvent,
   ContentBlockCompletedEvent,
 } from "./events";
-import { DateTime } from "luxon";
 
 export class StudentProgressProducerError extends Error {
   constructor(
@@ -144,8 +148,8 @@ export class StudentProgressProducer {
     courseProgress.completedAt = now;
   }
 
-  private eventDateTime(event: StudentProgressEvent): DateTime {
-    return DateTime.fromISO(event.metadata.datetime);
+  private eventDateTime(event: StudentProgressEvent): DateTimeISOString {
+    return event.metadata.datetime;
   }
 
   private createCourse({
@@ -155,7 +159,7 @@ export class StudentProgressProducer {
   }: {
     studentId: StudentId;
     courseId: CourseId;
-    now: DateTime;
+    now: DateTimeISOString;
   }): CourseProgress {
     return {
       courseId: courseId,

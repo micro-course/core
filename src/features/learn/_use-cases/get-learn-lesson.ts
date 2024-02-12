@@ -74,7 +74,9 @@ export class GetLearnLessonUseCase {
     const studentProgress =
       await studentProgressRepository.getByStudentId(userId);
 
-    const myCourses = getSortedMyCourses(courseIndex, studentProgress);
+    const myCourses = getSortedMyCourses(courseIndex, studentProgress, {
+      filterCompleted: true,
+    });
 
     const currentCourseIndex = myCourses.findIndex(
       (course) => course.slug === query.courseSlug,
