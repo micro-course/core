@@ -11,7 +11,7 @@ import { CourseProgressCircle } from "@/entities/student-progress/student-progre
 
 export default function CourseNode(props: NodeProps<CourseNode>) {
   const ability = useMapAbility();
-  const canManageNodes = ability.canMangeNodes();
+  const canManageNodes = ability?.canMangeNodes() ?? false;
 
   return (
     <>

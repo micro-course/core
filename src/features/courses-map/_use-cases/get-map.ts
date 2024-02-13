@@ -7,7 +7,7 @@ import {
 } from "../_domain/projections";
 import { createMapNode } from "../_domain/mappers";
 import { mapNodeRepository } from "@/entities/map/map-node.server";
-import { WithSession, checkAbility } from "@/entities/user/session.server";
+import { WithSession } from "@/entities/user/session.server";
 import {
   MAP_NODE_TYPES,
   MapNodeEntity,
@@ -24,18 +24,15 @@ import { studentProgressRepository } from "@/entities/student-progress/student-p
 import { UserId } from "@/kernel";
 
 export class GetMapUseCase {
-  @checkAbility({
-    createAbility: createMapAbility,
-    check: (ability) => ability.canViewMap(),
-  })
-  async exec({ session }: WithSession): Promise<CoursesMap> {
-    const ability = createMapAbility(session);
+  async exec({ session }: Partial<WithSession>): Promise<CoursesMap> {
+    const userId = session?.user.id;
 
-    let { mapNodes, courseIndex, studentProgress } = await this.uploadData(
-      session.user.id,
-    );
+    let { mapNodes, courseIndex, studentProgress } =
+      await this.uploadData(userId);
 
-    if (ability.canViewHidenNodes() === false) {
+    const ability = session ? createMapAbility(session) : undefined;
+
+    if (!ability?.canViewHidenNodes()) {
       mapNodes = await this.filterHiddenNodes(mapNodes);
     }
 
@@ -47,7 +44,7 @@ export class GetMapUseCase {
   private async buildMap(
     mapNodes: MapNodeEntity[],
     courseIndex: CoursesIndex,
-    studentProgress: StudentProgress,
+    studentProgress?: StudentProgress,
   ): Promise<CoursesMap> {
     const nodes: Record<MapNodeId, CoursesMapNode> = {};
     const nodeIds: MapNodeId[] = [];
@@ -64,7 +61,9 @@ export class GetMapUseCase {
         nodes[mapNode.id] = createMapNode(
           mapNode,
           course,
-          getCourseProgressPercent(course, studentProgress),
+          studentProgress
+            ? getCourseProgressPercent(course, studentProgress)
+            : undefined,
         );
         courseIdNodeMap[mapNode.data.courseId] = mapNode.id;
         nodeIds.push(mapNode.id);
@@ -110,11 +109,11 @@ export class GetMapUseCase {
     });
   }
 
-  private async uploadData(userId: UserId) {
+  private async uploadData(userId?: UserId) {
     const [mapNodes, courseIndex, studentProgress] = await Promise.all([
       mapNodeRepository.getList(),
       courseIndexRepository.getCoursesIndex(),
-      studentProgressRepository.getByStudentId(userId),
+      userId ? studentProgressRepository.getByStudentId(userId) : undefined,
     ]);
 
     return {

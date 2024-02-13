@@ -17,7 +17,7 @@ export default function Toolbar(props: NodeProps<CoursesMapNode>) {
   const ability = useMapAbility();
   const { deleteNode } = useDeleteNode();
 
-  if (!ability.canMangeNodes()) {
+  if (!ability?.canMangeNodes()) {
     return null;
   }
 

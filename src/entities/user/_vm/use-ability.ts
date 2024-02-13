@@ -11,3 +11,13 @@ export const useAbilityStrict = <T>(factory: (session: SessionEntity) => T) => {
 
   throw new NeedAuthError();
 };
+
+export const useAbility = <T>(factory: (session: SessionEntity) => T) => {
+  const session = useAppSession();
+
+  if (session.status === "authenticated") {
+    return factory(session.data);
+  }
+
+  return undefined;
+};

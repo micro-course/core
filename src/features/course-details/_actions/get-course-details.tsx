@@ -1,6 +1,6 @@
 "use server";
 
-import { getAppSessionStrictServer } from "@/entities/user/session.server";
+import { getAppSessionServer } from "@/entities/user/session.server";
 import { serverAction } from "@/shared/lib/server-action/server";
 import { getCourseDetailsUseCase } from "../_use-cases/get-course-details";
 import { z } from "zod";
@@ -14,7 +14,7 @@ export const getCourseDetailsAction = serverAction(
     paramsSchema,
   },
   async (params) => {
-    const session = await getAppSessionStrictServer();
+    const session = (await getAppSessionServer()) ?? undefined;
     return getCourseDetailsUseCase.exec({ session }, params);
   },
 );

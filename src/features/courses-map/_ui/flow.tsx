@@ -74,7 +74,7 @@ const selectCurrentZoomLevel = (state: ReactFlowState) => {
 export function Flow({ map }: { map: CoursesMap }) {
   const flow = useReactFlow();
   const ability = useMapAbility();
-  const canManageNodes = ability.canMangeNodes();
+  const canManageNodes = ability?.canMangeNodes() ?? false;
 
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges] = useEdgesState([]);
@@ -155,7 +155,7 @@ export function Flow({ map }: { map: CoursesMap }) {
     });
   }, [setNodes, map, setEdges, zoomLevel, canManageNodes]);
 
-  const flowProps: ReactFlowProps = ability.canMangeNodes()
+  const flowProps: ReactFlowProps = ability?.canMangeNodes()
     ? {
         onNodesChange: onNodesChange,
         onNodesDelete: handleNodesDelete,

@@ -31,10 +31,10 @@ export function CoursesMap() {
       <div className="grow relative">
         <Flow map={mapQuery.data} />
         <ControlsLayout
-          actionsPanel={ability.canMangeNodes() && <ActionsPanel />}
+          actionsPanel={ability?.canMangeNodes() && <ActionsPanel />}
         />
       </div>
-      {ability.canMangeNodes() && (
+      {ability?.canMangeNodes() && (
         <>
           <AddImageDialog />
           <UpdateNodeDialog />

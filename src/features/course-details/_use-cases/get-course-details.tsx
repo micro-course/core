@@ -1,7 +1,6 @@
-import { WithSession, checkAbility } from "@/entities/user/session.server";
+import { WithSession } from "@/entities/user/session.server";
 import { courseRepository } from "@/entities/course/course.server";
 import { CourseSlug } from "@/entities/course/course";
-import { createCourseDetailsAbility } from "../_domain/ablility";
 import { CourseDetails } from "../_domain/projections";
 import { courseEntityToCourseDetails } from "../_domain/mappers";
 import { NotFoundError } from "@/shared/lib/errors";
@@ -16,18 +15,19 @@ type Query = {
 };
 
 export class GetCourseDetailsUseCase {
-  @checkAbility({
-    createAbility: createCourseDetailsAbility,
-    check: (ability) => ability.canView(),
-  })
-  async exec({ session }: WithSession, query: Query): Promise<CourseDetails> {
+  async exec(
+    { session }: Partial<WithSession>,
+    query: Query,
+  ): Promise<CourseDetails> {
     const courseEntity = await this.loadCompiledCourse(query.courseSlug);
     const lessons = await this.loadLessons(courseEntity.lessons);
-    const progress = await studentProgressRepository.getByStudentId(
-      session.user.id,
-    );
+    const progress = session
+      ? await studentProgressRepository.getByStudentId(session.user.id)
+      : undefined;
 
-    const action = await getCourseAction(progress, courseEntity, lessons);
+    const action = progress
+      ? await getCourseAction(progress, courseEntity, lessons)
+      : ({ type: "buy" } as const);
 
     return courseEntityToCourseDetails(courseEntity, lessons, action);
   }

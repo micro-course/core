@@ -1,4 +1,4 @@
-import { useAbilityStrict } from "@/entities/user/session";
 import { createMapAbility } from "../_domain/ability";
+import { useAbility } from "@/entities/user/_vm/use-ability";
 
-export const useMapAbility = () => useAbilityStrict(createMapAbility);
+export const useMapAbility = () => useAbility(createMapAbility);
