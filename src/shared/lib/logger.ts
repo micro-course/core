@@ -25,17 +25,13 @@ export const loggedMethod = <A extends any[] = any[], R = any>({
     const methodName = String(context.name);
 
     function replacementMethod(this: This, ...args: Args): Return {
-      logger.info({
-        methodName,
-        args: logArgs?.(...args),
-        msg: `Call ${methodName}: ${msg ?? ""}`,
-      });
       const result = target.call(this, ...args);
 
       Promise.resolve(result)
         .then((awaited) => {
           logger.info({
             methodName,
+            args: logArgs?.(...args),
             data: logRes?.(awaited, ...args),
             msg: `Result ${methodName}: ${msg ?? ""}`,
           });
@@ -43,6 +39,7 @@ export const loggedMethod = <A extends any[] = any[], R = any>({
         .catch((error) => {
           logger.error({
             methodName,
+            args: logArgs?.(...args),
             error,
             msg: `Error ${methodName}: ${msg ?? ""}`,
           });

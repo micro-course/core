@@ -89,6 +89,7 @@ class CourseIndexRepository {
       lessons: lessonsEntities.map((lesson) => lesson.id),
       shortDescription: course.shortDescription,
       image: course.image,
+      product: course.product,
     };
 
     return [courseEntity, lessonsEntities] as const;

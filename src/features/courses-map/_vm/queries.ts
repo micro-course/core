@@ -88,7 +88,8 @@ export const useMapCache = () => {
       queryKey: [baseKey, "map"],
     });
 
-  const set = (data?: CoursesMap) => queryClient.setQueryData([baseKey, "map"], data);
+  const set = (data?: CoursesMap) =>
+    queryClient.setQueryData([baseKey, "map"], data);
 
   const get = () => queryClient.getQueryData<CoursesMap>([baseKey, "map"]);
 

@@ -1,6 +1,6 @@
 import { WithSession } from "@/entities/user/session.server";
 import { courseRepository } from "@/entities/course/course.server";
-import { CourseSlug } from "@/entities/course/course";
+import { CourseEntity, CourseSlug } from "@/entities/course/course";
 import { CourseDetails } from "../_domain/projections";
 import { courseEntityToCourseDetails } from "../_domain/mappers";
 import { NotFoundError } from "@/shared/lib/errors";
@@ -9,6 +9,8 @@ import { LessonEntity, LessonId } from "@/entities/course/lesson";
 import { logger } from "@/shared/lib/logger";
 import { studentProgressRepository } from "@/entities/student-progress/student-progress.server";
 import { getCourseAction } from "../_domain/methods/get-course-action";
+import { UserId } from "@/kernel";
+import { checkCourseAccessService } from "@/entities/access/_services/check-course-access";
 
 type Query = {
   courseSlug: CourseSlug;
@@ -21,15 +23,43 @@ export class GetCourseDetailsUseCase {
   ): Promise<CourseDetails> {
     const courseEntity = await this.loadCompiledCourse(query.courseSlug);
     const lessons = await this.loadLessons(courseEntity.lessons);
-    const progress = session
-      ? await studentProgressRepository.getByStudentId(session.user.id)
-      : undefined;
 
-    const action = progress
-      ? await getCourseAction(progress, courseEntity, lessons)
-      : ({ type: "buy" } as const);
+    const action = await this.getAction(
+      session?.user.id,
+      courseEntity,
+      lessons,
+    );
 
     return courseEntityToCourseDetails(courseEntity, lessons, action);
+  }
+
+  private async getAction(
+    userId: UserId | undefined,
+    course: CourseEntity,
+    lessons: LessonEntity[],
+  ) {
+    if (!userId) {
+      if (course.product.access === "free") {
+        return { type: "enter" } as const;
+      }
+
+      return { type: "buy", price: course.product.price } as const;
+    }
+
+    const studentProgress =
+      await studentProgressRepository.getByStudentId(userId);
+
+    const hasAccess = await checkCourseAccessService.exec({
+      userId,
+      course,
+    });
+
+    return await getCourseAction({
+      studentProgress,
+      course,
+      lessons,
+      hasAccess,
+    });
   }
 
   async loadCompiledCourse(courseSlug: CourseSlug) {

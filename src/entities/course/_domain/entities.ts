@@ -1,3 +1,11 @@
+export type ProductConfig =
+  | {
+      access: "free";
+    }
+  | {
+      access: "paid";
+      price: number;
+    };
 export type CourseId = string;
 export type CourseSlug = string;
 
@@ -21,6 +29,7 @@ export type CourseEntity = {
   description: string;
   shortDescription?: string;
   dependencies: CourseId[];
+  product: ProductConfig;
 
   lessons: LessonId[];
 };

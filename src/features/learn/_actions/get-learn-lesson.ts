@@ -12,6 +12,7 @@ const paramsSchema = z.object({
 
 export const getLearnLessonAction = serverAction(
   {
+    name: "getLearnLesson",
     paramsSchema,
   },
   async (query) => {

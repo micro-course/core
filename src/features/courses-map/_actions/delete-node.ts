@@ -10,6 +10,7 @@ const params = z.object({
 
 export const deleteNodeAction = serverAction(
   {
+    name: "deleteNode",
     paramsSchema: params,
   },
   async (data) => {

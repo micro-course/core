@@ -6,7 +6,7 @@ export function FullPageSpinner({ isLoading }: { isLoading?: boolean }) {
 
   if (show) {
     return (
-      <div className="inset-0 flex items-center justify-center absolute bg-background">
+      <div className="inset-0 flex items-center justify-center absolute bg-background  z-10">
         <Spinner
           className="w-10 h-10 text-primary"
           aria-label="Загрузка страницы"

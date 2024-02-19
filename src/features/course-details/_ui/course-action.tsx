@@ -4,7 +4,9 @@ import Link from "next/link";
 import { useCourseEnter } from "../_vm/use-course-enter";
 import { CourseSlug } from "@/entities/course/course";
 import { Spinner } from "@/shared/ui/spinner";
-import { getLessonPath } from "@/shared/router";
+import { getCourseByPath, getLessonPath } from "@/shared/router";
+import { usePathname } from "next/navigation";
+import { publicConfig } from "@/shared/config/public";
 
 export function CourseAction({
   action,
@@ -13,12 +15,20 @@ export function CourseAction({
   courseSlug: CourseSlug;
   action: CourseAction;
 }) {
+  const pathname = usePathname();
   const enter = useCourseEnter();
 
   if (action.type === "buy") {
     return (
-      <Button size={"lg"} variant={"rainbow"}>
-        Купить за 999 руб
+      <Button size={"lg"} variant={"rainbow"} asChild>
+        <Link
+          href={getCourseByPath(
+            courseSlug,
+            `${publicConfig.PUBLIC_URL}${pathname}`,
+          )}
+        >
+          Купить за {new Intl.NumberFormat("ru-RU").format(action.price)}₽
+        </Link>
       </Button>
     );
   }
@@ -33,11 +43,9 @@ export function CourseAction({
 
   if (action.type === "continue") {
     return (
-      <Link href={getLessonPath(action.targetLesson)}>
-        <Button variant={"default"} size={"lg"} className={"w-full"}>
-          Продолжить
-        </Button>
-      </Link>
+      <Button variant={"default"} size={"lg"} className={"w-full"} asChild>
+        <Link href={getLessonPath(action.targetLesson)}>Продолжить</Link>
+      </Button>
     );
   }
 
@@ -46,7 +54,7 @@ export function CourseAction({
       <Button
         size={"lg"}
         variant={"rainbow"}
-        onClick={() => enter.mutate({ courseSlug })}
+        onClick={() => enter.handleEnter(courseSlug)}
       >
         {enter.isPending && <Spinner className={"mr-2 h-5 w-5"} />}
         Начать

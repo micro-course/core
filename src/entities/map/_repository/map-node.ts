@@ -27,7 +27,7 @@ export class MapNodeRepository {
   }
 
   @invalidateCache(mapNodesCacheStrategy, (_) => ["map-node", "list"])
-  async delete(id: MapNodeId) {
+  async deleteNode(id: MapNodeId) {
     await dbClient.mapNode.delete({ where: { id } });
   }
 

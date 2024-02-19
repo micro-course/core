@@ -3,13 +3,26 @@ import { LessonEntity } from "@/entities/course/lesson";
 import { StudentProgress } from "@/entities/student-progress/student-progress";
 import { CourseAction } from "../projections";
 
-export async function getCourseAction(
-  studentProgress: StudentProgress,
-  courseEntity: CourseEntity,
-  lessons: LessonEntity[],
-): Promise<CourseAction> {
-  const courseProgress = studentProgress.courses[courseEntity.id];
+export async function getCourseAction({
+  studentProgress,
+  course,
+  lessons,
+  hasAccess,
+}: {
+  studentProgress: StudentProgress;
+  course: CourseEntity;
+  lessons: LessonEntity[];
+  hasAccess?: boolean;
+}): Promise<CourseAction> {
+  const courseProgress = studentProgress.courses[course.id];
   const firstLessonSlug = lessons[0]?.slug;
+
+  if (!hasAccess && course.product.access === "paid") {
+    return {
+      type: "buy",
+      price: course.product.price,
+    };
+  }
 
   // Если урока нет, то скорее всего это демо курс
   if (!firstLessonSlug) {
@@ -36,7 +49,7 @@ export async function getCourseAction(
     return {
       type: "continue",
       targetLesson: {
-        courseSlug: courseEntity.slug,
+        courseSlug: course.slug,
         lessonSlug: firstLessonSlug,
       },
     };
@@ -45,7 +58,7 @@ export async function getCourseAction(
   return {
     type: "continue",
     targetLesson: {
-      courseSlug: courseEntity.slug,
+      courseSlug: course.slug,
       lessonSlug: lessonSlug,
       contentBlockId: lastViewedBlock?.contentBlockId,
     },

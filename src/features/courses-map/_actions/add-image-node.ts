@@ -19,6 +19,7 @@ const params = z
 
 export const addImageNodeAction = serverAction(
   {
+    name: "addImageNode",
     paramsSchema: params,
   },
   async (data) => {

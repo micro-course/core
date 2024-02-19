@@ -5,12 +5,13 @@ import { LearnLesson } from "../_domain/projections";
 import { CourseSlug, CoursesIndex } from "@/entities/course/course";
 import { LessonSlug, courseLessonSlug } from "@/entities/course/lesson";
 import { lessonRepository } from "@/entities/course/lesson.server";
-import { NotFoundError } from "@/shared/lib/errors";
+import { AuthorizatoinError, NotFoundError } from "@/shared/lib/errors";
 import { LessonPath } from "@/shared/router";
 import { courseIndexRepository } from "@/entities/course/course.server";
 import { studentProgressRepository } from "@/entities/student-progress/student-progress.server";
 import { UserId } from "@/kernel";
 import { getSortedMyCourses } from "../_domain/methods";
+import { checkCourseAccessService } from "@/entities/access/user-access.server";
 
 type Query = {
   courseSlug: CourseSlug;
@@ -30,10 +31,19 @@ export class GetLearnLessonUseCase {
     prev?: LessonPath;
     next?: LessonPath;
   }> {
-    const { lesson, courseIndex } = await this.uploadData(query);
+    const { lesson, courseIndex, course } = await this.uploadData(query);
 
-    if (!lesson) {
+    if (!lesson || !course) {
       throw new NotFoundError();
+    }
+
+    if (
+      !(await checkCourseAccessService.exec({
+        userId: session.user.id,
+        course: course,
+      }))
+    ) {
+      throw new AuthorizatoinError("Course not found");
     }
 
     return {
@@ -127,8 +137,11 @@ export class GetLearnLessonUseCase {
       courseIndexRepository.getCoursesIndex(),
     ]);
 
+    const course = courseIndex.bySlug[courseSlug];
+
     return {
       lesson,
+      course,
       courseIndex,
     };
   }

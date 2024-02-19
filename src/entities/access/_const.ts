@@ -1,0 +1,1 @@
+export const USER_COURSE_ACCESS_VERSION = "1";

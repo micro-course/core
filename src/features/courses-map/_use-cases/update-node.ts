@@ -11,6 +11,7 @@ import {
 import { createMapNode } from "../_domain/mappers";
 import { NotFoundError } from "@/shared/lib/errors";
 import { courseRepository } from "@/entities/course/course.server";
+import { studentProgressRepository } from "@/entities/student-progress/student-progress.server";
 
 export type UpdateNodeCommand = {
   id: MapNodeId;
@@ -21,8 +22,14 @@ export class UpdateNodeUseCase {
     createAbility: createMapAbility,
     check: (ability) => ability.canMangeNodes(),
   })
-  async exec(_: WithSession, command: UpdateNodeCommand): Promise<CoursesMapNode> {
+  async exec(
+    { session }: WithSession,
+    command: UpdateNodeCommand,
+  ): Promise<CoursesMapNode> {
     const nodeEntity = await mapNodeRepository.getNodeById(command.id);
+    const studentProgress = await studentProgressRepository.getByStudentId(
+      session.user.id,
+    );
 
     if (!nodeEntity) {
       throw new NotFoundError();
@@ -36,6 +43,7 @@ export class UpdateNodeUseCase {
         nodeEntity.data.type === "course"
           ? courseRepository.courseById(nodeEntity.data.courseId)
           : undefined,
+        undefined,
       ])),
     );
   }

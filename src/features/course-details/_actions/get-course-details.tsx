@@ -11,6 +11,7 @@ const paramsSchema = z.object({
 
 export const getCourseDetailsAction = serverAction(
   {
+    name: "getCourseDetails",
     paramsSchema,
   },
   async (params) => {

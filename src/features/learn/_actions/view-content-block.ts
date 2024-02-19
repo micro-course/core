@@ -13,6 +13,7 @@ const paramsSchema = z.object({
 
 export const viewContentBlockAction = serverAction(
   {
+    name: "viewContentBlock",
     paramsSchema,
   },
   async (query) => {

@@ -2,8 +2,8 @@
 
 import { getAppSessionStrictServer } from "@/entities/user/session.server";
 import { serverAction } from "@/shared/lib/server-action/server";
-import { z } from "zod";
 import { courseEnterUseCase } from "../_use-cases/course-enter";
+import { z } from "zod";
 
 const paramsSchema = z.object({
   courseSlug: z.string(),
@@ -11,6 +11,7 @@ const paramsSchema = z.object({
 
 export const courseEnterAction = serverAction(
   {
+    name: "courseEnter",
     paramsSchema,
   },
   async (params) => {

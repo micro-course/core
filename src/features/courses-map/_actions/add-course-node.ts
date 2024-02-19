@@ -19,6 +19,7 @@ const params = z
 
 export const addCourseNodeAction = serverAction(
   {
+    name: "addCourseNode",
     paramsSchema: params,
   },
   async (data) => {

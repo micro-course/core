@@ -16,6 +16,7 @@ export class CourseIndexCacheStrategy implements CacheStrategy {
       defaultOptions: {
         queries: {
           staleTime: Infinity,
+          gcTime: Infinity,
           retry: 0,
         },
       },
@@ -47,6 +48,7 @@ export class CompiledContentCacheStrategy implements CacheStrategy {
       defaultOptions: {
         queries: {
           staleTime: publicConfig.isDev ? 0 : 5 * 60 * 1000,
+          gcTime: 5 * 60 * 1000,
           retry: 0,
         },
       },

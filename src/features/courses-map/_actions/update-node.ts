@@ -19,6 +19,7 @@ const params = z
 
 export const updateNodeAction = serverAction(
   {
+    name: "updateNode",
     paramsSchema: params,
   },
   async (data) => {

@@ -6,6 +6,8 @@ import { LessonSlug } from "@/entities/course/lesson";
 import { getLearnLessonAction } from "../_actions/get-learn-lesson";
 import { useQueryClient } from "@tanstack/react-query";
 import { getLastLessonAction } from "../_actions/get-last-lesson";
+import { getCheckAccessAction } from "../_actions/check-access";
+import { learnBaseKey, learnCourseKey, learnCoursesKey } from "@/kernel";
 
 export const baseKey = "learn";
 
@@ -13,8 +15,20 @@ export const useGetCoursesListQuery = () => {
   const getCoursesList = useServerAction(getCoursesListAction);
 
   return {
-    queryKey: [baseKey, "courses-list"],
+    queryKey: learnCoursesKey,
     queryFn: () => getCoursesList(),
+  };
+};
+
+export const useGetCourseAccessQuery = (courseSlug: CourseSlug) => {
+  const checkAccess = useServerAction(getCheckAccessAction);
+
+  return {
+    queryKey: [...learnCourseKey(courseSlug), "access"],
+    queryFn: () =>
+      checkAccess({
+        courseSlug,
+      }),
   };
 };
 
@@ -22,7 +36,7 @@ export const useGetCourseLessonsQuery = (slug?: CourseSlug) => {
   const getCourseLessons = useServerAction(getCourseLessonsAction);
 
   return {
-    queryKey: [baseKey, "course", slug, "lessons"],
+    queryKey: [...learnCourseKey(slug), "lessons"],
     queryFn: () =>
       slug ? getCourseLessons({ courseSlug: slug }) : Promise.resolve(null),
   };
@@ -35,7 +49,7 @@ export const useGetLearnLessonQuery = (
   const getLearnLesson = useServerAction(getLearnLessonAction);
 
   return {
-    queryKey: [baseKey, "course", courseSlug, "lessons", lessonSlug, "content"],
+    queryKey: [...learnCourseKey(courseSlug), "lessons", lessonSlug, "content"],
     queryFn: () => getLearnLesson({ courseSlug, lessonSlug }),
   };
 };
@@ -43,7 +57,7 @@ export const useGetLearnLessonQuery = (
 export const useLastLessonQuery = () => {
   const lastLesson = useServerAction(getLastLessonAction);
   return {
-    queryKey: [baseKey, "last-lesson"],
+    queryKey: [...learnCoursesKey, "last-lesson"],
     queryFn: () => lastLesson(),
     gcTime: 0,
   };
@@ -53,6 +67,6 @@ export const useInvalidateLearn = () => {
   const queryClient = useQueryClient();
   return () =>
     queryClient.invalidateQueries({
-      queryKey: [baseKey],
+      queryKey: [learnBaseKey],
     });
 };

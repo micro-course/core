@@ -36,7 +36,7 @@ class FileStorage {
         Bucket: bucket,
         Key: `${tag}-${Date.now().toString()}-${file.name}`,
         Body: file,
-        ContentType: mime.lookup(file.name),
+        ContentType: mime.lookup(file.name) || undefined,
       },
       queueSize: 4, // optional concurrency configuration
       partSize: 1024 * 1024 * 5, // optional size of each part, in bytes, at least 5MB

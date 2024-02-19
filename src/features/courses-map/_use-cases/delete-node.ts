@@ -18,7 +18,7 @@ export class DeleteNodeUseCase {
     if (!node) {
       throw new NotFoundError();
     }
-    await mapNodeRepository.delete(command.id);
+    await mapNodeRepository.deleteNode(command.id);
 
     return "ok";
   }

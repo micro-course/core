@@ -5,7 +5,7 @@ import {
   CourseEntity,
   CourseSlug,
 } from "@/entities/course/course";
-import { NotFoundError } from "@/shared/lib/errors";
+import { AuthorizatoinError, NotFoundError } from "@/shared/lib/errors";
 import { studentProgressRepository } from "@/entities/student-progress/student-progress.server";
 import {
   StudentProgress,
@@ -16,6 +16,7 @@ import { ContentBlockId, UserId } from "@/kernel";
 import { LessonEntity, LessonSlug } from "@/entities/course/lesson";
 import { createLearnAbility } from "../_domain/ability";
 import { compact } from "lodash-es";
+import { checkCourseAccessService } from "@/entities/access/user-access.server";
 
 type Query = {
   courseSlug: CourseSlug;
@@ -40,6 +41,15 @@ export class ViewContentBlockUseCase {
       userId: session.user.id,
       ...query,
     });
+
+    if (
+      !(await checkCourseAccessService.exec({
+        userId: session.user.id,
+        course: data.course,
+      }))
+    ) {
+      throw new AuthorizatoinError("Course not found");
+    }
 
     const contentBlockViewedEvent = await this.viewContentBlock(data);
 

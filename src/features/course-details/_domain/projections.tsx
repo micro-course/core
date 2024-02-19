@@ -11,7 +11,7 @@ export type LessonPartial = {
 
 export type CourseAction =
   | { type: "comming-soon" }
-  | { type: "buy" }
+  | { type: "buy"; price: number }
   | {
       type: "enter";
     }

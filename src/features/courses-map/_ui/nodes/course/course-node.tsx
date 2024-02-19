@@ -8,14 +8,18 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { useMapAbility } from "../../../_vm/use-map-ability";
 import Link from "next/link";
 import { CourseProgressCircle } from "@/entities/student-progress/student-progress";
+import { useHoverDirty } from "react-use";
+import { useRef } from "react";
 
 export default function CourseNode(props: NodeProps<CourseNode>) {
   const ability = useMapAbility();
   const canManageNodes = ability?.canMangeNodes() ?? false;
+  const cardRef = useRef<HTMLDivElement>(null);
+  const isHovered = useHoverDirty(cardRef);
 
   return (
     <>
-      <Toolbar {...props} />
+      <Toolbar {...props} isHovered={isHovered} />
       <Handle type="target" position={Position.Bottom} />
       <Handle type="source" position={Position.Top} />
       <Link
@@ -27,6 +31,7 @@ export default function CourseNode(props: NodeProps<CourseNode>) {
         }}
       >
         <Card
+          ref={cardRef}
           className={cn(
             "shrink-0 shadow hover:shadow-lg cursor-pointer ",
             "transition-color hover:outline hover:outline-primary",

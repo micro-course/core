@@ -23,14 +23,17 @@ export class AddCourseNodeUseCase {
     createAbility: createMapAbility,
     check: (ability) => ability.canMangeNodes(),
   })
-  async exec(_: WithSession, command: AddCourseNodeCommand): Promise<CoursesMapNode> {
+  async exec(
+    _: WithSession,
+    command: AddCourseNodeCommand,
+  ): Promise<CoursesMapNode> {
     let entity = createCourseMapNodeEntity(command);
 
     entity = await mapNodeRepository.save(entity);
 
     const course = await courseRepository.courseById(command.courseId);
 
-    return createMapNode(entity, course);
+    return createMapNode(entity, course, undefined);
   }
 }
 

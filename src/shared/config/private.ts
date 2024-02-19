@@ -24,6 +24,9 @@ const privateConfigSchema = z.object({
 
   EVENT_STORE_DB_URL: z.string(),
   REDIS_URL: z.string(),
+
+  PRODAMUS_KEY: z.string().optional(),
+  PRODAMUS_URL: z.string().optional(),
 });
 
 export const privateConfig = privateConfigSchema.parse(process.env);

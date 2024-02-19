@@ -7,6 +7,8 @@ import { studentProgressRepository } from "@/entities/student-progress/student-p
 import { UserId } from "@/kernel";
 import { getCourseProgressPercent } from "@/entities/student-progress/student-progress";
 import { getSortedMyCourses } from "../_domain/methods";
+import { mapNodeRepository } from "@/entities/map/map-node.server";
+import { CourseMapNodeData } from "@/entities/map/map-node";
 
 export class GetCoursesListUseCase {
   @checkAbility({
@@ -17,7 +19,7 @@ export class GetCoursesListUseCase {
     myCourses: CourseListItem[];
     otherCourses: CourseListItem[];
   }> {
-    const { courseIndex, studentProgress } = await this.uploadData(
+    const { courseIndex, studentProgress, mapNodes } = await this.uploadData(
       session.user.id,
     );
 
@@ -29,7 +31,12 @@ export class GetCoursesListUseCase {
         ),
     );
 
-    const otherCourses = courseIndex.list
+    const otherCourses = mapNodes
+      .filter((mapNode) => !mapNode.hidden && mapNode.data.type === "course")
+      .map((mapNode) => {
+        const data = mapNode.data as CourseMapNodeData;
+        return courseIndex.byId[data.courseId];
+      })
       .filter((course) => !studentProgress.courses[course.id]?.enteredAt)
       .map((course) => courseToListItem(course));
 
@@ -40,14 +47,16 @@ export class GetCoursesListUseCase {
   }
 
   private async uploadData(userId: UserId) {
-    const [courseIndex, studentProgress] = await Promise.all([
+    const [courseIndex, studentProgress, mapNodes] = await Promise.all([
       courseIndexRepository.getCoursesIndex(),
       studentProgressRepository.getByStudentId(userId),
+      mapNodeRepository.getList(),
     ]);
 
     return {
       courseIndex,
       studentProgress,
+      mapNodes,
     };
   }
 }

@@ -11,7 +11,9 @@ import { Settings2, Trash2 } from "lucide-react";
 import { useDeleteNode } from "../../_vm/actions/use-delete-node";
 import { useMapAbility } from "../../_vm/use-map-ability";
 
-export default function Toolbar(props: NodeProps<CoursesMapNode>) {
+export default function Toolbar(
+  props: NodeProps<CoursesMapNode> & { isHovered?: boolean },
+) {
   const setDialogState = useDialogSetState(DialogType.UPDATE_NODE);
 
   const ability = useMapAbility();
@@ -23,7 +25,7 @@ export default function Toolbar(props: NodeProps<CoursesMapNode>) {
 
   return (
     <>
-      <NodeToolbar>
+      <NodeToolbar isVisible={props.isHovered}>
         <div className={cn(" flex gap-2 z-50")}>
           <Button
             size={"icon"}

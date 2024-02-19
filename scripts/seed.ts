@@ -3,6 +3,8 @@ import { ADMIN, USER, USER_2 } from "../tests/stabs/users";
 import { eventStoreDb } from "@/shared/lib/event-store";
 import { studentProgressRepository } from "@/entities/student-progress/student-progress.server";
 import { ANY } from "@eventstore/db-client";
+import { userPaymentsRepository } from "@/entities/payment/payment.server";
+import { userAccessRepository } from "@/entities/access/user-access.server";
 const prisma = new PrismaClient();
 
 async function main() {
@@ -110,15 +112,20 @@ async function main() {
 
   await studentProgressRepository.clearCache(ADMIN.id);
   try {
-    await eventStoreDb.getStreamMetadata(
-      studentProgressRepository.getKey(ADMIN.id),
-    );
-    await eventStoreDb.deleteStream(
-      studentProgressRepository.getKey(ADMIN.id),
-      {
+    Promise.allSettled([
+      await eventStoreDb.deleteStream(
+        studentProgressRepository.getKey(ADMIN.id),
+        {
+          expectedRevision: ANY,
+        },
+      ),
+      await eventStoreDb.deleteStream(userPaymentsRepository.getKey(ADMIN.id), {
         expectedRevision: ANY,
-      },
-    );
+      }),
+      await eventStoreDb.deleteStream(userAccessRepository.getKey(ADMIN.id), {
+        expectedRevision: ANY,
+      }),
+    ]);
   } catch (e) {
     console.log(e);
   }

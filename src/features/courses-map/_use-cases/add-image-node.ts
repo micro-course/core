@@ -21,12 +21,15 @@ export class AddImageNodeUseCase {
     createAbility: createMapAbility,
     check: (ability) => ability.canMangeNodes(),
   })
-  async exec(_: WithSession, command: AddImageNodeCommand): Promise<CoursesMapNode> {
+  async exec(
+    _: WithSession,
+    command: AddImageNodeCommand,
+  ): Promise<CoursesMapNode> {
     let entity = createImageMapNodeEntity(command);
 
     entity = await mapNodeRepository.save(entity);
 
-    return createMapNode(entity, undefined);
+    return createMapNode(entity, undefined, undefined);
   }
 }
 

@@ -17,6 +17,13 @@ export class LessonRepository {
     return index.lessonById[id] as LessonEntity | undefined;
   }
 
+  async lessonsByIds(ids: LessonId[]) {
+    const index = await courseIndexRepository.getCoursesIndex();
+    return Promise.all(ids.map((id) => index.lessonById[id])).then(
+      (r) => r.filter(Boolean) as LessonEntity[],
+    );
+  }
+
   async lessonBySlug(courseSlug: CourseSlug, lessonSlug: LessonSlug) {
     const index = await courseIndexRepository.getCoursesIndex();
 
