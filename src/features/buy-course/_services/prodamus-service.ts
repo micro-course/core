@@ -50,7 +50,7 @@ export class ProdamusService {
       installments_disabled: "1",
     };
 
-    if (publicConfig.isDev) {
+    if (privateConfig.PRODAMUS_DEMO_ENABLED) {
       Object.assign(params, {
         demo_mode: "1",
       });
