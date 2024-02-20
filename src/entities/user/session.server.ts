@@ -1,6 +1,8 @@
 import { getServerSession } from "next-auth";
 import { nextAuthConfig } from "./next-auth-config";
 import { NeedAuthError } from "@/shared/lib/errors";
+export { checkAbility } from "./_lib/check-ability";
+export type { WithSession } from "./_lib/check-ability";
 
 export const getAppSessionServer = () => getServerSession(nextAuthConfig);
 export const getAppSessionStrictServer = async () => {

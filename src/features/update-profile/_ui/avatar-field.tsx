@@ -1,6 +1,4 @@
 import { Button } from "@/shared/ui/button";
-import { useMutation } from "@tanstack/react-query";
-//import { selectFile } from "@/shared/lib/file";
 import { Spinner } from "@/shared/ui/spinner";
 import { ProfileAvatar } from "@/entities/user/profile";
 import { useUploadAvatar } from "../_vm/use-upload-avatar";
@@ -8,8 +6,12 @@ import { useUploadAvatar } from "../_vm/use-upload-avatar";
 export function AvatarField({
   value,
   onChange,
+  name,
+  email,
 }: {
   value?: string;
+  name: string;
+  email: string;
   onChange: (value?: string) => void;
 }) {
   const { handleFileSelect, isPending } = useUploadAvatar({
@@ -30,7 +32,11 @@ export function AvatarField({
       )}
       <ProfileAvatar
         className="w-full h-full"
-        profile={{ email: "evgeny.paromov@gmail.com", image: value }}
+        profile={{
+          name,
+          email,
+          image: value,
+        }}
       />
     </Button>
   );

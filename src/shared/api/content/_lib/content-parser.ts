@@ -3,7 +3,9 @@ import * as Yaml from "yaml";
 import Ajv from "ajv";
 
 export class ContentParser {
-  private ajv = new Ajv();
+  private ajv = new Ajv({
+    strict: false,
+  });
 
   async parse<T>(text: string, schema: object) {
     try {

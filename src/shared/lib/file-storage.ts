@@ -2,6 +2,7 @@ import { S3Client, Tag } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
 import cuid from "cuid";
 import { privateConfig } from "../config/private";
+import * as mime from "mime-types";
 
 export type StoredFile = {
   id: string;
@@ -35,6 +36,7 @@ class FileStorage {
         Bucket: bucket,
         Key: `${tag}-${Date.now().toString()}-${file.name}`,
         Body: file,
+        ContentType: mime.lookup(file.name) || undefined,
       },
       queueSize: 4, // optional concurrency configuration
       partSize: 1024 * 1024 * 5, // optional size of each part, in bytes, at least 5MB

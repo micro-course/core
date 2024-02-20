@@ -1,45 +1,43 @@
-import { cache } from "react";
-import { CourseEntity } from "../_domain/types";
-import { contentApi } from "@/shared/api/content";
-import { logger } from "@/shared/lib/logger";
-class CoursesRepository {
-  getCoursesList = cache(async (): Promise<CourseEntity[]> => {
-    const manifest = await contentApi.fetchManifest();
+import { cachedAsyncMethod } from "@/shared/lib/cache";
+import { CourseEntity, CourseId, CourseSlug } from "../course";
+import { courseIndexRepository } from "./course-index";
+import { compiledContentCacheStrategy } from "./cache-strategy";
+import { compileMDX } from "@/shared/lib/mdx/server";
 
-    const fetchCourse = async (courseSlug: string): Promise<CourseEntity> => {
-      const course = await contentApi.fetchCourse(courseSlug);
+export class CourseRepository {
+  async coursesList() {
+    const index = await courseIndexRepository.getCoursesIndex();
+    return index.list;
+  }
 
-      return {
-        id: course.id,
-        title: course.title,
-        description: course.description,
-        slug: courseSlug,
-      };
+  async courseById(id: CourseId) {
+    const index = await courseIndexRepository.getCoursesIndex();
+    return index.byId[id] as CourseEntity | undefined;
+  }
+
+  async courseBySlug(slug: CourseSlug) {
+    const index = await courseIndexRepository.getCoursesIndex();
+    return index.bySlug[slug] as CourseEntity | undefined;
+  }
+
+  @cachedAsyncMethod(compiledContentCacheStrategy, (slug) => [
+    "compiled-course",
+    slug,
+  ])
+  async compiledCourseBySlug(slug: CourseSlug) {
+    const courseEntity = await this.courseBySlug(slug);
+
+    if (!courseEntity) {
+      return;
+    }
+
+    return {
+      ...courseEntity,
+      description: await compileMDX(courseEntity.description).then(
+        (r) => r.code,
+      ),
     };
-
-    const setteldCourses = await Promise.allSettled(
-      manifest.courses.map(fetchCourse),
-    );
-
-    setteldCourses.forEach((value, i) => {
-      if (value.status === "rejected") {
-        logger.error({
-          msg: "Course by slug not found",
-          slug: manifest.courses[i],
-          erorr: value.reason,
-        });
-      }
-    });
-
-    return setteldCourses
-      .filter(
-        (courseResult): courseResult is PromiseFulfilledResult<CourseEntity> =>
-          courseResult.status === "fulfilled",
-      )
-      .map((course) => {
-        return course.value;
-      });
-  });
+  }
 }
 
-export const coursesRepository = new CoursesRepository();
+export const courseRepository = new CourseRepository();
