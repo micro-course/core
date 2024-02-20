@@ -27,6 +27,10 @@ const privateConfigSchema = z.object({
 
   PRODAMUS_KEY: z.string().optional(),
   PRODAMUS_URL: z.string().optional(),
+  PRODAMUS_DEMO_ENABLED: z
+    .string()
+    .optional()
+    .transform<boolean>((value) => value === "true"),
 });
 
 export const privateConfig = privateConfigSchema.parse(process.env);
