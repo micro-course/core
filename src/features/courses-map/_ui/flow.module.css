@@ -18,6 +18,9 @@
 .root :global(.react-flow__controls-button) {
   background-color: hsl(var(--background));
 }
+.root :global(.react-flow__minimap) {
+  background-color: transparent;
+}
 
 @keyframes largeDashDraw {
   to {
