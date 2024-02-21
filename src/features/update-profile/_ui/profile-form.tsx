@@ -106,7 +106,12 @@ export function ProfileForm({
             <FormItem>
               <FormLabel>Аватарка</FormLabel>
               <FormControl>
-                <AvatarField value={field.value} onChange={field.onChange} />
+                <AvatarField
+                  value={field.value}
+                  onChange={field.onChange}
+                  name={form.watch("name") ?? ""}
+                  email={form.watch("email") ?? ""}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

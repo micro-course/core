@@ -18,6 +18,19 @@ const privateConfigSchema = z.object({
   S3_IMAGES_BUCKET: z.string(),
   S3_ENDPOINT: z.string(),
   S3_REGION: z.string(),
+
+  CONTENT_URL: z.string(),
+  CONTENT_TOKEN: z.string().optional(),
+
+  EVENT_STORE_DB_URL: z.string(),
+  REDIS_URL: z.string(),
+
+  PRODAMUS_KEY: z.string().optional(),
+  PRODAMUS_URL: z.string().optional(),
+  PRODAMUS_DEMO_ENABLED: z
+    .string()
+    .optional()
+    .transform<boolean>((value) => value === "true"),
 });
 
 export const privateConfig = privateConfigSchema.parse(process.env);

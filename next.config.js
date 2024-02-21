@@ -1,5 +1,22 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    serverActions: {
+      allowedOrigins: [
+        "localhost:3000",
+        "staging.micro-courses.ru",
+        "micro-courses.ru",
+      ],
+    },
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
+  },
   rewrites: () => [
     {
       source: "/storage/:path*",

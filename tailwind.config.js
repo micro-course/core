@@ -1,4 +1,4 @@
-const { fontFamily } = require("tailwindcss/defaultTheme");
+const { fontFamily, colors } = require("tailwindcss/defaultTheme");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -13,6 +13,12 @@ module.exports = {
       },
     },
     extend: {
+      width: {
+        content: "var(--content-container)",
+      },
+      maxWidth: {
+        content: "var(--content-container)",
+      },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },
@@ -72,5 +78,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 };
