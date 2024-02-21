@@ -25,7 +25,7 @@ export default function Toolbar(
 
   return (
     <>
-      <NodeToolbar isVisible={props.isHovered}>
+      <NodeToolbar>
         <div className={cn(" flex gap-2 z-50")}>
           <Button
             size={"icon"}
