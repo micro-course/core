@@ -14,6 +14,7 @@ import { cachedAsyncMethod } from "@/shared/lib/cache";
 import { contentCacheStrategy } from "./cache-strategy";
 import { logger } from "@/shared/lib/logger";
 import { compact } from "lodash-es";
+import { compileMDX } from "@/shared/lib/mdx/server";
 
 const supportedBlockTypes: ContentBlockEntity["type"][] = ["text"];
 
@@ -87,7 +88,9 @@ class CourseIndexRepository {
       description: course.description,
       dependencies: course.dependencies ?? [],
       lessons: lessonsEntities.map((lesson) => lesson.id),
-      shortDescription: course.shortDescription,
+      shortDescription: course.shortDescription
+        ? await compileMDX(course.shortDescription).then((r) => r.code)
+        : undefined,
       image: course.image,
       product: course.product,
     };
