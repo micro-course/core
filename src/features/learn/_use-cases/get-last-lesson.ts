@@ -86,10 +86,12 @@ export class GetLastLessonUseCase {
     }
 
     const courseEntity = courseIndex.byId[course.courseId];
+    const lessonId = courseEntity?.lessons[0];
+    const lesson = courseIndex.lessonById[lessonId ?? "never"];
 
-    const lessonId = courseEntity.lessons[0];
-
-    const lesson = courseIndex.lessonById[lessonId];
+    if (!lesson || !courseEntity) {
+      return;
+    }
 
     return {
       courseSlug: courseEntity.slug,

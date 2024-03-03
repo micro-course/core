@@ -68,16 +68,19 @@ export class GetLearnLessonUseCase {
       throw new NotFoundError();
     }
 
-    const currentLessonIndex = currentCourse.lessons.findIndex(
-      (lessonId) => lessonId === currentLesson.id,
-    );
+    const currentLessonIndex =
+      currentCourse?.lessons.findIndex(
+        (lessonId) => lessonId === currentLesson.id,
+      ) ?? -1;
 
-    const nextLesson = currentCourse.lessons[currentLessonIndex + 1];
+    const nextLesson =
+      currentCourse?.lessons[currentLessonIndex + 1] ?? "never";
+    const nextLessonSlug = courseIndex.lessonById[nextLesson]?.slug;
 
-    if (nextLesson) {
+    if (nextLessonSlug) {
       return {
         courseSlug: query.courseSlug,
-        lessonSlug: courseIndex.lessonById[nextLesson].slug,
+        lessonSlug: nextLessonSlug,
       };
     }
 
@@ -93,14 +96,15 @@ export class GetLearnLessonUseCase {
     );
 
     const nextCourse = myCourses[currentCourseIndex + 1];
+    const nextCourseSlug = courseIndex.lessonById[nextCourse.lessons[0]]?.slug;
 
-    if (!nextCourse) {
+    if (!nextCourseSlug) {
       return;
     }
 
     return {
       courseSlug: nextCourse.slug,
-      lessonSlug: courseIndex.lessonById[nextCourse.lessons[0]].slug,
+      lessonSlug: nextCourseSlug,
     };
   }
 
@@ -115,16 +119,19 @@ export class GetLearnLessonUseCase {
       throw new NotFoundError();
     }
 
-    const currentLessonIndex = currentCourse.lessons.findIndex(
-      (lessonId) => lessonId === currentLesson.id,
-    );
+    const currentLessonIndex =
+      currentCourse?.lessons.findIndex(
+        (lessonId) => lessonId === currentLesson.id,
+      ) ?? -1;
 
-    const prevLesson = currentCourse.lessons[currentLessonIndex - 1];
+    const prevLesson =
+      currentCourse?.lessons[currentLessonIndex - 1] ?? "never";
+    const prevLessonSlug = courseIndex.lessonById[prevLesson]?.slug;
 
-    if (prevLesson) {
+    if (prevLessonSlug) {
       return {
         courseSlug: query.courseSlug,
-        lessonSlug: courseIndex.lessonById[prevLesson].slug,
+        lessonSlug: prevLessonSlug,
       };
     }
 

@@ -9,6 +9,7 @@ import { getCourseProgressPercent } from "@/entities/student-progress/student-pr
 import { getSortedMyCourses } from "../_domain/methods";
 import { mapNodeRepository } from "@/entities/map/map-node.server";
 import { CourseMapNodeData } from "@/entities/map/map-node";
+import { NotUndefined } from "@/shared/lib/types";
 
 export class GetCoursesListUseCase {
   @checkAbility({
@@ -37,6 +38,7 @@ export class GetCoursesListUseCase {
         const data = mapNode.data as CourseMapNodeData;
         return courseIndex.byId[data.courseId];
       })
+      .filter((course): course is NotUndefined<typeof course> => !!course)
       .filter((course) => !studentProgress.courses[course.id]?.enteredAt)
       .map((course) => courseToListItem(course));
 
