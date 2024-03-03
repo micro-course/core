@@ -6,6 +6,11 @@ import { cn } from "@/shared/ui/utils";
 import { LessonsList } from "./_ui/lessons";
 import { CourseAction } from "./_ui/course-action";
 import { Skeleton } from "@/shared/ui/skeleton";
+import Image from "next/image";
+
+const components = {
+  NextImage: Image,
+};
 
 export function CourseDetails({
   courseSlug,
@@ -39,11 +44,14 @@ export function CourseDetails({
   return (
     <div className={cn(className, "flex gap-8 flex-col")}>
       <div className="flex flex-col gap-5">
-        <h2 className="text-3xl font-semibold tracking-tight transition-colors ">
+        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
           {courseDetailsQuery.data.title}
-        </h2>
+        </h1>
 
-        <MdxCode code={courseDetailsQuery.data.description} />
+        <MdxCode
+          code={courseDetailsQuery.data.description}
+          components={components}
+        />
 
         <CourseAction
           action={courseDetailsQuery.data.action}
