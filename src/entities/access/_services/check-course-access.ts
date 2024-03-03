@@ -16,6 +16,7 @@ export class CheckCourseAccessService {
 
   async exec({ userId, course }: Command) {
     const userAccess = await userAccessRepository.getUserAccesss(userId);
+    console.log({ userAccess, userId });
     return (
       !!userAccess.byCourseId[course.id] || course.product.access === "free"
     );
