@@ -75,7 +75,7 @@ export function LearnNavigation({
                 strokeWidth={4}
                 courseProgress={courseQuery.data.course.progress}
                 textClassName="text-md"
-                className="hidden sm:block shink-0"
+                className="hidden sm:flex shink-0"
               />
               <CourseProgressCircle
                 size={30}
