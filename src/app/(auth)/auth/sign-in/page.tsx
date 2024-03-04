@@ -1,6 +1,5 @@
 import { SignInForm } from "@/features/auth/sign-in-form.server";
 import { Card, CardContent, CardHeader } from "@/shared/ui/card";
-import Link from "next/link";
 import React from "react";
 import { Suspense } from "react";
 import { Spinner } from "@/shared/ui/spinner";
@@ -20,23 +19,6 @@ export default function AuthenticationPage() {
             <Suspense fallback={<Spinner />}>
               <SignInForm />
             </Suspense>
-            <p className="px-0 text-center text-sm text-muted-foreground">
-              Нажимая продолжить вы соглашаетесь с{" "}
-              <Link
-                href="/terms"
-                className="underline underline-offset-4 hover:text-primary"
-              >
-                Пользовательским соглашением
-              </Link>{" "}
-              и{" "}
-              <Link
-                href="/privacy"
-                className="underline underline-offset-4 hover:text-primary"
-              >
-                Политикой конфиденциальности
-              </Link>
-              .
-            </p>
           </CardContent>
         </Card>
       </div>
