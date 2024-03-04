@@ -62,7 +62,7 @@ export function SelectLessonSheet({
     <Sheet open={isOpen} onOpenChange={() => close()}>
       <SheetContent side="left" className="p-0 flex flex-col">
         <SheetHeader className="p-3 sm:p-5 ">
-          <SheetTitle className="flex gap-2 items-center">
+          <SheetTitle className="flex gap-2 items-center text-left">
             {sheetTitle()}
           </SheetTitle>
         </SheetHeader>

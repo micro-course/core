@@ -56,6 +56,8 @@ function Player({ style, ...props }: ReactPlayerProps) {
     <ReactPlayer
       {...props}
       style={{ width: "100%", aspectRatio: "16/9", ...style }}
+      width={"100%"}
+      height={"auto"}
     />
   );
 }

@@ -12,6 +12,13 @@ import { CourseProgressCircle } from "@/entities/student-progress/student-progre
 import { Skeleton } from "@/shared/ui/skeleton";
 import { getLessonPath } from "@/shared/router";
 import Link from "next/link";
+import {
+  ChevronLeft,
+  ChevronRight,
+  MoreHorizontal,
+  MoreVertical,
+} from "lucide-react";
+import { ReactNode } from "react";
 
 export function useLearnNavigation(params: CurrentLessonParams) {
   const openCourseLessons = useSelectLessonSheetStore(
@@ -59,22 +66,125 @@ export function LearnNavigation({
           onClick={openCourseLessons}
           color="secondary"
           tabIndex={3}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 p-0 grow w-0"
         >
           {courseQuery.data.course.progress && (
-            <CourseProgressCircle
-              size={40}
-              strokeWidth={4}
-              courseProgress={courseQuery.data.course.progress}
-              textClassName="text-md"
-            />
+            <>
+              <CourseProgressCircle
+                size={40}
+                strokeWidth={4}
+                courseProgress={courseQuery.data.course.progress}
+                textClassName="text-md"
+                className="hidden sm:block shink-0"
+              />
+              <CourseProgressCircle
+                size={30}
+                strokeWidth={3}
+                courseProgress={courseQuery.data.course.progress}
+                className="sm:hidden shink-0"
+                textClassName="text-[10px]"
+              />
+            </>
           )}
-          {courseQuery.data.course.title}
+          <div className="grow w-0 truncate text-left underline">
+            {courseQuery.data.course.title}
+          </div>
         </Button>
       );
     }
 
     return null;
+  };
+
+  const renderMyCourses = () => {
+    return (
+      <>
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          onClick={openMyCourses}
+          tabIndex={4}
+          className="sm:hidden"
+        >
+          <MoreVertical className="w-5 h-5" />
+        </Button>
+
+        <Button
+          variant={"outline"}
+          onClick={openMyCourses}
+          tabIndex={4}
+          className="hidden sm:block"
+        >
+          Мои курсы
+        </Button>
+      </>
+    );
+  };
+
+  const renderBackButton = () => {
+    const link = (children: ReactNode) =>
+      canGoBack ? (
+        <Link href={backUrl ?? "#"}>{children}</Link>
+      ) : (
+        <button>{children}</button>
+      );
+
+    return (
+      <>
+        <Button
+          asChild
+          disabled={!canGoBack}
+          variant={"outline"}
+          className="ml-auto hidden sm:block"
+          tabIndex={2}
+        >
+          {link("Продолжить")}
+        </Button>
+        <Button
+          asChild
+          disabled={!canGoBack}
+          variant={"outline"}
+          size={"icon"}
+          className="ml-auto sm:hidden"
+          tabIndex={2}
+        >
+          {link(<ChevronLeft className="w-5 h-5" />)}
+        </Button>
+      </>
+    );
+  };
+
+  const renderForwardButton = () => {
+    const link = (children: ReactNode) =>
+      canGoForward ? (
+        <Link href={forwardUrl ?? "#"}>{children}</Link>
+      ) : (
+        <button>{children}</button>
+      );
+
+    return (
+      <>
+        <Button
+          asChild
+          disabled={!canGoForward}
+          variant={"default"}
+          className="ml-auto hidden sm:block"
+          tabIndex={2}
+        >
+          {link("Продолжить")}
+        </Button>
+        <Button
+          asChild
+          disabled={!canGoForward}
+          variant={"default"}
+          size={"icon"}
+          className="ml-auto sm:hidden"
+          tabIndex={2}
+        >
+          {link(<ChevronRight className="w-5 h-5" />)}
+        </Button>
+      </>
+    );
   };
 
   const {
@@ -86,37 +196,12 @@ export function LearnNavigation({
     forwardUrl,
   } = useLearnNavigation(params);
   return (
-    <div className={cn("flex gap-4", className)}>
-      <Button
-        variant={"outline"}
-        onClick={openMyCourses}
-        color="secondary"
-        tabIndex={4}
-      >
-        Мои курсы
-      </Button>
+    <div className={cn("flex gap-3 sm:gap-4 ", className)}>
+      {renderMyCourses()}
       {renderCourseLessons()}
 
-      <Button
-        asChild
-        disabled={!canGoBack}
-        variant={"outline"}
-        className="ml-auto"
-        tabIndex={2}
-      >
-        {canGoBack ? (
-          <Link href={backUrl ?? "#"}>Назад</Link>
-        ) : (
-          <button>Назад</button>
-        )}
-      </Button>
-      <Button disabled={!canGoForward} tabIndex={1} asChild>
-        {canGoForward ? (
-          <Link href={forwardUrl ?? "#"}>Продолжить</Link>
-        ) : (
-          <button>Продолжить</button>
-        )}
-      </Button>
+      {renderBackButton()}
+      {renderForwardButton()}
     </div>
   );
 }
