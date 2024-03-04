@@ -96,7 +96,8 @@ export class GetLearnLessonUseCase {
     );
 
     const nextCourse = myCourses[currentCourseIndex + 1];
-    const nextCourseSlug = courseIndex.lessonById[nextCourse.lessons[0]]?.slug;
+    const nextCourseSlug =
+      courseIndex.lessonById[nextCourse?.lessons?.[0]]?.slug;
 
     if (!nextCourseSlug) {
       return;
@@ -125,7 +126,7 @@ export class GetLearnLessonUseCase {
       ) ?? -1;
 
     const prevLesson =
-      currentCourse?.lessons[currentLessonIndex - 1] ?? "never";
+      currentCourse?.lessons?.[currentLessonIndex - 1] ?? "never";
     const prevLessonSlug = courseIndex.lessonById[prevLesson]?.slug;
 
     if (prevLessonSlug) {

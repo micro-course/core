@@ -44,6 +44,12 @@ export default function RootLayout({
           href="/favicon-16x16.png"
         />
         <link rel="manifest" href="/site.webmanifest" />
+        {/* polifils */}
+        <script
+          src="https://unpkg.com/@ungap/global-this@0.4.4/min.js"
+          noModule
+          async
+        ></script>
       </head>
 
       <body

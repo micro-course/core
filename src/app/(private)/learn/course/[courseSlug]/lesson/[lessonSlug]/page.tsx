@@ -11,7 +11,7 @@ export default function Page({
   };
 }) {
   return (
-    <main className="max-w-content w-screen mx-auto py-14 px-3">
+    <main className="max-w-content w-screen mx-auto py-6 sm:py-14 px-3">
       <Lesson courseSlug={courseSlug} lessonSlug={lessonSlug} />
     </main>
   );
