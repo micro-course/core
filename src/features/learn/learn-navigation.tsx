@@ -138,7 +138,7 @@ export function LearnNavigation({
           className="ml-auto hidden sm:block"
           tabIndex={2}
         >
-          {link("Продолжить")}
+          {link("Назад")}
         </Button>
         <Button
           asChild
