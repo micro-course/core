@@ -72,7 +72,7 @@ export class GetProgressStatisticsUseCase {
 
               const usersLessonStatistics = users.reduce(
                 (res, user) => {
-                  const lessonProgress = progress[user.id].lessons[course.id];
+                  const lessonProgress = progress[user.id].lessons[lessonId];
                   if (lessonProgress) {
                     res.started += 1;
                   }
