@@ -2,8 +2,8 @@
 
 import { z } from "zod";
 import { profileSchema } from "@/entities/user/profile";
-import { getAppSessionStrictServer } from "@/entities/user/session.server";
 import { updateProfileService } from "@/entities/user/profile.server";
+import { getAppSessionStrictServer } from "@/kernel/lib/next-auth/server";
 
 const propsSchema = z.object({
   userId: z.string(),

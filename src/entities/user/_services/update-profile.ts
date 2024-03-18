@@ -1,12 +1,13 @@
-import { Profile, SessionEntity, UserId } from "../_domain/types";
+import { Profile } from "../_domain/types";
 import { createProfileAbility } from "../_domain/ability";
 import { AuthorizatoinError } from "@/shared/lib/errors";
 import { profileRepository } from "../_repositories/profile";
+import { UserId, SharedSession } from "@/kernel/domain/user";
 
 type UpdateProfile = {
   userId: UserId;
   data: Partial<Profile>;
-  session: SessionEntity;
+  session: SharedSession;
 };
 
 export class UpdateProfileService {
