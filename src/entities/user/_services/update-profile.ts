@@ -9,7 +9,7 @@ type UpdateProfile = {
   session: SessionEntity;
 };
 
-export class UpdateProfileUseCase {
+export class UpdateProfileService {
   async exec({ userId, session, data }: UpdateProfile): Promise<Profile> {
     const profileAbility = createProfileAbility(session);
 
@@ -21,4 +21,4 @@ export class UpdateProfileUseCase {
   }
 }
 
-export const updateProfileUseCase = new UpdateProfileUseCase();
+export const updateProfileService = new UpdateProfileService();

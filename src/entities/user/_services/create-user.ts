@@ -10,7 +10,7 @@ type CreateUser = {
   emailVerified?: Date | null;
 };
 
-export class CreateUserUseCase {
+export class CreateUserService {
   async exec(data: CreateUser) {
     const adminEmails = privateConfig.ADMIN_EMAILS?.split(",") ?? [];
     const role = adminEmails.includes(data.email) ? ROLES.ADMIN : ROLES.USER;
@@ -25,4 +25,4 @@ export class CreateUserUseCase {
   }
 }
 
-export const createUserUseCase = new CreateUserUseCase();
+export const createUserService = new CreateUserService();

@@ -8,7 +8,7 @@ type GetUser = {
   session: SessionEntity;
 };
 
-export class GetUserUseCase {
+export class GetUserService {
   async exec({ userId, session }: GetUser): Promise<UserEntity> {
     const userAbility = createUserAbility(session);
 
@@ -20,4 +20,4 @@ export class GetUserUseCase {
   }
 }
 
-export const getUserUseCase = new GetUserUseCase();
+export const getUserService = new GetUserService();

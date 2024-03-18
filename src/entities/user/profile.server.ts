@@ -1,1 +1,1 @@
-export { updateProfileUseCase } from "./_use-cases/update-profile";
+export { updateProfileService } from "./_services/update-profile";
