@@ -9,6 +9,9 @@
     "title": {
       "type": "string"
     },
+    "shortDescription": {
+      "type": "string"
+    },
     "blocks": {
       "type": "array",
       "items": {
