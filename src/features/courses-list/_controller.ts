@@ -1,11 +1,13 @@
 import { GetCoursesListService } from "@/entities/course/server";
-import { publicProcedure, router } from "@/kernel/lib/trpc/server";
+import { publicProcedure, router, Controller } from "@/kernel/lib/trpc/server";
 import { compileMDX } from "@/shared/lib/mdx/server";
 import { injectable } from "inversify";
 
 @injectable()
-export class CoursesListController {
-  constructor(private getCoursesListService: GetCoursesListService) {}
+export class CoursesListController extends Controller {
+  constructor(private getCoursesListService: GetCoursesListService) {
+    super();
+  }
 
   public router = router({
     corusesList: router({
