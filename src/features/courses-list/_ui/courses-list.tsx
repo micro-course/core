@@ -1,7 +1,7 @@
 "use client";
 import { CourseEntity } from "@/entities/course/course";
 import { CourseItem } from "./course-item";
-import { coursesListApi } from "../api";
+import { coursesListApi } from "../_api";
 
 export function CoursesListClient({
   defaultList,
