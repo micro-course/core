@@ -4,7 +4,7 @@ import { useCourseDetailsQuery } from "./_vm/queries";
 import { MdxCode } from "@/shared/lib/mdx";
 import { cn } from "@/shared/ui/utils";
 import { LessonsList } from "./_ui/lessons";
-import { CourseAction } from "./_ui/course-action";
+import { CourseAction, CourseActionContext } from "./_ui/course-action";
 import { Skeleton } from "@/shared/ui/skeleton";
 import Image from "next/image";
 
@@ -44,9 +44,14 @@ export function CourseDetails({
   return (
     <div className={cn(className, "flex gap-8 flex-col")}>
       <div className="flex flex-col gap-5">
-        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mb-5">
           {courseDetailsQuery.data.title}
         </h1>
+
+        <CourseAction
+          action={courseDetailsQuery.data.action}
+          courseSlug={courseSlug}
+        />
 
         <MdxCode
           code={courseDetailsQuery.data.description}
