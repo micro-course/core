@@ -4,7 +4,7 @@ import { useCourseDetailsQuery } from "./_vm/queries";
 import { MdxCode } from "@/shared/lib/mdx";
 import { cn } from "@/shared/ui/utils";
 import { LessonsList } from "./_ui/lessons";
-import { CourseAction, CourseActionContext } from "./_ui/course-action";
+import { CourseAction } from "./_ui/course-action";
 import { Skeleton } from "@/shared/ui/skeleton";
 import Image from "next/image";
 
