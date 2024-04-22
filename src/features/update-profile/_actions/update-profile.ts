@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { profileSchema } from "@/entities/user/profile";
-import { updateProfileService } from "@/entities/user/profile.server";
+import { updateProfileService } from "@/entities/user/server";
 import { getAppSessionStrictServer } from "@/kernel/lib/next-auth/server";
 
 const propsSchema = z.object({
