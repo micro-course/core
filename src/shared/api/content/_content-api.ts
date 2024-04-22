@@ -8,8 +8,6 @@ import lessonSchema from "./_schemas/lesson.schema.json";
 import { Course } from "./_schemas/course.schema";
 import { Lesson } from "./_schemas/lesson.schema";
 import { Manifest } from "./_schemas/manifest.schema";
-import { loggedMethod } from "@/shared/lib/logger";
-import { pick } from "lodash-es";
 
 interface Deps {
   cacheStrategy: CacheStategy;
@@ -32,9 +30,6 @@ export class ContentApi {
     );
   }
 
-  @loggedMethod({
-    logRes: (res: Manifest) => res,
-  })
   private async fetchManifestQuery() {
     const text = await this.d.fileFetcher.fetchText(this.getManifestUrl());
     return await this.d.contentParser.parse<Manifest>(text, manifestSchema);
@@ -46,11 +41,6 @@ export class ContentApi {
     );
   }
 
-  @loggedMethod({
-    logArgs: (slug: CourseSlug) => ({ slug }),
-    logRes: (res: Course, slug) =>
-      pick({ ...res, slug }, ["id", "title", "slug"]),
-  })
   private async fetchCourseQuery(slug: string) {
     const text = await this.d.fileFetcher.fetchText(this.getCourseUrl(slug));
     return await this.d.contentParser.parse<Course>(text, courseSchema);
@@ -62,13 +52,6 @@ export class ContentApi {
     );
   }
 
-  @loggedMethod({
-    logArgs: (courseSlug: CourseSlug, lessonSlug: LessonSlug) => ({
-      courseSlug,
-      lessonSlug,
-    }),
-    logRes: (res: Lesson) => pick(res, ["id", "title", "slug"]),
-  })
   private async fetchLessonQuery(
     courseSlug: CourseSlug,
     lessonSlug: LessonSlug,

@@ -16,9 +16,9 @@ import {
 import { Input } from "@/shared/ui/input";
 import { Spinner } from "@/shared/ui/spinner";
 import { AvatarField } from "./avatar-field";
-import { Profile } from "@/entities/user/profile";
-import { UserId } from "@/entities/user/user";
 import { useUpdateProfile } from "../_vm/use-update-profile";
+import { Profile } from "@/entities/user/client";
+import { UserId } from "@/kernel/domain/user";
 
 const profileFormSchema = z.object({
   name: z
@@ -64,9 +64,12 @@ export function ProfileForm({
       data,
     });
 
-    form.reset(getDefaultValues(newProfile.profile));
+    form.reset(getDefaultValues(newProfile));
     onSuccess?.();
   });
+
+  const email = form.watch("email");
+  const name = form.watch("name");
 
   return (
     <Form {...form}>
@@ -106,7 +109,12 @@ export function ProfileForm({
             <FormItem>
               <FormLabel>Аватарка</FormLabel>
               <FormControl>
-                <AvatarField value={field.value} onChange={field.onChange} />
+                <AvatarField
+                  value={field.value}
+                  onChange={field.onChange}
+                  name={name}
+                  email={email ?? ""}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
