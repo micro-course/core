@@ -1,4 +1,4 @@
-import { UserId, SharedSession } from "@/kernel/domain/user";
+import { UserId } from "@/kernel/domain/user";
 import { injectable } from "inversify";
 import { ProfileRepository } from "../_repositories/profile";
 import { Profile } from "../client";

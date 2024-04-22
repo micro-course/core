@@ -6,6 +6,7 @@ import { CoursesListModule } from "@/features/courses-list/server";
 import { UpdateProfileModule } from "@/features/update-profile/server";
 import { NextAuthModule } from "@/kernel/lib/next-auth/server";
 import { Container } from "inversify";
+import { TrpcModule } from "@/kernel/lib/trpc/server";
 
 export function createServer() {
   const container = new Container();
@@ -16,6 +17,7 @@ export function createServer() {
     CourseEntityModule,
     UserEntityModule,
     UpdateProfileModule,
+    TrpcModule,
   );
 
   return container;
