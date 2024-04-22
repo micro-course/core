@@ -5,7 +5,6 @@ import { Profile } from "../client";
 
 type GetUser = {
   userId: UserId;
-  session: SharedSession;
 };
 
 @injectable()
