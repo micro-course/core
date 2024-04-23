@@ -10,14 +10,20 @@ export type Product =
       price: number;
     };
 
-export type Course = {
+export type Course = CourseFullInfo & {
   id: CourseId;
   slug: CourseSlug;
+  product: Product;
+};
+
+export type CourseBaseInfo = {
   title: string;
-  description: string;
   shortDescription?: string;
   thumbnail: ImageSrc;
-  image: ImageSrc;
   dependencies?: CourseId[];
-  product: Product;
+};
+
+export type CourseFullInfo = CourseBaseInfo & {
+  description: string;
+  image: ImageSrc;
 };
