@@ -15,7 +15,12 @@ const variants = cva("prose dark:prose-invert prose-slate", {
   },
 });
 
-export function useMdxComponent(code: string) {
+type CustomComponents = Record<string, any>;
+
+export function useMdxComponent(
+  code: string,
+  customComponents?: CustomComponents,
+) {
   return useMemo(() => {
     const Component = getMDXComponent(code, {});
 
@@ -33,9 +38,23 @@ export function useMdxComponent(code: string) {
             size,
           })}
         >
-          <Component />
+          <Component components={{ ...customComponents }} />
         </div>
       );
     };
-  }, [code]);
+  }, [code, customComponents]);
+}
+
+type MdxComponentProps = {
+  className?: string;
+  size?: "lg" | "md" | "sm";
+};
+
+export function MdxCode({
+  code,
+  components,
+  ...props
+}: MdxComponentProps & { code: string; components?: CustomComponents }) {
+  const Component = useMdxComponent(code, components);
+  return <Component {...props} />;
 }

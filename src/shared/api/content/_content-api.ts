@@ -8,6 +8,8 @@ import lessonSchema from "./_schemas/lesson.schema.json";
 import { Course } from "./_schemas/course.schema";
 import { Lesson } from "./_schemas/lesson.schema";
 import { Manifest } from "./_schemas/manifest.schema";
+import { bundleMDX } from "mdx-bundler";
+import { compileMDX } from "@/shared/lib/mdx/server";
 
 interface Deps {
   cacheStrategy: CacheStategy;
@@ -43,7 +45,15 @@ export class ContentApi {
 
   private async fetchCourseQuery(slug: string) {
     const text = await this.d.fileFetcher.fetchText(this.getCourseUrl(slug));
-    return await this.d.contentParser.parse<Course>(text, courseSchema);
+    const course = await this.d.contentParser.parse<Course>(text, courseSchema);
+
+    return {
+      ...course,
+      description: (await compileMDX(course.description)).code,
+      shortDescription: course.shortDescription
+        ? (await compileMDX(course.shortDescription)).code
+        : undefined,
+    };
   }
 
   async fetchLesson(courseSlug: CourseSlug, lessonSlug: LessonSlug) {

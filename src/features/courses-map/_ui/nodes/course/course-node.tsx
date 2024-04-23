@@ -5,6 +5,7 @@ import { Handle, NodeProps, Position } from "reactflow";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import Link from "next/link";
 import type { CourseNode } from "../../../_domain/types";
+import { MdxCode } from "@/shared/lib/mdx";
 
 export default function CourseNode(props: NodeProps<CourseNode>) {
   return (
@@ -42,15 +43,7 @@ export default function CourseNode(props: NodeProps<CourseNode>) {
           <CardHeader>
             <CardTitle>{props.data.title}</CardTitle>
             {props.data.shortDescription && (
-              <CardDescription className="empty:invisible">
-                {/** 
-                 * 
-                <MdxCode
-                  code={props.data.shortDescription}
-                  size="sm"
-                ></MdxCode>
-                */}
-              </CardDescription>
+              <MdxCode code={props.data.shortDescription} size="sm" />
             )}
           </CardHeader>
         </Card>
