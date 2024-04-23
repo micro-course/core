@@ -1,7 +1,6 @@
 "use client";
 import { cn } from "@/shared/ui/utils";
 import ReactFlow, {
-  useNodesState,
   useEdgesState,
   Controls,
   MiniMap,
@@ -11,12 +10,9 @@ import ReactFlow, {
 import css from "./flow.module.css";
 import { BG_CLASS_NAME } from "../_constant";
 import { CoursesMapNode } from "../_domain/types";
-import { coursesMapApi } from "../_api";
+import { useNodes } from "../_vm/nodes/use-nodes";
+import { customNodes } from "./nodes/custom-nodes";
 
-const initialNodes = [
-  { id: "1", position: { x: 0, y: 0 }, data: { label: "1" } },
-  { id: "2", position: { x: 0, y: 100 }, data: { label: "2" } },
-];
 const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
 
 export function Flow({
@@ -24,16 +20,8 @@ export function Flow({
 }: {
   coursesMap: CoursesMapNode[];
 }) {
-  const { data: coursesMap } = coursesMapApi.coursesMap.get.useQuery(
-    undefined,
-    {
-      initialData: defaultCoursesMap,
-    },
-  );
+  const { nodes, onNodesChange } = useNodes(defaultCoursesMap);
 
-  console.log(coursesMap);
-
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
   return (
@@ -43,6 +31,7 @@ export function Flow({
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
+        nodeTypes={customNodes}
       >
         <Controls
           className={cn(
