@@ -10,6 +10,8 @@ import ReactFlow, {
 } from "reactflow";
 import css from "./flow.module.css";
 import { BG_CLASS_NAME } from "../_constant";
+import { CoursesMapNode } from "../_domain/types";
+import { coursesMapApi } from "../_api";
 
 const initialNodes = [
   { id: "1", position: { x: 0, y: 0 }, data: { label: "1" } },
@@ -17,7 +19,20 @@ const initialNodes = [
 ];
 const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
 
-export function Flow() {
+export function Flow({
+  coursesMap: defaultCoursesMap,
+}: {
+  coursesMap: CoursesMapNode[];
+}) {
+  const { data: coursesMap } = coursesMapApi.coursesMap.get.useQuery(
+    undefined,
+    {
+      initialData: defaultCoursesMap,
+    },
+  );
+
+  console.log(coursesMap);
+
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
