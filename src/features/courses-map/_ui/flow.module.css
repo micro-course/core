@@ -1,0 +1,35 @@
+.largeEdge:global(.animated .react-flow__edge-path) {
+  stroke: hsl(var(--primary));
+  opacity: 0.8;
+  stroke-width: 10px;
+  stroke-dasharray: 20 0 20;
+  animation-name: largeDashDraw;
+  animation-duration: 1s;
+}
+
+.mediumEdge:global(.animated .react-flow__edge-path) {
+  opacity: 0.8;
+  stroke: hsl(var(--primary));
+  stroke-width: 4px;
+  stroke-dasharray: 8 0 8;
+  animation-name: mediumDashDraw;
+  animation-duration: 1s;
+}
+.root :global(.react-flow__controls-button) {
+  background-color: transparent;
+}
+.root :global(.react-flow__minimap) {
+  background-color: transparent;
+}
+
+@keyframes largeDashDraw {
+  to {
+    stroke-dashoffset: -80px;
+  }
+}
+
+@keyframes mediumDashDraw {
+  to {
+    stroke-dashoffset: -32px;
+  }
+}
