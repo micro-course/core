@@ -5,6 +5,6 @@ import { injectable } from "inversify";
 export class GetCoursesListService {
   constructor(private coursesRepository: CoursesRepository) {}
   async exec() {
-    return this.coursesRepository.getCoursesList();
+    return this.coursesRepository.coursesList();
   }
 }

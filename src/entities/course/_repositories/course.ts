@@ -1,14 +1,15 @@
-import { cache } from "react";
-import { CourseEntity } from "../_domain/types";
+import { Course } from "../_domain/types";
 import { contentApi } from "@/shared/api/content";
 import { logger } from "@/shared/lib/logger";
 import { injectable } from "inversify";
+import { allSuccess } from "@/shared/lib/promise";
+import { CourseId, CourseSlug } from "@/kernel/domain/course";
 @injectable()
 export class CoursesRepository {
-  getCoursesList = cache(async (): Promise<CourseEntity[]> => {
+  coursesList = async (): Promise<Course[]> => {
     const manifest = await contentApi.fetchManifest();
 
-    const fetchCourse = async (courseSlug: string): Promise<CourseEntity> => {
+    const fetchCourse = async (courseSlug: string): Promise<Course> => {
       const course = await contentApi.fetchCourse(courseSlug);
 
       return {
@@ -16,14 +17,19 @@ export class CoursesRepository {
         title: course.title,
         description: course.description,
         slug: courseSlug,
+        image: course.image,
+        thumbnail: course.thumbnail,
+        dependencies: await allSuccess(
+          course.dependencies?.map((slug) =>
+            contentApi.fetchCourse(slug).then((r) => r.id),
+          ) ?? [],
+        ),
+        shortDescription: course.shortDescription,
+        product: course.product,
       };
     };
 
-    const setteldCourses = await Promise.allSettled(
-      manifest.courses.map(fetchCourse),
-    );
-
-    setteldCourses.forEach((value, i) => {
+    return allSuccess(manifest.courses.map(fetchCourse), (value, i) => {
       if (value.status === "rejected") {
         logger.error({
           msg: "Course by slug not found",
@@ -32,14 +38,15 @@ export class CoursesRepository {
         });
       }
     });
+  };
 
-    return setteldCourses
-      .filter(
-        (courseResult): courseResult is PromiseFulfilledResult<CourseEntity> =>
-          courseResult.status === "fulfilled",
-      )
-      .map((course) => {
-        return course.value;
-      });
-  });
+  async courseById(courseId: CourseId) {
+    const list = await this.coursesList();
+    return list.find((course) => course.id === courseId);
+  }
+
+  async courseSlug(courseSlug: CourseSlug) {
+    const list = await this.coursesList();
+    return list.find((course) => course.slug === courseSlug);
+  }
 }
