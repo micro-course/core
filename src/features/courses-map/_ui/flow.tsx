@@ -14,6 +14,7 @@ import { useNodes } from "../_vm/nodes/use-nodes";
 import { customNodes } from "./nodes/custom-nodes";
 import { useCoursesMapAblity } from "../_vm/lib/use-courses-map-ability";
 import { useInitialViewportEffect } from "../_vm/flow/use-initial-viewport-effect";
+import { useDeleteNode } from "../_vm/nodes/use-delete-node";
 
 const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
 
@@ -24,6 +25,7 @@ export function Flow({
 }) {
   const ability = useCoursesMapAblity();
 
+  const { deleteNode } = useDeleteNode();
   const { setViewport } = useInitialViewportEffect();
   const { nodes, onNodesChange } = useNodes(defaultCoursesMap);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -44,6 +46,9 @@ export function Flow({
         edges={edges}
         nodeTypes={customNodes}
         onlyRenderVisibleElements={true}
+        onNodesDelete={(nodes) =>
+          nodes.map((node) => deleteNode({ id: node.data.id }))
+        }
         onMoveEnd={(_, viewport) => {
           setViewport(viewport);
         }}

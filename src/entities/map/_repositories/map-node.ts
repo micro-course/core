@@ -19,6 +19,85 @@ export class MapNodeRepository {
     return this.mapNodeToEntity(node);
   }
 
+  async saveNode({
+    id,
+    height,
+    hidden,
+    rotation,
+    scale,
+    width,
+    x,
+    y,
+    zIndex,
+    ...data
+  }: MapNode) {
+    const fields = {
+      height,
+      hidden,
+      rotation,
+      scale,
+      width,
+      x,
+      y,
+      zIndex,
+    };
+
+    const result = await dbClient.mapNode.upsert({
+      where: {
+        id,
+      },
+      create: {
+        id,
+        ...fields,
+        imageData:
+          data.type === MAP_NODE_TYPES.IMAGE
+            ? {
+                create: {
+                  src: data.src,
+                },
+              }
+            : undefined,
+        courseData:
+          data.type === MAP_NODE_TYPES.COURSE
+            ? {
+                create: {
+                  courseId: data.courseId,
+                },
+              }
+            : undefined,
+      },
+      update: {
+        ...fields,
+        imageData:
+          data.type === MAP_NODE_TYPES.IMAGE
+            ? {
+                update: {
+                  src: data.src,
+                },
+              }
+            : undefined,
+        courseData:
+          data.type === MAP_NODE_TYPES.COURSE
+            ? {
+                update: {
+                  courseId: data.courseId,
+                },
+              }
+            : undefined,
+      },
+      include: {
+        imageData: true,
+        courseData: true,
+      },
+    });
+
+    return this.mapNodeToEntity(result);
+  }
+
+  async deleteNode(id: MapNodeId) {
+    return dbClient.mapNode.delete({ where: { id } });
+  }
+
   private mapNodeToEntity({
     id,
     imageData,
