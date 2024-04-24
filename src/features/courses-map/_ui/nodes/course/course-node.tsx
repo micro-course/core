@@ -1,13 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 import { cn } from "@/shared/ui/utils";
-
-import { Handle, NodeProps, Position } from "reactflow";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import Link from "next/link";
-import type { CourseNode } from "../../../_domain/types";
 import { MdxCode } from "@/shared/lib/mdx";
 
+import { Handle, NodeProps, Position } from "reactflow";
+import { Card, CardHeader, CardTitle } from "@/shared/ui/card";
+import Link from "next/link";
+import type { CourseNode } from "../../../_domain/types";
+import { useCoursesMapAblity } from "../../../_vm/lib/use-courses-map-ability";
+
 export default function CourseNode(props: NodeProps<CourseNode>) {
+  const ability = useCoursesMapAblity();
   return (
     <>
       <Handle type="target" position={Position.Bottom} />
@@ -24,7 +26,9 @@ export default function CourseNode(props: NodeProps<CourseNode>) {
           className={cn(
             "shrink-0 shadow hover:shadow-lg cursor-pointer ",
             "transition-color hover:outline hover:outline-primary",
-            props.selected && "outline-primary outline ",
+            props.selected &&
+              ability?.canUpdateCoursesMap() &&
+              "outline-primary outline ",
             props.data.hidden && "opacity-50",
           )}
           style={{

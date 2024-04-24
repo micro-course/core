@@ -12,6 +12,7 @@ import { BG_CLASS_NAME } from "../_constant";
 import { CoursesMapNode } from "../_domain/types";
 import { useNodes } from "../_vm/nodes/use-nodes";
 import { customNodes } from "./nodes/custom-nodes";
+import { useCoursesMapAblity } from "../_vm/lib/use-courses-map-ability";
 
 const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
 
@@ -20,18 +21,27 @@ export function Flow({
 }: {
   coursesMap: CoursesMapNode[];
 }) {
-  const { nodes, onNodesChange } = useNodes(defaultCoursesMap);
+  const ability = useCoursesMapAblity();
 
+  const { nodes, onNodesChange } = useNodes(defaultCoursesMap);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+  const flowProps = ability?.canUpdateCoursesMap()
+    ? {
+        onNodesChange: onNodesChange,
+        onEdgesChange: onEdgesChange,
+      }
+    : {
+        draggable: false,
+      };
 
   return (
     <div className={cn("fixed inset-0 flex flex-col", css.root)}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
         nodeTypes={customNodes}
+        {...flowProps}
       >
         <Controls
           className={cn(
