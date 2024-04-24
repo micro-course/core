@@ -11,7 +11,7 @@ import {
 import { createId } from "@/shared/lib/id";
 import { getZIndex } from "../_domain/methods";
 
-type CreateMapNodeCommand = (MapNodeDimensions &
+export type CreateMapNodeCommand = (MapNodeDimensions &
   MapNodePosition &
   MapNodeSettings) &
   (CourseMapNodeData | ImageMapNodeData);

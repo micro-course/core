@@ -4,7 +4,7 @@ import { MapNode } from "../_domain/types";
 import { MapNodeId } from "@/kernel/domain/map";
 import { TRPCError } from "@trpc/server";
 
-type UpdateMapNodeCommand = { id: MapNodeId } & Partial<MapNode>;
+export type UpdateMapNodeCommand = { id: MapNodeId } & Partial<MapNode>;
 
 @injectable()
 export class UpdateMapNodeService {
