@@ -2,21 +2,30 @@ import {
   router,
   Controller,
   publicProcedure,
-  authorizedProcedure,
   checkAbilityProcedure,
 } from "@/kernel/lib/trpc/server";
 import { injectable } from "inversify";
 import { GetCoursesMapService } from "./_services/get-courses-map";
 import { createCoursesMapAbility } from "./_domain/ability";
-import { DeleteMapNodeService } from "@/entities/map/server";
-import { z } from "zod";
+import {
+  UpdateMapNodeService,
+  CreateMapNodeService,
+  DeleteMapNodeService,
+} from "@/entities/map/server";
 import { revalidatePath } from "next/cache";
+import {
+  createCourseNodeCommandSchema,
+  mapNodeIdSchema,
+  updateCourseNodeCommandSchema,
+} from "./_domain/schema";
 
 @injectable()
 export class CoursesMapController extends Controller {
   constructor(
     private getCoursesMapService: GetCoursesMapService,
     private deleteMapNodeService: DeleteMapNodeService,
+    private createMapNodeService: CreateMapNodeService,
+    private updateMapNodeService: UpdateMapNodeService,
   ) {
     super();
   }
@@ -30,11 +39,23 @@ export class CoursesMapController extends Controller {
       get: publicProcedure.query(() => {
         return this.getCoursesMapService.exec();
       }),
-      deleteNode: this.manageMapProcedure
-        .input(z.object({ id: z.string() }))
+      createNode: this.manageMapProcedure
+        .input(createCourseNodeCommandSchema)
         .mutation(({ input }) => {
           revalidatePath("/map");
-          return this.deleteMapNodeService.exec({ id: input.id });
+          return this.createMapNodeService.exec(input);
+        }),
+      updateNode: this.manageMapProcedure
+        .input(updateCourseNodeCommandSchema)
+        .mutation(({ input }) => {
+          revalidatePath("/map");
+          return this.updateMapNodeService.exec(input);
+        }),
+      deleteNode: this.manageMapProcedure
+        .input(mapNodeIdSchema)
+        .mutation(({ input }) => {
+          revalidatePath("/map");
+          return this.deleteMapNodeService.exec(input);
         }),
     }),
   });

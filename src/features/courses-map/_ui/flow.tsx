@@ -6,6 +6,7 @@ import ReactFlow, {
   MiniMap,
   Background,
   BackgroundVariant,
+  Node,
 } from "reactflow";
 import css from "./flow.module.css";
 import { BG_CLASS_NAME } from "../_constant";
@@ -15,6 +16,7 @@ import { customNodes } from "./nodes/custom-nodes";
 import { useCoursesMapAblity } from "../_vm/lib/use-courses-map-ability";
 import { useInitialViewportEffect } from "../_vm/flow/use-initial-viewport-effect";
 import { useDeleteNode } from "../_vm/nodes/use-delete-node";
+import { useMoveNode } from "../_vm/nodes/use-move-node";
 
 const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
 
@@ -26,12 +28,25 @@ export function Flow({
   const ability = useCoursesMapAblity();
 
   const { deleteNode } = useDeleteNode();
+  const { moveNode } = useMoveNode();
   const { setViewport } = useInitialViewportEffect();
   const { nodes, onNodesChange } = useNodes(defaultCoursesMap);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
   const flowProps = ability?.canUpdateCoursesMap()
     ? {
+        onNodesDelete: (nodes: Node[]) =>
+          nodes.map((node) => deleteNode({ id: node.id })),
+        onNodeDragStop: (_: unknown, __: unknown, nodes: Node[]) => {
+          nodes.forEach((node) => {
+            moveNode({ x: node.position.x, y: node.position.y, id: node.id });
+          });
+        },
+        onSelectionDragStop: (_: unknown, nodes: Node[]) => {
+          nodes.forEach((node) => {
+            moveNode({ x: node.position.x, y: node.position.y, id: node.id });
+          });
+        },
         onNodesChange: onNodesChange,
         onEdgesChange: onEdgesChange,
       }
@@ -46,9 +61,6 @@ export function Flow({
         edges={edges}
         nodeTypes={customNodes}
         onlyRenderVisibleElements={true}
-        onNodesDelete={(nodes) =>
-          nodes.map((node) => deleteNode({ id: node.data.id }))
-        }
         onMoveEnd={(_, viewport) => {
           setViewport(viewport);
         }}
