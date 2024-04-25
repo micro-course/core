@@ -2,6 +2,7 @@ import { coursesMapHttpApi } from "./_api";
 import { Controls } from "./_ui/controls/controls";
 import { Flow } from "./_ui/flow/flow";
 import { FlowProvider } from "./_ui/flow/flow-provider";
+import { UpsertNodeDialog } from "./_ui/upsert-node/upsert-node-dialog";
 
 export async function CoursesMap() {
   const coursesMap = await coursesMapHttpApi.coursesMap.get.query();
@@ -12,6 +13,7 @@ export async function CoursesMap() {
         <Flow coursesMap={coursesMap} />
         <Controls />
       </div>
+      <UpsertNodeDialog />
     </FlowProvider>
   );
 }
