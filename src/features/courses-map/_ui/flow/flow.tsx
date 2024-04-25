@@ -9,14 +9,14 @@ import ReactFlow, {
   Node,
 } from "reactflow";
 import css from "./flow.module.css";
-import { BG_CLASS_NAME } from "../_constant";
-import { CoursesMapNode } from "../_domain/types";
-import { useNodes } from "../_vm/nodes/use-nodes";
-import { customNodes } from "./nodes/custom-nodes";
-import { useCoursesMapAblity } from "../_vm/lib/use-courses-map-ability";
-import { useInitialViewportEffect } from "../_vm/flow/use-initial-viewport-effect";
-import { useDeleteNode } from "../_vm/nodes/use-delete-node";
-import { useMoveNode } from "../_vm/nodes/use-move-node";
+import { BG_CLASS_NAME } from "../../_constant";
+import { CoursesMapNode } from "../../_domain/types";
+import { useNodes } from "../../_vm/nodes/use-nodes";
+import { customNodes } from "../nodes/custom-nodes";
+import { useCoursesMapAblity } from "../../_vm/lib/use-courses-map-ability";
+import { useInitialViewportEffect } from "../../_vm/flow/use-initial-viewport-effect";
+import { useDeleteNode } from "../../_vm/nodes/use-delete-node";
+import { useMoveNode } from "../../_vm/nodes/use-move-node";
 
 const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
 

@@ -1,6 +1,7 @@
 import { coursesMapHttpApi } from "./_api";
-import { Flow } from "./_ui/flow";
-import { FlowProvider } from "./_ui/flow-provider";
+import { Controls } from "./_ui/controls/controls";
+import { Flow } from "./_ui/flow/flow";
+import { FlowProvider } from "./_ui/flow/flow-provider";
 
 export async function CoursesMap() {
   const coursesMap = await coursesMapHttpApi.coursesMap.get.query();
@@ -9,6 +10,7 @@ export async function CoursesMap() {
     <FlowProvider>
       <div className="grow relative">
         <Flow coursesMap={coursesMap} />
+        <Controls />
       </div>
     </FlowProvider>
   );
