@@ -9,7 +9,7 @@ import { Button } from "@/shared/ui/button";
 import { Form } from "@/shared/ui/form";
 import { Spinner } from "@/shared/ui/spinner";
 import { CommonFields, commonFieldsSchema } from "./field-groups/common-fields";
-import { CourseFields } from "./field-groups/course-fields";
+import { CourseFields, courseFieldsSchema } from "./field-groups/course-fields";
 import { CourseNode, CoursesMapNode } from "../../_domain/types";
 import {
   INITIAL_HEIGHT,
@@ -19,18 +19,47 @@ import {
 } from "../../_constant";
 import { useGetScreenCenter } from "../../_vm/lib/use-get-screen-center";
 import { MAP_NODE_TYPES } from "@/entities/map";
+import { parseFloatForm, parseIntForm } from "@/shared/lib/form";
+import {
+  upsertNodeSchema,
+  useUpsertNode,
+} from "../../_vm/upsert-node/use-upsert-node";
 
-const formSchema = z
-  .object({
-    courseId: z.string().min(5),
-  })
-  .merge(commonFieldsSchema);
+const formSchema = commonFieldsSchema
+  .and(courseFieldsSchema)
+  .transform(
+    ({
+      height,
+      width,
+      rotation,
+      scale,
+      hidden,
+      x,
+      y,
+      zIndex,
+      type,
+      courseId,
+    }) => ({
+      height: parseIntForm(height),
+      width: parseIntForm(width),
+      rotation: parseIntForm(rotation),
+      scale: parseIntForm(scale),
+      x: parseFloatForm(x),
+      y: parseFloatForm(y),
+      zIndex: parseIntForm(zIndex),
+      hidden,
+      type,
+      courseId,
+    }),
+  )
+  .pipe(upsertNodeSchema);
 
 type FormValues = z.infer<typeof formSchema>;
 
 export function UpsertNodeForm({
   onSuccess,
   children,
+  node,
 }: {
   onSuccess?: () => void;
   children?: React.ReactNode;
@@ -40,7 +69,10 @@ export function UpsertNodeForm({
     resolver: zodResolver(formSchema),
   });
 
+  const { save } = useUpsertNode(node);
+
   const handleSubmit = form.handleSubmit(async (data) => {
+    await save(data);
     onSuccess?.();
   });
 
@@ -90,12 +122,10 @@ export function UpsertNodeFormFields({ node }: { node?: CoursesMapNode }) {
 }
 
 export function UpsertNodeFormActions() {
+  const { isPending } = useUpsertNode();
   return (
-    <Button type="submit">
-      <Spinner
-        className="mr-2 h-4 w-4 animate-spin"
-        aria-label="Добавление курса"
-      />
+    <Button type="submit" disabled={isPending}>
+      {isPending && <Spinner className="mr-2 h-4 w-4 animate-spin" />}
       Добавить
     </Button>
   );
