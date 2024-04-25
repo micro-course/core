@@ -7,15 +7,29 @@ import { Card, CardHeader, CardTitle } from "@/shared/ui/card";
 import Link from "next/link";
 import type { CourseNode } from "../../../_domain/types";
 import { useCoursesMapAblity } from "../../../_vm/lib/use-courses-map-ability";
+import { Toolbar } from "../toolbar";
+import { useEffect, useState } from "react";
 
 export default function CourseNode(props: NodeProps<CourseNode>) {
   const ability = useCoursesMapAblity();
+  const canUpdateCoursesMap = ability?.canUpdateCoursesMap();
+
+  const [hasHref, setHasHref] = useState(!canUpdateCoursesMap);
+
+  useEffect(() => {
+    setTimeout(
+      () => setHasHref(canUpdateCoursesMap ? props.selected : true),
+      300,
+    );
+  }, [props.selected, canUpdateCoursesMap]);
+
   return (
     <>
+      <Toolbar {...props} />
       <Handle type="target" position={Position.Bottom} />
       <Handle type="source" position={Position.Top} />
       <Link
-        href={`#`}
+        href={hasHref ? `/courses/${props.data.id}` : `#`}
         className="flex justify-center items-center"
         style={{
           width: `${props.data.width * props.data.scale}px`,
@@ -26,9 +40,7 @@ export default function CourseNode(props: NodeProps<CourseNode>) {
           className={cn(
             "shrink-0 shadow hover:shadow-lg cursor-pointer ",
             "transition-color hover:outline hover:outline-primary",
-            props.selected &&
-              ability?.canUpdateCoursesMap() &&
-              "outline-primary outline ",
+            props.selected && canUpdateCoursesMap && "outline-primary outline ",
             props.data.hidden && "opacity-50",
           )}
           style={{

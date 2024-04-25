@@ -3,10 +3,12 @@ import { cn } from "@/shared/ui/utils";
 import type { ImageNode } from "../../../_domain/types";
 
 import { NodeProps } from "reactflow";
+import { Toolbar } from "../toolbar";
 
 export default function ImageNode(props: NodeProps<ImageNode>) {
   return (
     <>
+      <Toolbar {...props} />
       <img
         src={props.data.src}
         className={cn(
