@@ -10,7 +10,7 @@ import { Form } from "@/shared/ui/form";
 import { Spinner } from "@/shared/ui/spinner";
 import { CommonFields, commonFieldsSchema } from "./field-groups/common-fields";
 import { CourseFields, courseFieldsSchema } from "./field-groups/course-fields";
-import { CourseNode, CoursesMapNode } from "../../_domain/types";
+import { CourseNode, CoursesMapNode, ImageNode } from "../../_domain/types";
 import {
   INITIAL_HEIGHT,
   INITIAL_ROTATION,
@@ -24,9 +24,11 @@ import {
   upsertNodeSchema,
   useUpsertNode,
 } from "../../_vm/upsert-node/use-upsert-node";
+import { ImageFields, imageFieldsSchema } from "./field-groups/image-fields";
 
 const formSchema = commonFieldsSchema
   .and(courseFieldsSchema)
+  .and(imageFieldsSchema)
   .transform(
     ({
       height,
@@ -39,17 +41,19 @@ const formSchema = commonFieldsSchema
       zIndex,
       type,
       courseId,
+      src,
     }) => ({
       height: parseIntForm(height),
       width: parseIntForm(width),
       rotation: parseIntForm(rotation),
-      scale: parseIntForm(scale),
+      scale: parseFloatForm(scale),
       x: parseFloatForm(x),
       y: parseFloatForm(y),
       zIndex: parseIntForm(zIndex),
       hidden,
       type,
       courseId,
+      src,
     }),
   )
   .pipe(upsertNodeSchema);
@@ -107,15 +111,24 @@ export function UpsertNodeFormFields({ node }: { node?: CoursesMapNode }) {
           zIndex: node?.zIndex?.toString() ?? "",
           type: node?.type,
         }}
-        renderSpecificFields={({ type }) =>
-          (node?.type ?? type) === MAP_NODE_TYPES.COURSE ? (
-            <CourseFields
-              defaultValues={{
-                courseId: (node as CourseNode)?.courseId,
-              }}
-            />
-          ) : null
-        }
+        renderSpecificFields={({ type }) => (
+          <>
+            {(node?.type ?? type) === MAP_NODE_TYPES.COURSE && (
+              <CourseFields
+                defaultValues={{
+                  courseId: (node as CourseNode)?.courseId,
+                }}
+              />
+            )}
+            {(node?.type ?? type) === MAP_NODE_TYPES.IMAGE && (
+              <ImageFields
+                defaultValues={{
+                  src: (node as ImageNode)?.src,
+                }}
+              />
+            )}
+          </>
+        )}
       />
     </div>
   );

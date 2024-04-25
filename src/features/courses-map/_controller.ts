@@ -20,6 +20,7 @@ import {
 } from "./_domain/schema";
 import { GetCoursesMapService } from "./_services/get-courses-map";
 import { GetCoursesToAddService } from "./_services/get-courses-to-add";
+import { UploadImageService } from "./_services/upload-image";
 
 @injectable()
 export class CoursesMapController extends Controller {
@@ -29,6 +30,7 @@ export class CoursesMapController extends Controller {
     private createMapNodeService: CreateMapNodeService,
     private updateMapNodeService: UpdateMapNodeService,
     private getCoursesToAddService: GetCoursesToAddService,
+    private uploadImageService: UploadImageService,
   ) {
     super();
   }
@@ -65,6 +67,16 @@ export class CoursesMapController extends Controller {
         .input(z.object({ notFilterCourseId: z.string().optional() }))
         .query(async ({ input }) => {
           return this.getCoursesToAddService.exec(input);
+        }),
+      uploadImage: this.manageMapProcedure
+        .input(
+          z.object({
+            dataURI: z.string(),
+            name: z.string(),
+          }),
+        )
+        .mutation(async ({ input }) => {
+          return this.uploadImageService.exec(input);
         }),
     }),
   });
