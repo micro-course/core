@@ -69,14 +69,14 @@ export function UpsertNodeFormFields({ node }: { node?: CoursesMapNode }) {
           width: (node?.width ?? INITIAL_WIDTH).toString(),
           rotation: (node?.rotation ?? INITIAL_ROTATION).toString(),
           scale: (node?.scale ?? INITIAL_SCALE).toString(),
-          hidden: node?.hidden ?? false,
+          hidden: node?.hidden ?? true,
           x: (node?.x ?? screenCenter.x).toString(),
           y: (node?.y ?? screenCenter.y).toString(),
           zIndex: node?.zIndex?.toString() ?? "",
           type: node?.type,
         }}
         renderSpecificFields={({ type }) =>
-          type === MAP_NODE_TYPES.COURSE ? (
+          (node?.type ?? type) === MAP_NODE_TYPES.COURSE ? (
             <CourseFields
               defaultValues={{
                 courseId: (node as CourseNode)?.courseId,

@@ -6,12 +6,14 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from "@/shared/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { cn } from "@/shared/ui/utils";
 import { Spinner } from "@/shared/ui/spinner";
 import { useState } from "react";
 import { CourseId } from "@/kernel/domain/course";
+import { useCoursesToAddOptions } from "../../../_vm/upsert-node/use-courses-to-add-options";
 
 export function CourseToAddSelect({
   value,
@@ -21,8 +23,7 @@ export function CourseToAddSelect({
   onChange: (value: CourseId) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const courses = [] as { label: string; value: string }[];
-  const isPending = false;
+  const { isPending, options } = useCoursesToAddOptions(value);
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -32,7 +33,7 @@ export function CourseToAddSelect({
           className={cn("justify-between", !value && "text-muted-foreground")}
         >
           {value
-            ? courses.find((course) => course.value === value)?.label
+            ? options?.find((option) => option.value === value)?.label
             : "Select course"}
           {isPending ? (
             <Spinner className="ml-2 h-4 w-4 shrink-0" />
@@ -46,24 +47,26 @@ export function CourseToAddSelect({
           <CommandInput placeholder="Search course..." />
           <CommandEmpty>No course found.</CommandEmpty>
           <CommandGroup>
-            {courses.map((course) => (
-              <CommandItem
-                value={course.label}
-                key={course.value}
-                onSelect={() => {
-                  onChange(course.value);
-                  setOpen(false);
-                }}
-              >
-                <Check
-                  className={cn(
-                    "mr-2 h-4 w-4",
-                    course.value === value ? "opacity-100" : "opacity-0",
-                  )}
-                />
-                {course.label}
-              </CommandItem>
-            ))}
+            <CommandList>
+              {options?.map((option) => (
+                <CommandItem
+                  value={option.label}
+                  key={option.value}
+                  onSelect={() => {
+                    onChange(option.value);
+                    setOpen(false);
+                  }}
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      option.value === value ? "opacity-100" : "opacity-0",
+                    )}
+                  />
+                  {option.label}
+                </CommandItem>
+              ))}
+            </CommandList>
           </CommandGroup>
         </Command>
       </PopoverContent>
