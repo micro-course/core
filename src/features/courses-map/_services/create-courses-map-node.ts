@@ -1,4 +1,4 @@
-import { GetCourseByIdService } from "@/entities/course/server";
+import { GetCourseService } from "@/entities/course/server";
 import {
   CreateMapNodeCommand,
   CreateMapNodeService,
@@ -13,7 +13,7 @@ export type CreateCoursesMapNodeCommand = CreateMapNodeCommand;
 @injectable()
 export class CreateCoursesMapNodeService {
   constructor(
-    private getCourseByIdService: GetCourseByIdService,
+    private getCourseByIdService: GetCourseService,
     private createMapNodeService: CreateMapNodeService,
   ) {}
   async exec(command: CreateCoursesMapNodeCommand): Promise<CoursesMapNode> {
