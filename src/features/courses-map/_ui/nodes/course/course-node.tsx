@@ -29,7 +29,7 @@ export default function CourseNode(props: NodeProps<CourseNode>) {
       <Handle type="target" position={Position.Bottom} />
       <Handle type="source" position={Position.Top} />
       <Link
-        href={hasHref ? `/courses/${props.data.id}` : `#`}
+        href={hasHref ? `/course/${props.data.id}` : `#`}
         className="flex justify-center items-center"
         style={{
           width: `${props.data.width * props.data.scale}px`,
