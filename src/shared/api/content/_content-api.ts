@@ -69,7 +69,26 @@ export class ContentApi {
     const text = await this.d.fileFetcher.fetchText(
       this.getLessonUrl(courseSlug, lessonSlug),
     );
-    return await this.d.contentParser.parse<Lesson>(text, lessonSchema);
+    const lesson = await this.d.contentParser.parse<Lesson>(text, lessonSchema);
+
+    return {
+      ...lesson,
+      shortDescription: lesson.shortDescription
+        ? (await compileMDX(lesson.shortDescription)).code
+        : undefined,
+      blocks: await Promise.all(
+        lesson.blocks.map(async (block) => {
+          if (block.type === "text") {
+            const { code } = await compileMDX(block.text);
+            return {
+              ...block,
+              text: code,
+            };
+          }
+          return block;
+        }),
+      ),
+    };
   }
 
   private getManifestUrl() {
