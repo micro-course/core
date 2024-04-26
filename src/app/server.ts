@@ -8,6 +8,7 @@ import { Container } from "inversify";
 import { TrpcModule } from "@/kernel/lib/trpc/server";
 import { MapEntityModule } from "@/entities/map/server";
 import { CoursesMapModule } from "@/features/courses-map/server";
+import { CourseDetailsModule } from "@/features/course-details/server";
 
 export function createServer() {
   const container = new Container();
@@ -20,6 +21,7 @@ export function createServer() {
     TrpcModule,
     MapEntityModule,
     CoursesMapModule,
+    CourseDetailsModule,
   );
 
   return container;

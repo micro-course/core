@@ -100,7 +100,7 @@ export class ContentApi {
   private getLessonUrl(courseSlug: CourseSlug, lessonSlug: LessonSlug) {
     return join(
       this.baseUrl,
-      `/courses/${courseSlug}/lesson/${lessonSlug}/lesson.yaml`,
+      `/courses/${courseSlug}/lessons/${lessonSlug}/lesson.yaml`,
     );
   }
 }

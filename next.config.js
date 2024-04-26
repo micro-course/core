@@ -9,6 +9,15 @@ const nextConfig = {
       ],
     },
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
+  },
+
   rewrites: () => [
     {
       source: "/storage/:path*",

@@ -4,8 +4,10 @@ import { GetCourseDetailsService } from "./_services/get-course-details";
 import { z } from "zod";
 
 @injectable()
-export class CourseDetailsController implements Controller {
-  constructor(private courseDetailsService: GetCourseDetailsService) {}
+export class CourseDetailsController extends Controller {
+  constructor(private courseDetailsService: GetCourseDetailsService) {
+    super();
+  }
 
   public router = router({
     courseDetails: {
