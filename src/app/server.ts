@@ -9,6 +9,7 @@ import { TrpcModule } from "@/kernel/lib/trpc/server";
 import { MapEntityModule } from "@/entities/map/server";
 import { CoursesMapModule } from "@/features/courses-map/server";
 import { CourseDetailsModule } from "@/features/course-details/server";
+import { PaymentEntityModule } from "@/entities/payment/server";
 
 export function createServer() {
   const container = new Container();
@@ -17,6 +18,7 @@ export function createServer() {
     NextAuthModule,
     CourseEntityModule,
     UserEntityModule,
+    PaymentEntityModule,
     UpdateProfileModule,
     TrpcModule,
     MapEntityModule,
