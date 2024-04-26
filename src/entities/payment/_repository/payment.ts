@@ -3,6 +3,7 @@ import { dbClient } from "@/shared/lib/db";
 import { Payment } from "../_domain/types";
 import { CourseId } from "@/kernel/domain/course";
 import { UserId } from "@/kernel/domain/user";
+import { PaymentId } from "@/kernel/domain/payment";
 
 @injectable()
 export class PaymentRepository {
@@ -16,6 +17,24 @@ export class PaymentRepository {
       }
       return this.dbPaymentToPayment(payment);
     });
+  }
+
+  findPaymentById(paymentId: PaymentId): Promise<Payment | undefined> {
+    return dbClient.payment
+      .findUnique({
+        where: {
+          id: paymentId,
+        },
+        include: {
+          products: true,
+        },
+      })
+      .then((payment) => {
+        if (!payment) {
+          return undefined;
+        }
+        return this.dbPaymentToPayment(payment);
+      });
   }
 
   async save(payment: Payment): Promise<Payment> {
