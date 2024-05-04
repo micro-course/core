@@ -5,6 +5,7 @@ import { CheckPurchaseStatusService } from "./_services/check-purchase-status";
 import { ReceivePurchaseCallbackService } from "./_services/receive-purchase-callback";
 import { ReceivePurchaseWebhookService } from "./_services/receive-purchase-webhook";
 import { StartCorusePurchaseService } from "./_services/start-course-purchase";
+import { ProdamusService } from "./_services/prodamus";
 
 export const CoursePurchaseModule = new ContainerModule((bind) => {
   bind(Controller).to(CoursePurchaseController);
@@ -12,4 +13,5 @@ export const CoursePurchaseModule = new ContainerModule((bind) => {
   bind(StartCorusePurchaseService).toSelf();
   bind(ReceivePurchaseCallbackService).toSelf();
   bind(ReceivePurchaseWebhookService).toSelf();
+  bind(ProdamusService).toSelf();
 });

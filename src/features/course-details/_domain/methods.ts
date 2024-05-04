@@ -1,4 +1,4 @@
-import { Course, Lesson } from "@/entities/course";
+import { Course, getIsCourseInDraft, Lesson } from "@/entities/course";
 import { CourseAction } from "./types";
 
 export async function getCourseAction({
@@ -10,8 +10,6 @@ export async function getCourseAction({
   lessons: Lesson[];
   hasAccess?: boolean;
 }): Promise<CourseAction> {
-  const firstLessonSlug = lessons[0]?.slug;
-
   if (!hasAccess && course.product.access === "paid") {
     return {
       type: "buy",
@@ -20,7 +18,7 @@ export async function getCourseAction({
   }
 
   // Если урока нет, то скорее всего это демо курс
-  if (!firstLessonSlug) {
+  if (!getIsCourseInDraft(lessons)) {
     return {
       type: "comming-soon",
     };
@@ -31,7 +29,7 @@ export async function getCourseAction({
     type: "enter",
     targetLesson: {
       courseSlug: course.slug,
-      lessonSlug: firstLessonSlug,
+      lessonSlug: lessons[0]?.slug,
     },
   };
 }

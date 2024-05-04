@@ -6,3 +6,5 @@ export type {
   Lesson,
   ContentBlock,
 } from "./_domain/types";
+
+export { getIsCourseInDraft } from "./_domain/methods";
