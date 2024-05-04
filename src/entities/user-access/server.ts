@@ -1,12 +1,12 @@
 import { ContainerModule } from "inversify";
-import { CreatePaymentService } from "./_services/create-payment";
-import { ReceivePaymentService } from "./_services/receive-payment";
-import { PaymentRepository } from "./_repository/user-access";
+import { GrandCourseAccessService } from "./_services/grand-course-access";
+import { CheckCourseAccessService } from "./_services/check-course-access";
+import { UserAccessRepository } from "./_repository/user-access";
 
-export const PaymentEntityModule = new ContainerModule((bind) => {
-  bind(PaymentRepository).toSelf();
-  bind(CreatePaymentService).toSelf();
-  bind(ReceivePaymentService).toSelf();
+export const UserAccessModule = new ContainerModule((bind) => {
+  bind(UserAccessRepository).toSelf();
+  bind(CheckCourseAccessService).toSelf();
+  bind(GrandCourseAccessService).toSelf();
 });
 
-export { CreatePaymentService, ReceivePaymentService };
+export { CheckCourseAccessService, GrandCourseAccessService };

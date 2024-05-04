@@ -1,20 +1,14 @@
 import {
   ContentBlockId,
   CourseId,
+  CourseProduct,
   CourseSlug,
   LessonId,
   LessonSlug,
 } from "@/kernel/domain/course";
 import { ImageSrc } from "@/shared/lib/image";
 
-export type Product =
-  | {
-      access: "free";
-    }
-  | {
-      access: "paid";
-      price: number;
-    };
+export type Product = CourseProduct;
 
 export type Course = CourseFullInfo & {
   id: CourseId;

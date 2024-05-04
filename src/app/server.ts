@@ -11,6 +11,7 @@ import { CoursesMapModule } from "@/features/courses-map/server";
 import { CourseDetailsModule } from "@/features/course-details/server";
 import { PaymentEntityModule } from "@/entities/payment/server";
 import { CoursePurchaseModule } from "@/features/course-purchase/server";
+import { UserAccessModule } from "@/entities/user-access/server";
 
 export function createServer() {
   const container = new Container();
@@ -26,6 +27,7 @@ export function createServer() {
     CoursesMapModule,
     CourseDetailsModule,
     CoursePurchaseModule,
+    UserAccessModule,
   );
 
   return container;
