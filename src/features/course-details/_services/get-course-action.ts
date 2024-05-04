@@ -12,7 +12,7 @@ import { getCourseAction } from "../_domain/methods";
 
 type Query = {
   courseSlug: CourseSlug;
-  userId: UserId;
+  userId?: UserId;
 };
 
 @injectable()
@@ -35,10 +35,12 @@ export class GetCourseActionService {
       });
     }
 
-    const courseAccess = await this.getCourseAccess.exec({
-      course,
-      userId: query.userId,
-    });
+    const courseAccess = query.userId
+      ? await this.getCourseAccess.exec({
+          course,
+          userId: query.userId,
+        })
+      : false;
 
     return getCourseAction({
       course,

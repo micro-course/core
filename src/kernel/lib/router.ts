@@ -19,20 +19,20 @@ export const getLessonPath = (
   return url;
 };
 
-export const getCourseByPath = (
+export const getCoursePurchasePath = (
   courseSlug: CourseSlug,
   urlReturn: string,
   baseUrl = "",
 ) => {
-  let url = `${baseUrl}/buy?courseSlug=${courseSlug}&urlReturn=${encodeURIComponent(
+  let url = `${baseUrl}/purchase?courseSlug=${courseSlug}&urlReturn=${encodeURIComponent(
     urlReturn,
   )}`;
 
   return url;
 };
 
-export const getBuySuccessByPath = (baseUrl = "") => {
-  let url = `${baseUrl}/buy/success`;
+export const getCoursePurchaseSucccessPath = (baseUrl = "") => {
+  let url = `${baseUrl}/purchase/success`;
 
   return url;
 };

@@ -6,7 +6,6 @@ import { type CourseAction } from "../_domain/types";
 import { getLessonPath } from "@/kernel/lib/router";
 import { useCourseAction } from "../_vm/use-course-action";
 import { Skeleton } from "@/shared/ui/skeleton";
-import { Spinner } from "@/shared/ui/spinner";
 
 export function CourseAction({ courseSlug }: { courseSlug: CourseSlug }) {
   const action = useCourseAction(courseSlug);
@@ -17,14 +16,10 @@ export function CourseAction({ courseSlug }: { courseSlug: CourseSlug }) {
 
   if (action.type === "buy") {
     return (
-      <Button
-        size={"lg"}
-        variant={"rainbow"}
-        disabled={action.isLoadingByCourse}
-        onClick={() => action.buyCourse({ courseSlug })}
-      >
-        {action.isLoadingByCourse && <Spinner className="w-5 h-5" />}
-        Купить за {new Intl.NumberFormat("ru-RU").format(action.price)}₽
+      <Button size={"lg"} variant={"rainbow"} asChild>
+        <Link href={action.href}>
+          Купить за {new Intl.NumberFormat("ru-RU").format(action.price)}₽
+        </Link>
       </Button>
     );
   }

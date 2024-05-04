@@ -1,18 +1,14 @@
-import {
-  StartCoursePurchaseCommand,
-  StartCoursePurchaseResult,
-  StartCoursePurchaseService,
-} from "@/kernel/services/start-course-purchase";
+import { CourseSlug } from "@/kernel/domain/course";
+import { UserId } from "@/kernel/domain/user";
 import { injectable } from "inversify";
+type Command = {
+  courseSlug: CourseSlug;
+  userId: UserId;
+};
 
 @injectable()
-export class StartCorusePurchaseServiceImpl extends StartCoursePurchaseService {
-  constructor() {
-    super();
-  }
-  async exec(
-    command: StartCoursePurchaseCommand,
-  ): Promise<StartCoursePurchaseResult> {
+export class StartCorusePurchaseService {
+  async exec(command: Command) {
     return {
       redirectUrl: "https://google.com",
     };
