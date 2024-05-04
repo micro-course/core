@@ -1,9 +1,22 @@
 import { CourseSlug } from "@/kernel/domain/course";
 import { useAppSession } from "@/kernel/lib/next-auth/client";
 import { courseDetailsApi } from "../_api";
+import { useRouter } from "next/navigation";
 
-export function useAcourseAction(courseSlug: CourseSlug) {
+export function useCourseAction(courseSlug: CourseSlug) {
+  const router = useRouter();
   const session = useAppSession();
+  const utils = courseDetailsApi.useUtils();
+
+  const { mutate: buyCourse, isPending: isLoadingByCourse } =
+    courseDetailsApi.courseDetails.buyCourse.useMutation({
+      async onSettled() {
+        await utils.courseDetails.getAction.invalidate();
+      },
+      async onSuccess({ redirectUrl }) {
+        router.push(redirectUrl);
+      },
+    });
 
   const { data: action, isPending } =
     courseDetailsApi.courseDetails.getAction.useQuery(
@@ -19,6 +32,10 @@ export function useAcourseAction(courseSlug: CourseSlug) {
 
   if (!action) {
     return { type: "pending" } as const;
+  }
+
+  if (action.type === "buy") {
+    return { ...action, buyCourse, isLoadingByCourse };
   }
 
   return action;

@@ -6,7 +6,7 @@ import { dbClient } from "@/shared/lib/db";
 import { compact } from "lodash-es";
 import { privateConfig } from "@/shared/config/private";
 import { injectable } from "inversify";
-import { CreateUserService } from "./_create-user-service";
+import { CreateUserService } from "../../services/create-user";
 
 const prismaAdapter = PrismaAdapter(dbClient);
 
