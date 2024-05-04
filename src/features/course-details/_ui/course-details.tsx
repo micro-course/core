@@ -4,6 +4,7 @@ import { LessonsList } from "./lessons-list";
 import Image from "next/image";
 import { CourseSlug } from "@/kernel/domain/course";
 import { courseDetailsHttpApi } from "../_api";
+import { CourseAction } from "./course-action";
 
 const components = {
   NextImage: Image,
@@ -28,7 +29,9 @@ export async function CourseDetails({
           {title}
         </h1>
 
+        <CourseAction courseSlug={courseSlug} />
         <MdxCode code={description} components={components} />
+        <CourseAction courseSlug={courseSlug} />
       </div>
 
       <hr />

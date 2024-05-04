@@ -1,5 +1,6 @@
 import {
   CourseId,
+  CourseProduct,
   CourseSlug,
   LessonId,
   LessonSlug,
@@ -17,8 +18,11 @@ export type CourseAction =
   | { type: "buy"; price: number }
   | {
       type: "enter";
-    }
-  | { type: "continue" };
+      targetLesson: {
+        courseSlug: CourseSlug;
+        lessonSlug: LessonSlug;
+      };
+    };
 
 export type CourseDetails = {
   id: CourseId;
