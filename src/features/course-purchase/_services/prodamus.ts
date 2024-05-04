@@ -12,6 +12,7 @@ type Command = {
   paymentId: PaymentId;
   urlSuccess: string;
   urlReturn: string;
+  urlNotification: string;
   userId: UserId;
   userEmail: string;
   products: Product[];
@@ -28,12 +29,15 @@ export class ProdamusService {
     userEmail,
     urlReturn,
     urlSuccess,
+    urlNotification,
   }: Command) {
     const params = {
       do: "link",
+      sys: "micro-courses",
       customer_email: userEmail,
       urlReturn,
       urlSuccess,
+      urlNotification,
       products: products.reduce((acc, product, i) => {
         return {
           ...acc,
@@ -48,6 +52,7 @@ export class ProdamusService {
       payments_limit: "1",
       _param_user_id: userId,
       _param_payment_id: paymentId,
+      _param_sign: this.createSignature({ paymentId, userId }),
     };
 
     if (privateConfig.PRODAMUS_DEMO_ENABLED) {

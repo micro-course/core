@@ -36,3 +36,9 @@ export const getCoursePurchaseSucccessPath = (baseUrl = "") => {
 
   return url;
 };
+
+export const getCoursePurchaseWebhookPath = (baseUrl = "") => {
+  let url = `${baseUrl}/purchase/webhook`;
+
+  return url;
+};

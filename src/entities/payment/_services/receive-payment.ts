@@ -32,6 +32,6 @@ export class ReceivePaymentService {
       },
     };
 
-    this.paymentRepository.save(newPayment);
+    return this.paymentRepository.save(newPayment);
   }
 }

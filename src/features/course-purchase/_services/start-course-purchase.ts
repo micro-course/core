@@ -8,7 +8,10 @@ import { CreatePaymentService } from "@/entities/payment/server";
 import { CheckCourseAccessService } from "@/entities/user-access/server";
 import { CourseSlug } from "@/kernel/domain/course";
 import { UserId } from "@/kernel/domain/user";
-import { getCoursePurchaseSucccessPath } from "@/kernel/lib/router";
+import {
+  getCoursePurchaseSucccessPath,
+  getCoursePurchaseWebhookPath,
+} from "@/kernel/lib/router";
 import { publicConfig } from "@/shared/config/public";
 import { TRPCError } from "@trpc/server";
 import { ProdamusService } from "./prodamus";
@@ -69,8 +72,6 @@ export class StartCorusePurchaseService {
       });
     }
 
-    const successPath = getCoursePurchaseSucccessPath(publicConfig.PUBLIC_URL);
-
     const payment = await this.createPaymentService.exec({
       userEmail: command.userEmail,
       userId: command.userId,
@@ -85,9 +86,15 @@ export class StartCorusePurchaseService {
       ],
     });
 
+    const successPath = getCoursePurchaseSucccessPath(publicConfig.PUBLIC_URL);
+    const notificationPath = getCoursePurchaseWebhookPath(
+      publicConfig.PUBLIC_URL,
+    );
+
     const { url } = await this.prodamusService.createLink({
       urlReturn: command.urlReturn,
       urlSuccess: successPath,
+      urlNotification: notificationPath,
       ...payment,
     });
 
