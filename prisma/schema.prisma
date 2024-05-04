@@ -125,3 +125,24 @@ enum PaymentState {
   success
   failed
 }
+
+model UserAccess {
+  id        String        @id @default(cuid())
+  userId    String
+  adminId   String?
+  courseId  String
+  type UserAccessType
+  reason UserAccessReason
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+enum UserAccessType {
+  course
+}
+
+enum UserAccessReason {
+  paid
+  free
+  manual
+}
