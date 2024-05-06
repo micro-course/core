@@ -6,6 +6,12 @@ export type LessonPath = {
   contentBlockId?: ContentBlockId;
 };
 
+export const getCoursePath = (courseSlug: CourseSlug, baseUrl = "") => {
+  let url = `${baseUrl}/course/${courseSlug}`;
+
+  return url;
+};
+
 export const getLessonPath = (
   { courseSlug, lessonSlug, contentBlockId }: LessonPath,
   baseUrl = "",

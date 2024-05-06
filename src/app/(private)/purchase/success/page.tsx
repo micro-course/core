@@ -1,6 +1,12 @@
 "use client";
+import { CheckPurchase } from "@/features/course-purchase/check-purchase";
 import { FullPageSpinner } from "@/shared/ui/full-page-spinner";
 
 export default function Page() {
-  return <FullPageSpinner isLoading></FullPageSpinner>;
+  return (
+    <>
+      <CheckPurchase />
+      <FullPageSpinner isLoading></FullPageSpinner>
+    </>
+  );
 }

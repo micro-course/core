@@ -6,10 +6,14 @@ import {
 import { injectable } from "inversify";
 import { z } from "zod";
 import { StartCorusePurchaseService } from "./_services/start-course-purchase";
+import { CheckPurchaseStatusService } from "./_services/check-purchase-status";
 
 @injectable()
 export class CoursePurchaseController extends Controller {
-  constructor(private startCoursePurchaseService: StartCorusePurchaseService) {
+  constructor(
+    private startCoursePurchaseService: StartCorusePurchaseService,
+    private checkCoursePurchaseService: CheckPurchaseStatusService,
+  ) {
     super();
   }
 
@@ -28,6 +32,18 @@ export class CoursePurchaseController extends Controller {
             userId: ctx.session.user.id,
             userEmail: ctx.session.user.email,
             urlReturn: input.urlReturn,
+          });
+        }),
+      check: authorizedProcedure
+        .input(
+          z.object({
+            orderId: z.string(),
+          }),
+        )
+        .query(({ ctx, input }) => {
+          return this.checkCoursePurchaseService.exec({
+            userId: ctx.session.user.id,
+            orderId: input.orderId,
           });
         }),
     },

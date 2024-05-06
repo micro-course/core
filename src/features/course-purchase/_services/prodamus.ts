@@ -32,6 +32,7 @@ export class ProdamusService {
     urlNotification,
   }: Command) {
     const params = {
+      order_id: `${paymentId}-${products.map((p) => p.name).join(",")}`,
       do: "link",
       sys: "micro-courses",
       customer_email: userEmail,

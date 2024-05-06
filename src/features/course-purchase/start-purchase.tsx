@@ -11,10 +11,8 @@ export function StartPurchase() {
   const { toast } = useToast();
   const searchParams = useSearchParams();
 
-  const createPaymentLink = coursePurchaseApi.coursePurchase.start.useMutation({
-    onSuccess: () => {},
-    onError: () => {},
-  });
+  const createPaymentLink =
+    coursePurchaseApi.coursePurchase.start.useMutation();
 
   useEffect(() => {
     const res = createCoursePurchaseSchema.safeParse(
