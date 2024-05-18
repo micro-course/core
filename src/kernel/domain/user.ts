@@ -1,16 +1,12 @@
-/** @deprecated use from kernel */
 export type UserId = string;
-/** @deprecated use from kernel */
 export type Role = "ADMIN" | "USER";
 
-/** @deprecated use ROLES from shared */
 export const ROLES: Record<Role, Role> = {
   ADMIN: "ADMIN",
   USER: "USER",
 };
 
-/** @deprecated use ShaeredUser */
-export type UserEntity = {
+export type SharedUser = {
   id: UserId;
   email: string;
   role: Role;
@@ -19,8 +15,7 @@ export type UserEntity = {
   image?: string | null;
 };
 
-/** @deprecated use SharedSession */
-export type SessionEntity = {
+export type SharedSession = {
   user: {
     id: UserId;
     email: string;
@@ -29,12 +24,4 @@ export type SessionEntity = {
     image?: string | null;
   };
   expires: string;
-};
-
-// Projetions
-
-export type Profile = {
-  email: string;
-  name?: string | null;
-  image?: string | null;
 };

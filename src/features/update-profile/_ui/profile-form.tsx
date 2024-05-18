@@ -16,19 +16,15 @@ import {
 import { Input } from "@/shared/ui/input";
 import { Spinner } from "@/shared/ui/spinner";
 import { AvatarField } from "./avatar-field";
-import { Profile } from "@/entities/user/profile";
-import { UserId } from "@/entities/user/user";
 import { useUpdateProfile } from "../_vm/use-update-profile";
+import { UserId } from "@/kernel/domain/user";
+import { Profile } from "@/entities/user/profile";
 
 const profileFormSchema = z.object({
-  name: z
-    .string()
-    .max(30, {
-      message: "Username must not be longer than 30 characters.",
-    })
-    .transform((name) => name.trim())
-    .optional(),
-  email: z.string().email().optional(),
+  name: z.string().max(30, {
+    message: "Username must not be longer than 30 characters.",
+  }),
+  email: z.string().email(),
   image: z.string().optional(),
 });
 
@@ -64,9 +60,12 @@ export function ProfileForm({
       data,
     });
 
-    form.reset(getDefaultValues(newProfile.profile));
+    form.reset(getDefaultValues(newProfile));
     onSuccess?.();
   });
+
+  const email = form.watch("email");
+  const name = form.watch("name");
 
   return (
     <Form {...form}>
@@ -74,12 +73,11 @@ export function ProfileForm({
         <FormField
           control={form.control}
           name="email"
-          disabled
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="" {...field} />
+                <Input placeholder="" {...field} disabled />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -101,7 +99,6 @@ export function ProfileForm({
         <FormField
           control={form.control}
           name="image"
-          disabled
           render={({ field }) => (
             <FormItem>
               <FormLabel>Аватарка</FormLabel>
@@ -109,8 +106,8 @@ export function ProfileForm({
                 <AvatarField
                   value={field.value}
                   onChange={field.onChange}
-                  name={form.watch("name") ?? ""}
-                  email={form.watch("email") ?? ""}
+                  name={name ?? ""}
+                  email={email ?? ""}
                 />
               </FormControl>
               <FormMessage />

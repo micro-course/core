@@ -1,17 +1,17 @@
 import { createAdminAbility } from "../_domain/ability";
 import { WithSession, checkAbility } from "@/entities/user/session.server";
-import { userRepository } from "@/entities/user/_repositories/user";
 import {
   ProgressStatisticsQuery,
   ProgressStatistics,
   CourseStatistics,
 } from "../_domain/types/progress-statistics";
 import { studentProgressRepository } from "@/entities/student-progress/student-progress.server";
-import { UserEntity } from "@/entities/user/user";
 import { courseIndexRepository } from "@/entities/course/course.server";
-import { UserId } from "@/kernel";
 import { StudentProgress } from "@/entities/student-progress/student-progress";
 import { NotUndefined } from "@/shared/lib/types";
+import { SharedUser, UserId } from "@/kernel/domain/user";
+import { getUserService, getUsersService } from "@/entities/user/server";
+import { compact } from "lodash-es";
 
 export class GetProgressStatisticsUseCase {
   @checkAbility({
@@ -22,11 +22,11 @@ export class GetProgressStatisticsUseCase {
     {}: Partial<WithSession>,
     query: ProgressStatisticsQuery,
   ): Promise<ProgressStatistics> {
-    let users: UserEntity[] = [];
+    let users: SharedUser[] = [];
     if (query.userId) {
-      users = [await userRepository.getUserById(query.userId)];
+      users = compact([await getUserService.exec({ userId: query.userId })]);
     } else {
-      users = await userRepository.getUsersList();
+      users = await getUsersService.exec();
     }
 
     const coursesIndex = await courseIndexRepository.getCoursesIndex();
