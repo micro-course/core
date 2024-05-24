@@ -87,8 +87,8 @@ export class GetMapUseCase {
 
           edges[id] = {
             id: `${nodeId}-${dependencyId}`,
-            source: nodeId,
-            target: courseIdNodeMap[dependencyId],
+            source: courseIdNodeMap[dependencyId],
+            target: nodeId,
           };
         });
       }
