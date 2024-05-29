@@ -40,4 +40,5 @@ export class CourseRepository {
   }
 }
 
+/** @deprecated */
 export const courseRepository = new CourseRepository();

@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { $Enums, PrismaClient } from "@prisma/client";
 import { ADMIN, USER, USER_2 } from "../tests/stabs/users";
 import { eventStoreDb } from "@/shared/lib/event-store";
 import { studentProgressRepository } from "@/entities/student-progress/student-progress.server";
@@ -8,6 +8,83 @@ import { userAccessRepository } from "@/entities/access/user-access.server";
 const prisma = new PrismaClient();
 
 async function main() {
+  // Create Courses
+  const course1 = await prisma.course.create({
+    data: {
+      slug: "intro-to-programming",
+      title: "Introduction to Programming",
+      thumbnail: "thumb_intro_to_programming.jpg",
+      image: "img_intro_to_programming.jpg",
+      shortDescription: "Learn the basics of programming.",
+      draft: false,
+      product: {
+        create: {
+          access: "free",
+        },
+      },
+    },
+  });
+
+  const course2 = await prisma.course.create({
+    data: {
+      slug: "advanced-programming",
+      title: "Advanced Programming",
+      thumbnail: "thumb_advanced_programming.jpg",
+      image: "img_advanced_programming.jpg",
+      shortDescription: "Dive deeper into programming concepts.",
+      draft: false,
+      product: {
+        create: {
+          access: "paid",
+          price: 10,
+        },
+      },
+    },
+  });
+
+  // Create Course Dependencies
+  await prisma.courseDependency.create({
+    data: {
+      courseId: course2.id,
+      dependsOnId: course1.id,
+    },
+  });
+
+  // Create Lessons
+  const lesson1 = await prisma.lesson.create({
+    data: {
+      slug: "intro-lesson-1",
+      title: "Introduction Lesson 1",
+      shortDescription: "First lesson of the introductory course.",
+      courseId: course1.id,
+      blocks: {
+        create: [
+          {
+            type: "text",
+            text: "Welcome to the first lesson!",
+          },
+        ],
+      },
+    },
+  });
+
+  const lesson2 = await prisma.lesson.create({
+    data: {
+      slug: "advanced-lesson-1",
+      title: "Advanced Lesson 1",
+      shortDescription: "First lesson of the advanced course.",
+      courseId: course2.id,
+      blocks: {
+        create: [
+          {
+            type: "text",
+            text: "Welcome to the first advanced lesson!",
+          },
+        ],
+      },
+    },
+  });
+
   const adminUser = await prisma.user.create({
     data: {
       id: ADMIN.id,

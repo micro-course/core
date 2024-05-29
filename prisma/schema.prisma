@@ -10,12 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Course {
-  id          String @id @default(cuid())
-  name        String
-  description String
-}
-
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -68,7 +62,7 @@ enum ROLE {
 }
 
 model MapNode {
-  id         String             @id @default(uuid())
+  id         String             @id @default(cuid())
   x          Float
   y          Float
   width      Int                @default(100)
@@ -82,15 +76,95 @@ model MapNode {
 }
 
 model MapNodeCourseData {
-  id        String   @id @default(uuid())
+  id        String   @id @default(cuid())
   courseId  String   @unique
   mapNode   MapNode? @relation(fields: [mapNodeId], references: [id], onDelete: Cascade)
   mapNodeId String?  @unique
 }
 
 model MapNodeImageData {
-  id        String   @id @default(uuid())
+  id        String   @id @default(cuid())
   src       String
   mapNode   MapNode? @relation(fields: [mapNodeId], references: [id], onDelete: Cascade)
   mapNodeId String?  @unique
+}
+
+// Course entity
+
+model Course {
+  id                 String             @id @default(cuid())
+  slug               String             @unique
+  title              String
+  thumbnail          String
+  image              String
+  draft              Boolean
+  dependencies       CourseDependency[] @relation("CourseDependencies")
+  dependents         CourseDependency[] @relation("CourseDependents")
+  product            CourseProduct?
+  lessons            Lesson[]
+  landing            String?
+  shortDescription   String?
+  shortDescriptionId String?
+}
+
+model Lesson {
+  id                 String         @id @default(cuid())
+  slug               String
+  courseId           String
+  course             Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  title              String
+  shortDescription   String?
+  shortDescriptionId String?
+  blocks             ContentBlock[]
+}
+
+model ContentBlock {
+  id       String    @id @default(cuid())
+  type     BlockType
+  text     String?
+  lessonId String
+  lesson   Lesson    @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+}
+
+model CourseDependency {
+  id          String @id @default(cuid())
+  courseId    String
+  dependsOnId String
+
+  course    Course @relation("CourseDependencies", fields: [courseId], references: [id], onDelete: Cascade)
+  dependsOn Course @relation("CourseDependents", fields: [dependsOnId], references: [id], onDelete: Cascade)
+
+  @@unique([courseId, dependsOnId])
+}
+
+enum BlockType {
+  text
+}
+
+enum AccessType {
+  free
+  paid
+}
+
+model CourseProduct {
+  id       String     @id @default(cuid())
+  access   AccessType
+  price    Int?
+  course   Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId String     @unique
+}
+
+model MdxText {
+  id         String  @id @default(cuid())
+  text       String
+  type       MdxType
+  relationId String
+  version    Int
+}
+
+enum MdxType {
+  courseLanding
+  courseShortDescription
+  contentBlockText
+  lessonShortDescription
 }

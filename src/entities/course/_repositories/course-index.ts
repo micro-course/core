@@ -144,4 +144,5 @@ class CourseIndexRepository {
   };
 }
 
+/** @deprecated */
 export const courseIndexRepository = new CourseIndexRepository();

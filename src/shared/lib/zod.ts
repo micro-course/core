@@ -30,3 +30,5 @@ export const luxonDateTimeOptionalSchema = isoDateString.optional().pipe(
     }
   }, "Optional DateTime parse error"),
 );
+
+export type SchemaOf<T, I = any> = z.ZodType<T, any, I>;

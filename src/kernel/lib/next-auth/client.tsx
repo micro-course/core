@@ -2,6 +2,7 @@
 import { SharedSession } from "@/kernel/domain/user";
 import { useSession } from "next-auth/react";
 import { SessionProvider as NextAuthSessionProvider } from "next-auth/react";
+import { useMemo } from "react";
 
 export const useAppSession = useSession;
 export function AppSessionProvider({
@@ -15,9 +16,9 @@ export function AppSessionProvider({
 export function useAbility<T>(abilityFactory: (session: SharedSession) => T) {
   const session = useAppSession();
 
-  if (session.status === "authenticated") {
-    return abilityFactory(session.data);
-  }
-
-  return null;
+  return useMemo(
+    () =>
+      session.status === "authenticated" ? abilityFactory(session.data) : null,
+    [abilityFactory, session.data, session.status],
+  );
 }

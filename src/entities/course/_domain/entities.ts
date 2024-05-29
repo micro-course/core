@@ -1,3 +1,4 @@
+/** @deprecated */
 export type ProductConfig =
   | {
       access: "free";
@@ -6,20 +7,28 @@ export type ProductConfig =
       access: "paid";
       price: number;
     };
+/** @deprecated */
 export type CourseId = string;
+/** @deprecated */
 export type CourseSlug = string;
 
+/** @deprecated */
 export type LessonId = string;
+/** @deprecated */
 export type LessonSlug = string;
+/** @deprecated */
 export type ContentBlockId = string;
 
 /* slug in format: course-slug/lesson-slug */
+/** @deprecated */
 export type CourseLessonSlug = string;
+/** @deprecated */
 export const courseLessonSlug = (
   courseSlug: CourseSlug,
   lessonSlug: LessonSlug,
 ) => `${courseSlug}/${lessonSlug}`;
 
+/** @deprecated */
 export type CourseEntity = {
   id: CourseId;
   slug: CourseSlug;
@@ -34,6 +43,7 @@ export type CourseEntity = {
   lessons: LessonId[];
 };
 
+/** @deprecated */
 export interface LessonEntity {
   id: LessonId;
   slug: LessonSlug;
@@ -43,8 +53,10 @@ export interface LessonEntity {
   blocks: ContentBlockEntity[];
 }
 
+/** @deprecated */
 export type ContentBlockEntity = TextBlockEntity;
 
+/** @deprecated */
 export interface TextBlockEntity {
   id: ContentBlockId;
   type: "text";
