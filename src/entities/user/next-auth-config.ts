@@ -59,6 +59,8 @@ export const nextAuthConfig: AuthOptions = {
       GithubProvider({
         clientId: privateConfig.GITHUB_ID,
         clientSecret: privateConfig.GITHUB_SECRET,
+        // GitHub присылает iss (RFC 9207), а openid-client тогда требует issuer у провайдера.
+        issuer: "https://github.com/login/oauth",
       }),
   ]),
 };
