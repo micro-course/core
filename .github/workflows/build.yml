@@ -53,3 +53,35 @@ jobs:
           git config user.email "build@micro-courses.ru"
           git commit -am "micro-courses: core ${{ steps.tag.outputs.tag }}" || exit 0
           git push
+      - name: cleanup
+        # Реестр Timeweb сам старое не чистит: оставляем KEEP последних образов, текущий не трогаем никогда.
+        env:
+          TOKEN: ${{ secrets.REGISTRY_PASSWORD }}
+          CURRENT: ${{ steps.tag.outputs.tag }}
+          KEEP: "2"
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request
+          tok, cur, keep = os.environ["TOKEN"], os.environ["CURRENT"], int(os.environ["KEEP"])
+          reg, repo = "https://paromov.registry.twcstorage.ru", "micro-courses/core"
+          def call(url, method="GET", headers=None):
+              req = urllib.request.Request(url, method=method, headers=headers or {})
+              with urllib.request.urlopen(req) as r:
+                  return r.status, r.headers, r.read()
+          _, _, body = call("https://api.timeweb.cloud/api/v1/container-registry", headers={"Authorization": "Bearer " + tok})
+          rid = next(r["id"] for r in json.loads(body)["container_registry_list"] if r["name"] == "paromov")
+          _, _, body = call(f"https://api.timeweb.cloud/api/v1/container-registry/{rid}/repositories", headers={"Authorization": "Bearer " + tok})
+          tags = next(r["tags"] for r in json.loads(body)["container_registries_repositories"] if r["name"] == repo)
+          tags.sort(key=lambda t: t["created_at"], reverse=True)
+          old = [t for t in tags[keep:] if t["tag"] != cur]
+          if not old:
+              print("удалять нечего"); raise SystemExit
+          import base64
+          basic = base64.b64encode(f"paromov:{tok}".encode()).decode()
+          _, _, body = call(f"https://api.timeweb.cloud/api/v1/k8s/cr-auth?service={reg}/auth/token&scope=repository:{repo}:pull,push,delete",
+                            headers={"Authorization": "Basic " + basic})
+          bearer = json.loads(body)["token"]
+          for t in old:
+              code, _, _ = call(f"{reg}/v2/{repo}/manifests/{t['digest']}", method="DELETE", headers={"Authorization": "Bearer " + bearer})
+              print("удалён", t["tag"], code)
+          PY
