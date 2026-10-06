@@ -1,4 +1,4 @@
-FROM node:20-bookworm-slim AS build
+FROM node:20.10.0-bookworm-slim AS build
 RUN apt-get update && apt-get install -y --no-install-recommends openssl ca-certificates && rm -rf /var/lib/apt/lists/*
 WORKDIR /app/core
 COPY package.json package-lock.json ./
@@ -22,7 +22,7 @@ RUN --mount=type=secret,id=sentry,env=SENTRY_AUTH_TOKEN \
     CONTENT_URL=../prod-content EVENT_STORE_DB_URL=esdb://build:2113?tls=false REDIS_URL=redis://build:6379 \
     npm run build
 
-FROM node:20-bookworm-slim
+FROM node:20.10.0-bookworm-slim
 RUN apt-get update && apt-get install -y --no-install-recommends openssl ca-certificates && rm -rf /var/lib/apt/lists/*
 WORKDIR /app/core
 ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 CONTENT_URL=../prod-content
