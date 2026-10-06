@@ -4,6 +4,8 @@ import React from "react";
 import { Suspense } from "react";
 import { Spinner } from "@/shared/ui/spinner";
 
+export const dynamic = "force-dynamic";
+
 export default function AuthenticationPage() {
   return (
     <>
